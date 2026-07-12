@@ -1,0 +1,6 @@
+{
+  "name": "Lindenwood Academy",
+  "description": "A pixel-perfect, premium educational landing page featuring a warm matte aesthetic, editorial layout, and classic high-end design.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
