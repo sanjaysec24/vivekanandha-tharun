@@ -1,5 +1,6 @@
 import React from 'react';
 import { Linkedin, Instagram, Twitter, MapPin, MessageSquare, ShieldCheck, Heart } from 'lucide-react';
+import { Link } from '../lib/router';
 
 export default function Footer() {
   return (
@@ -13,10 +14,10 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="text-xs uppercase tracking-widest font-bold text-[#E78F68]">Programs</h4>
             <ul className="space-y-2.5 text-sm text-[#F5F1EB]/70">
-              <li><a href="#programs" className="hover:text-white transition-colors">For Pre-School</a></li>
-              <li><a href="#programs" className="hover:text-white transition-colors">For Kindergarten</a></li>
-              <li><a href="#programs" className="hover:text-white transition-colors">For Primary Academy</a></li>
-              <li><a href="#programs" className="hover:text-white transition-colors">Forest Schooling</a></li>
+              <li><Link to="/academics" className="hover:text-white transition-colors">For Pre-School</Link></li>
+              <li><Link to="/academics" className="hover:text-white transition-colors">For Kindergarten</Link></li>
+              <li><Link to="/academics" className="hover:text-white transition-colors">For Primary Academy</Link></li>
+              <li><Link to="/academics" className="hover:text-white transition-colors">Forest Schooling</Link></li>
             </ul>
           </div>
 
@@ -24,10 +25,10 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="text-xs uppercase tracking-widest font-bold text-[#EAB308]">Institution</h4>
             <ul className="space-y-2.5 text-sm text-[#F5F1EB]/70">
-              <li><a href="#about" className="hover:text-white transition-colors">About Us</a></li>
-              <li><a href="#about" className="hover:text-white transition-colors">Our Academics</a></li>
-              <li><a href="#about" className="hover:text-white transition-colors">Faculty Directory</a></li>
-              <li><a href="#about" className="hover:text-white transition-colors">Careers</a></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
+              <li><Link to="/academics" className="hover:text-white transition-colors">Our Academics</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">Faculty Directory</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">Careers</Link></li>
             </ul>
           </div>
 
@@ -35,10 +36,10 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="text-xs uppercase tracking-widest font-bold text-[#5B92E5]">Admissions</h4>
             <ul className="space-y-2.5 text-sm text-[#F5F1EB]/70">
-              <li><a href="#admissions" className="hover:text-white transition-colors">Tuition & Plans</a></li>
-              <li><a href="#admissions" className="hover:text-white transition-colors">Admissions Guide</a></li>
-              <li><a href="#admissions" className="hover:text-white transition-colors">Private Tour Booking</a></li>
-              <li><a href="#admissions" className="hover:text-white transition-colors">Scholarship Criteria</a></li>
+              <li><Link to="/admissions" className="hover:text-white transition-colors">Tuition & Plans</Link></li>
+              <li><Link to="/admissions" className="hover:text-white transition-colors">Admissions Guide</Link></li>
+              <li><Link to="/admissions" className="hover:text-white transition-colors">Private Tour Booking</Link></li>
+              <li><Link to="/admissions" className="hover:text-white transition-colors">Scholarship Criteria</Link></li>
             </ul>
           </div>
 
@@ -46,10 +47,10 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="text-xs uppercase tracking-widest font-bold text-emerald-400">Resources</h4>
             <ul className="space-y-2.5 text-sm text-[#F5F1EB]/70">
-              <li><a href="#about" className="hover:text-white transition-colors">Press & Media</a></li>
-              <li><a href="#about" className="hover:text-white transition-colors">Parent Council Portal</a></li>
-              <li><a href="#about" className="hover:text-white transition-colors">Medical Center Info</a></li>
-              <li><a href="#about" className="hover:text-white transition-colors">Transportation Paths</a></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">Press & Media</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">Parent Council Portal</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">Medical Center Info</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">Transportation Paths</Link></li>
             </ul>
           </div>
 
@@ -79,12 +80,12 @@ export default function Footer() {
           
           {/* Logo brand block */}
           <div className="lg:col-span-4 space-y-2">
-            <a href="#" className="text-3xl font-serif font-bold text-white tracking-tight flex items-center space-x-1.5">
-              <span>Lindenwood</span>
+            <Link to="/" className="text-3xl font-serif font-bold text-white tracking-tight flex items-center space-x-1.5">
+              <span>Vivekanandha School</span>
               <span className="w-3 h-3 rounded-full bg-[#E78F68]" />
-            </a>
+            </Link>
             <p className="text-xs text-[#F5F1EB]/60 font-sans font-light">
-              Nurturing exceptional childhood brilliance since 1994.
+              THE SCHOOL FOR AMBITIOUS MINDS
             </p>
           </div>
 
@@ -92,37 +93,37 @@ export default function Footer() {
           <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-[#F5F1EB]/90">
             
             {/* Box 1 */}
-            <div className="flex items-start space-x-3">
-              <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-[#E78F68] shrink-0">
+            <Link to="/contact" className="flex items-start space-x-3 group text-left">
+              <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-[#E78F68] shrink-0 group-hover:bg-[#E78F68]/10 transition-colors">
                 <MapPin className="w-5 h-5" />
               </div>
               <div>
-                <h5 className="text-xs font-bold uppercase tracking-wider text-white">Find a School</h5>
-                <p className="text-[11px] text-[#F5F1EB]/60 mt-0.5">24 Pinecone Ave, Hillsborough, CA</p>
+                <h5 className="text-xs font-bold uppercase tracking-wider text-white group-hover:text-[#E78F68] transition-colors">Find a School</h5>
+                <p className="text-[11px] text-[#F5F1EB]/60 mt-0.5">NH-47 Bypass Road, Avinashi Main Road, Coimbatore, Tamil Nadu</p>
               </div>
-            </div>
+            </Link>
 
             {/* Box 2 */}
-            <div className="flex items-start space-x-3">
-              <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-[#EAB308] shrink-0">
+            <Link to="/contact" className="flex items-start space-x-3 group text-left">
+              <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-[#EAB308] shrink-0 group-hover:bg-[#EAB308]/10 transition-colors">
                 <MessageSquare className="w-5 h-5" />
               </div>
               <div>
-                <h5 className="text-xs font-bold uppercase tracking-wider text-white">Offer Insights</h5>
-                <p className="text-[11px] text-[#F5F1EB]/60 mt-0.5">feedback@lindenwood.edu</p>
+                <h5 className="text-xs font-bold uppercase tracking-wider text-white group-hover:text-[#EAB308] transition-colors">Admissions & Info</h5>
+                <p className="text-[11px] text-[#F5F1EB]/60 mt-0.5">admissions@vivekanandha.edu.in</p>
               </div>
-            </div>
+            </Link>
 
             {/* Box 3 */}
-            <div className="flex items-start space-x-3">
-              <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-[#5B92E5] shrink-0">
+            <Link to="/admissions" className="flex items-start space-x-3 group text-left">
+              <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-[#5B92E5] shrink-0 group-hover:bg-[#5B92E5]/10 transition-colors">
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <div>
-                <h5 className="text-xs font-bold uppercase tracking-wider text-white">Parent Portal</h5>
+                <h5 className="text-xs font-bold uppercase tracking-wider text-white group-hover:text-[#5B92E5] transition-colors">Parent Portal</h5>
                 <p className="text-[11px] text-[#F5F1EB]/60 mt-0.5">Secure App & School Records</p>
               </div>
-            </div>
+            </Link>
 
           </div>
 
@@ -133,17 +134,17 @@ export default function Footer() {
           <div className="flex space-x-6">
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-white transition-colors">Terms of Use</a>
-            <a href="#" className="hover:text-white transition-colors">Contact Registrar</a>
+            <Link to="/contact" className="hover:text-white transition-colors">Contact Registrar</Link>
           </div>
 
           <div className="flex items-center space-x-1.5">
             <span>Design by Rylic Studio • Adapted with</span>
             <Heart className="w-3 h-3 text-[#E78F68] fill-current" />
-            <span>for Lindenwood Academy.</span>
+            <span>for Vivekanandha School.</span>
           </div>
 
           <div>
-            <span>© 2026 Lindenwood Inc. All rights reserved.</span>
+            <span>© 2027 Vivekanandha School. All rights reserved.</span>
           </div>
         </div>
 

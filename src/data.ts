@@ -1,16 +1,18 @@
 import { MenuItem, StatItem, FeatureCard, CategoryItem } from './types';
 
 export const navigationItems: MenuItem[] = [
-  { label: 'About', href: '#about' },
+  { label: 'Home', href: '/' },
+  { label: 'About Us', href: '/about' },
   { 
-    label: 'Programs', 
-    href: '#programs', 
+    label: 'Academics', 
+    href: '/academics', 
     hasDropdown: true, 
-    dropdownItems: ['Early Years (Ages 2-4)', 'Kindergarten (Ages 4-6)', 'Primary Academy (Ages 6-9)', 'Creative Arts & Expression'] 
+    dropdownItems: ['Pre KG', 'LKG', 'UKG', 'Grade 1-2', 'Grade 3-4', 'Grade 5'] 
   },
-  { label: 'Admissions', href: '#admissions' },
-  { label: 'Campus Life', href: '#campus-life' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Admissions', href: '/admissions' },
+  { label: 'Activities', href: '/activities' },
+  { label: 'Gallery', href: '/gallery' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 export const statistics: StatItem[] = [
@@ -64,31 +66,45 @@ export const features: FeatureCard[] = [
 export const categoryCards: CategoryItem[] = [
   {
     id: 'letter-id',
-    title: 'Language & Phonetics',
-    grade: 'Ages 2-4 • Toddler',
+    title: 'Letter Identification',
+    grade: 'Pre KG',
     imageUrl: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&q=80&w=300',
     color: '#86EFAC', // Soft green background
   },
   {
-    id: 'general-knowledge',
-    title: 'Practical Life Mastery',
-    grade: 'Ages 4-6 • Kindergarten',
+    id: 'foundational',
+    title: 'Foundational Learning',
+    grade: 'LKG',
     imageUrl: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=300',
     color: '#FED7AA', // Soft orange background
   },
   {
-    id: 'geography-quiz',
-    title: 'Cosmic Geography & Culture',
-    grade: 'Ages 6-8 • Lower Primary',
+    id: 'general-knowledge',
+    title: 'General Knowledge',
+    grade: 'UKG',
     imageUrl: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=300',
     color: '#FDE047', // Soft yellow background
   },
   {
-    id: 'visual-arts',
-    title: 'Fine Arts & Clay Sculpting',
-    grade: 'All Ages • Creative Studio',
+    id: 'creative-arts',
+    title: 'Creative Arts',
+    grade: 'Grade 1-2',
     imageUrl: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=300',
     color: '#93C5FD', // Soft blue background
+  },
+  {
+    id: 'science-explorer',
+    title: 'Science Explorer',
+    grade: 'Grade 3-4',
+    imageUrl: 'https://images.unsplash.com/photo-1530099486328-e021101a494a?auto=format&fit=crop&q=80&w=300',
+    color: '#C084FC', // Soft purple background
+  },
+  {
+    id: 'future-innovators',
+    title: 'Future Innovators',
+    grade: 'Grade 5',
+    imageUrl: 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&q=80&w=300',
+    color: '#F472B6', // Soft pink background
   },
 ];
 
@@ -104,57 +120,57 @@ export interface CurriculumMilestone {
 
 export const curriculumMilestones: CurriculumMilestone[] = [
   {
-    ageGroup: 'Toddler (Ages 2 - 4)',
-    focus: 'Sensory Exploration & Language Synthesis',
-    description: 'During these formative years, children learn through their senses. Our environment is meticulously curated with tactile materials that foster phonetic awareness and coordination.',
+    ageGroup: 'Pre KG & LKG',
+    focus: 'Letter Identification & Foundational Learning',
+    description: 'During these formative early years, our children build motor coordination, tactile focus, and initial letter/sound identification through engaging sensory materials.',
     pillar1: {
       title: 'Practical Life Mastery',
-      desc: 'Developing grace, courtesy, fine motor grip, and independence through daily task integration.'
+      desc: 'Developing independence, fine grip, and self-confidence through daily life tasks.'
     },
     pillar2: {
       title: 'Phonetic Foundation',
-      desc: 'Nurturing vocabulary through rich storytelling, tactile sandpaper letters, and auditory games.'
+      desc: 'Recognizing sounds and letters using sandpaper boards, tactile tracing, and stories.'
     },
     pillar3: {
       title: 'Somatic Coordination',
-      desc: 'Balancing beams, rhythmic movement, and organic outdoor exploration in nature.'
+      desc: 'Balanced physical activities, rhythmic movement, and interactive playground times.'
     },
-    dailyHighlight: '10:00 AM — Collaborative Painting & Sourdough Kneading'
+    dailyHighlight: '10:00 AM — Letter Tracing & Cooperative Clay Play'
   },
   {
-    ageGroup: 'Kindergarten (Ages 4 - 6)',
-    focus: 'Abstract Thought & Collaborative Discovery',
-    description: 'As children mature, they enter a stage of conscious refinement. Here we introduce geometric solids, mathematical decimal systems, and early literary comprehension.',
+    ageGroup: 'UKG & Grade 1-2',
+    focus: 'General Knowledge & Creative Arts',
+    description: 'As students transition to UKG and early grades, they dive deep into world environments, basic mathematical decimals, and express their imaginations via rich artistic mediums.',
     pillar1: {
-      title: 'Mathematical Decimals',
-      desc: 'Understanding units, tens, hundreds, and thousands tangibly through custom wooden beads.'
+      title: 'Mathematical Operations',
+      desc: 'Learning addition and subtraction with concrete bead boards and tactile blocks.'
     },
     pillar2: {
-      title: 'Expressive Composition',
-      desc: 'Writing original journals, reading classic anthologies, and staging mini theatrical works.'
+      title: 'Global Awareness',
+      desc: 'Exploring general knowledge, maps, natural science cycles, and regional cultures.'
     },
     pillar3: {
-      title: 'Botanical Observation',
-      desc: 'Planting seeds, categorizing local flora, and studying weather patterns in our forest lab.'
+      title: 'Creative Art Studios',
+      desc: 'Engaging in sketch play, musical rhythm exercises, and storytelling theater.'
     },
-    dailyHighlight: '1:30 PM — Solar System Mapping & Classical Violin Introduction'
+    dailyHighlight: '1:30 PM — Science Show & Tell & Group Singing Session'
   },
   {
-    ageGroup: 'Primary (Ages 6 - 9)',
-    focus: 'Inquiry, Research, & Civic Engagement',
-    description: 'Our primary program channels the immense curiosity of the child into structured research. Students collaborate on long-term historical projects and write multi-chapter essays.',
+    ageGroup: 'Grade 3-5',
+    focus: 'Science Explorer & Future Innovators',
+    description: 'Our senior primary students focus on advanced logical reasoning, computer lab exposure, and science explorations to become collaborative thinkers and tomorrow\'s leaders.',
     pillar1: {
-      title: 'Advanced Geometry',
-      desc: 'Proving geometric equivalences, measuring angles, and building custom scale architectural mockups.'
+      title: 'Scientific Method',
+      desc: 'Conducting small experiments, measuring water/soil, and exploring basic botany.'
     },
     pillar2: {
-      title: 'Global Historiography',
-      desc: 'Exploring deep timelines of Earth, researching ancient civilizations, and presenting term papers.'
+      title: 'Computer Lab Access',
+      desc: 'Understanding basic computer parts, interactive digital tasks, and smart boards.'
     },
     pillar3: {
       title: 'Civic Responsibilities',
-      desc: 'Governing their own classroom meetings, organizing local charity drives, and resolving conflicts.'
+      desc: 'Leading assembly talks, cooperative team challenges, and problem-solving groups.'
     },
-    dailyHighlight: '11:00 AM — Multi-language Debate & D3-based Local Ecology Mapping'
+    dailyHighlight: '11:00 AM — Science Lab Exploration & Smart Board Quiz'
   }
 ];

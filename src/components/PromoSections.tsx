@@ -41,7 +41,7 @@ export default function PromoSections({ onOpenAdmissions }: PromoSectionsProps) 
           <div className="absolute right-0 bottom-0 w-[200px] md:w-[260px] aspect-[4/5] z-10 pointer-events-none transform translate-y-6 md:translate-y-4 translate-x-2">
             <img
               src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&q=80&w=400"
-              alt="Confident student at Lindenwood"
+              alt="Confident student at Vivekanandha School"
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover rounded-tl-[64px] rounded-br-[32px] border-l-4 border-t-4 border-white shadow-xl"
             />

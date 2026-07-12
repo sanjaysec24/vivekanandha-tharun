@@ -74,7 +74,7 @@ export default function EventSection({ onOpenAdmissions }: EventSectionProps) {
                   <Calendar className="w-5 h-5 text-[#E78F68]" />
                   <div>
                     <p className="text-[10px] uppercase font-bold tracking-wider opacity-60">Date</p>
-                    <p className="text-sm font-semibold">07 March 2026</p>
+                    <p className="text-sm font-semibold">20 March 2027</p>
                   </div>
                 </div>
 
@@ -90,7 +90,7 @@ export default function EventSection({ onOpenAdmissions }: EventSectionProps) {
                   <MapPin className="w-5 h-5 text-[#E78F68]" />
                   <div>
                     <p className="text-[10px] uppercase font-bold tracking-wider opacity-60">Location</p>
-                    <p className="text-sm font-semibold">Lindenwood Pine Hall</p>
+                    <p className="text-sm font-semibold">Vivekanandha School Campus</p>
                   </div>
                 </div>
               </div>

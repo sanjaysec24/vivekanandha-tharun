@@ -1,5 +1,5 @@
 import React from 'react';
-import { Compass, Users, Sparkles } from 'lucide-react';
+import { Compass, Users, Sparkles, Heart } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export default function StatsBar() {
@@ -18,10 +18,26 @@ export default function StatsBar() {
         </div>
 
         {/* Content Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 divide-y md:divide-y-0 md:divide-x divide-[#F5F1EB]/15 relative z-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 divide-y sm:divide-y-0 sm:divide-x divide-[#F5F1EB]/15 relative z-10">
           
           {/* Metric 1 */}
-          <div className="flex flex-col space-y-4 md:px-6 pt-6 md:pt-0 first:pt-0">
+          <div className="flex flex-col space-y-4 md:px-4 pt-6 sm:pt-0 first:pt-0">
+            <div className="flex items-center space-x-3.5">
+              <div className="w-12 h-12 bg-[#EAB308]/20 rounded-2xl flex items-center justify-center text-[#EAB308]">
+                <Users className="w-6 h-6" />
+              </div>
+              <span className="text-4xl md:text-5xl font-serif font-bold text-white tracking-tight">1500+</span>
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-base font-semibold text-white">Happy Students</h3>
+              <p className="text-sm text-[#F5F1EB]/70 font-light leading-relaxed">
+                Empowered to discover their strengths, build resilience, and unlock their full creative potential.
+              </p>
+            </div>
+          </div>
+
+          {/* Metric 2 */}
+          <div className="flex flex-col space-y-4 sm:px-6 pt-6 sm:pt-0">
             <div className="flex items-center space-x-3.5">
               <div className="w-12 h-12 bg-[#E78F68]/20 rounded-2xl flex items-center justify-center text-[#E78F68]">
                 <Compass className="w-6 h-6" />
@@ -29,41 +45,41 @@ export default function StatsBar() {
               <span className="text-4xl md:text-5xl font-serif font-bold text-white tracking-tight">50+</span>
             </div>
             <div className="space-y-1">
-              <h3 className="text-base font-semibold text-white">Elite Faculty Members</h3>
+              <h3 className="text-base font-semibold text-white">Qualified Teachers</h3>
               <p className="text-sm text-[#F5F1EB]/70 font-light leading-relaxed">
-                Our guides hold advanced Montessori certifications and degrees in childhood cognitive development.
-              </p>
-            </div>
-          </div>
-
-          {/* Metric 2 */}
-          <div className="flex flex-col space-y-4 md:px-8 pt-8 md:pt-0">
-            <div className="flex items-center space-x-3.5">
-              <div className="w-12 h-12 bg-[#EAB308]/20 rounded-2xl flex items-center justify-center text-[#EAB308]">
-                <Users className="w-6 h-6" />
-              </div>
-              <span className="text-4xl md:text-5xl font-serif font-bold text-white tracking-tight">12K+</span>
-            </div>
-            <div className="space-y-1">
-              <h3 className="text-base font-semibold text-white">Students Thriving Globally</h3>
-              <p className="text-sm text-[#F5F1EB]/70 font-light leading-relaxed">
-                Nurtured with customized curricula that adapt to their unique mental rhythms and pacing.
+                Caring and highly trained educators dedicated to guiding each child's natural academic cycle.
               </p>
             </div>
           </div>
 
           {/* Metric 3 */}
-          <div className="flex flex-col space-y-4 md:px-8 pt-8 md:pt-0">
+          <div className="flex flex-col space-y-4 sm:px-6 pt-6 sm:pt-0">
             <div className="flex items-center space-x-3.5">
               <div className="w-12 h-12 bg-[#5B92E5]/20 rounded-2xl flex items-center justify-center text-[#5B92E5]">
                 <Sparkles className="w-6 h-6" />
               </div>
-              <span className="text-4xl md:text-5xl font-serif font-bold text-white tracking-tight">70+</span>
+              <span className="text-4xl md:text-5xl font-serif font-bold text-white tracking-tight">20+</span>
             </div>
             <div className="space-y-1">
-              <h3 className="text-base font-semibold text-white">Creative Ateliers & Labs</h3>
+              <h3 className="text-base font-semibold text-white">Years of Excellence</h3>
               <p className="text-sm text-[#F5F1EB]/70 font-light leading-relaxed">
-                Equipped with rich natural resources, scientific microscopes, and woodshop ateliers.
+                Nurturing young minds and building strong educational pillars across the region since day one.
+              </p>
+            </div>
+          </div>
+
+          {/* Metric 4 */}
+          <div className="flex flex-col space-y-4 sm:px-6 pt-6 sm:pt-0">
+            <div className="flex items-center space-x-3.5">
+              <div className="w-12 h-12 bg-emerald-500/20 rounded-2xl flex items-center justify-center text-emerald-400">
+                <Heart className="w-6 h-6" />
+              </div>
+              <span className="text-4xl md:text-5xl font-serif font-bold text-white tracking-tight">100%</span>
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-base font-semibold text-white">Student Care</h3>
+              <p className="text-sm text-[#F5F1EB]/70 font-light leading-relaxed">
+                Creating safe, friendly, and fully supportive environments for learning and personal growth.
               </p>
             </div>
           </div>

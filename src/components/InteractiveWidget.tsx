@@ -105,7 +105,7 @@ export function CurriculumWidget() {
 
             <div className="bg-white/70 p-4 rounded-xl border border-[#3B231A]/5 text-center">
               <p className="text-[11px] font-sans font-light text-[#3B231A]/85">
-                Each child’s cycle is recorded in real time and available to parents through our custom Lindenwood portal.
+                Each child’s cycle is recorded in real time and available to parents through our custom Vivekanandha portal.
               </p>
             </div>
           </div>
@@ -171,11 +171,11 @@ export function AdmissionsDrawer({ isAdmissionsOpen, onCloseAdmissions }: Intera
                 <div className="space-y-2 pr-8">
                   <span className="text-xs uppercase tracking-widest font-semibold text-[#E78F68] flex items-center">
                     <Compass className="w-4 h-4 mr-1 animate-spin" />
-                    Private Tour Booking
+                    Admissions Form 2027-2028
                   </span>
-                  <h3 className="text-2xl font-serif font-bold">Arrange a Private Tour</h3>
+                  <h3 className="text-2xl font-serif font-bold">Apply for Admissions</h3>
                   <p className="text-xs opacity-75">
-                    We open our grounds daily to prospective families. Meet with our headmaster and explore the pine woods.
+                    Join the school for ambitious minds. Complete our form to submit your application for the 2027-2028 academic year.
                   </p>
                 </div>
 
@@ -234,15 +234,17 @@ export function AdmissionsDrawer({ isAdmissionsOpen, onCloseAdmissions }: Intera
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-xs font-semibold block uppercase tracking-wider text-[#3B231A]/80">Age Group</label>
+                      <label className="text-xs font-semibold block uppercase tracking-wider text-[#3B231A]/80">Age Group / Grade</label>
                       <select
                         value={formData.childAge}
                         onChange={(e) => setFormData({ ...formData, childAge: e.target.value })}
                         className="w-full bg-white border border-[#3B231A]/15 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#E78F68] transition-colors"
                       >
-                        <option value="toddler">Toddler (Ages 2 - 4)</option>
-                        <option value="kinder">Kindergarten (Ages 4 - 6)</option>
-                        <option value="primary">Lower Primary (Ages 6 - 9)</option>
+                        <option value="prekg">Pre KG</option>
+                        <option value="lkg">LKG</option>
+                        <option value="ukg">UKG</option>
+                        <option value="grade12">Grade 1 - 2</option>
+                        <option value="grade35">Grade 3 - 5</option>
                       </select>
                     </div>
                   </div>
@@ -265,7 +267,7 @@ export function AdmissionsDrawer({ isAdmissionsOpen, onCloseAdmissions }: Intera
                   type="submit"
                   className="w-full flex items-center justify-center space-x-2 bg-[#E78F68] hover:bg-[#d07b53] text-white font-semibold py-4 rounded-xl shadow-lg transition-all duration-300"
                 >
-                  <span>Request My Private Tour</span>
+                  <span>Submit Admissions Form</span>
                   <Send className="w-4 h-4" />
                 </button>
 
@@ -281,12 +283,12 @@ export function AdmissionsDrawer({ isAdmissionsOpen, onCloseAdmissions }: Intera
                 </div>
                 
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-serif font-bold">Booking Confirmed!</h3>
+                  <h3 className="text-2xl font-serif font-bold">Application Registered!</h3>
                   <p className="text-sm text-[#3B231A]/85 max-w-sm mx-auto">
-                    Thank you, <strong className="font-semibold">{formData.parentName}</strong>. We have saved a private tour slot for <strong className="font-semibold">{formData.childName}</strong> on <strong className="font-semibold">{formData.desiredDate}</strong>.
+                    Thank you, <strong className="font-semibold">{formData.parentName}</strong>. We have registered your admissions inquiry for <strong className="font-semibold">{formData.childName}</strong>.
                   </p>
                   <p className="text-xs text-[#3B231A]/60">
-                    A physical prospectus booklet and calendar invitation has been dispatched to <strong className="font-semibold">{formData.parentEmail}</strong>.
+                    A confirmation email and physical prospectus booklet have been dispatched to <strong className="font-semibold">{formData.parentEmail}</strong>.
                   </p>
                 </div>
 

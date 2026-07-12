@@ -1,5 +1,70 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
+import { IllustrationDefs, TamilBoyIllustration, TamilGirlIllustration } from './TamilIllustrations';
+import { GraduationCap, Monitor, Laptop, Atom, Trophy, Sun } from 'lucide-react';
+
+const NOTICE_BOARD_SLIDES = [
+  {
+    id: 1,
+    icon: GraduationCap,
+    iconColor: '#6366F1', // Indigo
+    iconBg: '#EEF2FF',
+    title: 'Admissions Open for 2027-2028',
+    badge: 'APPLY NOW',
+    badgeBg: '#EEF2FF',
+    badgeText: '#4F46E5',
+  },
+  {
+    id: 2,
+    icon: Monitor,
+    iconColor: '#10B981', // Emerald
+    iconBg: '#ECFDF5',
+    title: 'Smart Classrooms Available',
+    badge: 'MODERN',
+    badgeBg: '#ECFDF5',
+    badgeText: '#059669',
+  },
+  {
+    id: 3,
+    icon: Laptop,
+    iconColor: '#06B6D4', // Cyan
+    iconBg: '#ECFEFF',
+    title: 'Computer Lab Introduced',
+    badge: 'NEW',
+    badgeBg: '#ECFEFF',
+    badgeText: '#0891B2',
+  },
+  {
+    id: 4,
+    icon: Atom,
+    iconColor: '#F59E0B', // Amber
+    iconBg: '#FEF3C7',
+    title: 'STEM Activities Starting Soon',
+    badge: 'SOON',
+    badgeBg: '#FEF3C7',
+    badgeText: '#D97706',
+  },
+  {
+    id: 5,
+    icon: Trophy,
+    iconColor: '#EC4899', // Pink
+    iconBg: '#FDF2F8',
+    title: 'Annual Day Registrations Open',
+    badge: 'REGISTER',
+    badgeBg: '#FDF2F8',
+    badgeText: '#DB2777',
+  },
+  {
+    id: 6,
+    icon: Sun,
+    iconColor: '#F97316', // Orange
+    iconBg: '#FFF7ED',
+    title: 'Summer Camp Admissions Open',
+    badge: 'SUMMER',
+    badgeBg: '#FFF7ED',
+    badgeText: '#EA580C',
+  },
+];
 
 interface HeroProps {
   onOpenAdmissions: () => void;
@@ -112,11 +177,20 @@ function CutoutImage({ src, alt, className, fallbackRGB, tolerance = 95, feather
 }
 
 export default function Hero({ onOpenAdmissions }: HeroProps) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % NOTICE_BOARD_SLIDES.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
   return (
     <section 
       id="hero-section" 
       className="relative bg-[#F4F0EA] min-h-[720px] lg:h-[760px] flex items-center px-6 md:px-12 py-10 overflow-hidden select-none"
     >
+      <IllustrationDefs />
       
       {/* ================= FLOATING DECORATIONS ================= */}
       
@@ -168,15 +242,6 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
             <div className="relative w-[280px] h-[340px] flex items-end justify-center">
               {/* Organic green shape backdrop - no outline, no gradient */}
               <div className="absolute bottom-0 inset-x-0 h-[260px] bg-[#5BB35A] rounded-t-[100px] rounded-br-[100px] rounded-bl-none" />
-              {/* True transparent PNG cutout child */}
-              <CutoutImage
-                src="https://images.unsplash.com/photo-1519452635265-7b1fbfd1e4e0?auto=format&fit=crop&q=80&w=500"
-                alt="Cheerful boy standing wearing bright green clothing"
-                fallbackRGB={[242, 206, 52]}
-                tolerance={95}
-                feather={20}
-                className="relative z-10 w-[240px] h-[310px] object-contain object-bottom select-none mb-1"
-              />
 
               {/* Floating Target & Dart overlay */}
               <div className="absolute bottom-[20%] -left-8 z-20 pointer-events-none transform -rotate-12 animate-pulse">
@@ -206,8 +271,8 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
             transition={{ duration: 0.8 }}
             className="space-y-4 w-full"
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-serif font-bold text-[#3A2318] leading-[1.12] tracking-tight max-w-[90%] mx-auto">
-              Putting your child’s <span className="italic font-normal">Future</span> <br className="hidden sm:inline" /> in great motion
+            <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-serif font-bold text-[#3A2318] leading-[1.12] tracking-tight max-w-[95%] mx-auto">
+              Building Ambitious Minds <br className="hidden sm:inline" /> <span className="italic font-normal text-[#FF8A3D]">for Tomorrow's World</span>
             </h1>
           </motion.div>
 
@@ -219,13 +284,13 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
             className="flex flex-wrap justify-center items-center gap-2 sm:gap-4 text-xs font-semibold text-[#3A2318]"
           >
             <span className="flex items-center bg-white px-4 py-2 rounded-full shadow-sm border border-[#3A2318]/5">
-              <span className="text-[#5CB35C] mr-1.5 font-bold">✓</span> No Credit Card
+              <span className="text-[#5CB35C] mr-1.5 font-bold">✓</span> Safe Learning Environment
             </span>
             <span className="flex items-center bg-white px-4 py-2 rounded-full shadow-sm border border-[#3A2318]/5">
-              <span className="text-[#5CB35C] mr-1.5 font-bold">✓</span> 14 Days Trial
+              <span className="text-[#5CB35C] mr-1.5 font-bold">✓</span> Activity Based Education
             </span>
             <span className="flex items-center bg-white px-4 py-2 rounded-full shadow-sm border border-[#3A2318]/5">
-              <span className="text-[#5CB35C] mr-1.5 font-bold">✓</span> Free For Teachers
+              <span className="text-[#5CB35C] mr-1.5 font-bold">✓</span> Individual Student Attention
             </span>
           </motion.div>
 
@@ -234,14 +299,20 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="pt-2"
+            className="pt-2 flex flex-col sm:flex-row gap-4 items-center justify-center"
           >
             <button
               onClick={onOpenAdmissions}
-              className="bg-[#FF8A3D] text-white font-bold px-10 py-4.5 rounded-[16px] shadow-sm hover:bg-[#e67425] transition-all duration-300 flex items-center space-x-2 text-sm uppercase tracking-wider font-sans transform hover:-translate-y-0.5 active:translate-y-0"
+              className="bg-[#FF8A3D] text-white font-bold px-8 py-4.5 rounded-[16px] shadow-sm hover:bg-[#e67425] transition-all duration-300 flex items-center space-x-2 text-sm uppercase tracking-wider font-sans transform hover:-translate-y-0.5 active:translate-y-0 shrink-0"
             >
-              <span>Start Learning</span>
+              <span>Apply Now</span>
               <span className="text-lg font-light">↗</span>
+            </button>
+            <button
+              onClick={onOpenAdmissions}
+              className="border-2 border-[#3A2318]/15 text-[#3A2318] hover:bg-[#3A2318]/5 font-bold px-8 py-4.5 rounded-[16px] transition-all duration-300 flex items-center space-x-2 text-sm uppercase tracking-wider font-sans transform hover:-translate-y-0.5 active:translate-y-0 shrink-0"
+            >
+              <span>Book a School Visit</span>
             </button>
           </motion.div>
 
@@ -250,53 +321,78 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-sm sm:text-base text-[#3A2318]/90 max-w-md mx-auto font-sans font-medium leading-relaxed"
+            className="text-sm sm:text-base text-[#3A2318]/90 max-w-xl mx-auto font-sans font-normal leading-relaxed"
           >
-            We just don't give our students only lecture but real life experiences.
+            We don't just teach lessons. We inspire creativity, confidence, curiosity and character through joyful learning experiences.
           </motion.p>
 
-          {/* Educational hand-drawn doodle illustration */}
+          {/* Automatic sliding notice board in a premium matte-style educational design */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.92 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
             className="w-full pt-1"
           >
-            <svg width="220" height="135" viewBox="0 0 220 135" fill="none" xmlns="http://www.w3.org/2000/svg" className="mx-auto">
-              {/* Laptop Screen Frame */}
-              <rect x="55" y="35" width="90" height="60" rx="10" stroke="#3A2318" strokeWidth="2.5" fill="white" />
-              {/* Keyboard Bottom Base */}
-              <path d="M45 95C45 95 48 105 58 105H142C152 105 155 95 155 95" stroke="#3A2318" strokeWidth="2.5" fill="#F4F0EA" />
-              <line x1="50" y1="95" x2="150" y2="95" stroke="#3A2318" strokeWidth="2.5" strokeLinecap="round" />
-              
-              {/* Cute eye logo on screen */}
-              <path d="M80 65C80 65 90 55 100 55C110 55 120 65 120 65C120 65 110 75 100 75C90 75 80 65 80 65Z" stroke="#3A2318" strokeWidth="2" fill="white" />
-              <circle cx="100" cy="65" r="5" fill="#3A2318" />
-              <circle cx="102" cy="63" r="1.5" fill="white" />
+            <div className="relative w-full max-w-[420px] h-[140px] bg-white border-[5px] border-[#E5DEC9] rounded-[24px] shadow-[0_8px_20px_rgba(58,35,24,0.05)] mx-auto overflow-hidden">
+              {/* Slide Content container */}
+              <div className="relative h-full w-full">
+                <AnimatePresence mode="wait">
+                  {NOTICE_BOARD_SLIDES.map((slide, index) => {
+                    if (index !== currentSlide) return null;
+                    const SlideIcon = slide.icon;
+                    return (
+                      <motion.div
+                        key={slide.id}
+                        initial={{ x: 40, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: -40, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                        className="absolute inset-0 flex items-center px-6 pb-5 pt-1"
+                      >
+                        <div className="flex items-center space-x-4 w-full">
+                          {/* Cute Left Icon Container */}
+                          <div 
+                            className="w-14 h-14 rounded-[18px] flex items-center justify-center shrink-0 border border-[#3A2318]/5"
+                            style={{ backgroundColor: slide.iconBg }}
+                          >
+                            <SlideIcon size={26} color={slide.iconColor} strokeWidth={2.2} />
+                          </div>
+                          
+                          {/* Content text */}
+                          <div className="flex-1 text-left min-w-0">
+                            <div className="flex flex-col space-y-1.5">
+                              <h3 className="text-sm sm:text-[15px] md:text-base font-bold text-[#3A2318] tracking-tight leading-snug">
+                                {slide.title}
+                              </h3>
+                              <div>
+                                <span 
+                                  className="inline-flex px-2.5 py-0.5 rounded-full text-[9px] font-extrabold tracking-wider uppercase border border-[#3A2318]/5"
+                                  style={{ backgroundColor: slide.badgeBg, color: slide.badgeText }}
+                                >
+                                  {slide.badge}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
+              </div>
 
-              {/* Blue accent line below eye */}
-              <path d="M65 82H135" stroke="#5B92E5" strokeWidth="2.5" strokeLinecap="round" />
-
-              {/* Foliage/Leaves on right side */}
-              <path d="M145 85C155 75 160 62 158 48C156 34 168 26 174 38C179 51 170 65 165 74" stroke="#3A2318" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              
-              {/* Hand-drawn leaf blobs */}
-              <path d="M158 48C164 46 170 49 168 55C166 61 160 58 158 48Z" fill="#5B92E5" stroke="#3A2318" strokeWidth="1.5" />
-              <path d="M152 63C158 63 162 67 159 72C156 77 152 73 152 63Z" fill="#5B92E5" stroke="#3A2318" strokeWidth="1.5" />
-              <path d="M162 36C168 32 174 35 172 42C170 49 164 44 162 36Z" fill="#5B92E5" stroke="#3A2318" strokeWidth="1.5" />
-              
-              {/* Little Flower on top left */}
-              <path d="M50 32C48 27 52 24 55 27C58 24 62 27 60 32C62 37 58 40 55 37C52 40 48 37 50 32Z" fill="#EAB308" stroke="#3A2318" strokeWidth="1.5" />
-              <circle cx="55" cy="32" r="2" fill="#E78F68" />
-              <path d="M55 37C54 41 51 46 53 50" stroke="#3A2318" strokeWidth="1.5" strokeLinecap="round" />
-              
-              {/* Orange drop petal */}
-              <path d="M135 24C140 20 145 23 143 28C141 33 137 30 135 24Z" fill="#E78F68" stroke="#3A2318" strokeWidth="1.5" />
-              
-              {/* Spark lines */}
-              <path d="M40 60L34 62" stroke="#EAB308" strokeWidth="2" strokeLinecap="round" />
-              <path d="M42 54L37 52" stroke="#EAB308" strokeWidth="2" strokeLinecap="round" />
-            </svg>
+              {/* Bottom Pagination Indicators */}
+              <div className="absolute bottom-3 left-0 right-0 flex justify-center space-x-1.5 z-10 pointer-events-none">
+                {NOTICE_BOARD_SLIDES.map((_, i) => (
+                  <div 
+                    key={i}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      i === currentSlide ? 'bg-[#3A2318] w-3.5' : 'bg-[#E5DEC9] w-1.5'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
           </motion.div>
 
         </div>
@@ -314,15 +410,6 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
             <div className="relative w-[280px] h-[340px] flex items-end justify-center">
               {/* Organic yellow shape backdrop - no outlines, no gradients */}
               <div className="absolute bottom-0 inset-x-0 h-[260px] bg-[#F7CE22] rounded-t-[100px] rounded-bl-[100px] rounded-br-none" />
-              {/* True transparent PNG cutout child */}
-              <CutoutImage
-                src="https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&q=80&w=500"
-                alt="Cheerful girl standing wearing warm orange/brown clothing"
-                fallbackRGB={[245, 245, 245]}
-                tolerance={65}
-                feather={20}
-                className="relative z-10 w-[240px] h-[310px] object-contain object-bottom select-none mb-1"
-              />
 
               {/* Floating Cozy Red Backpack overlay */}
               <div className="absolute bottom-[20%] -right-6 z-20 pointer-events-none transform rotate-12 animate-pulse">
