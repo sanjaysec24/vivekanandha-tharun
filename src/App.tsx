@@ -9,6 +9,7 @@ import PromoSections from './components/PromoSections';
 import EventSection from './components/EventSection';
 import Footer from './components/Footer';
 import { CurriculumWidget, AdmissionsDrawer } from './components/InteractiveWidget';
+import VLeoChatbot from './components/VLeoChatbot';
 
 // Custom router integration
 import { RouterProvider, Route } from './lib/router';
@@ -77,6 +78,9 @@ export default function App() {
 
         {/* Interactive slideout booking drawer (Global) */}
         <AdmissionsDrawer isAdmissionsOpen={isAdmissionsOpen} onCloseAdmissions={closeAdmissions} />
+
+        {/* Global Floating AI Chatbot Assistant */}
+        <VLeoChatbot />
       </div>
     </RouterProvider>
   );
