@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { IllustrationDefs, TamilBoyIllustration, TamilGirlIllustration } from './TamilIllustrations';
 import { GraduationCap, Monitor, Laptop, Atom, Trophy, Sun } from 'lucide-react';
+import HeroNoticeSlider from './HeroNoticeSlider';
 
 const NOTICE_BOARD_SLIDES = [
   {
@@ -326,73 +327,14 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
             We don't just teach lessons. We inspire creativity, confidence, curiosity and character through joyful learning experiences.
           </motion.p>
 
-          {/* Automatic sliding notice board in a premium matte-style educational design */}
+          {/* Interactive, admin-controlled premium Hero Notice Slider */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="w-full pt-1"
+            className="w-fit flex justify-center items-center mx-auto pt-1"
           >
-            <div className="relative w-full max-w-[420px] h-[140px] bg-white border-[5px] border-[#E5DEC9] rounded-[24px] shadow-[0_8px_20px_rgba(58,35,24,0.05)] mx-auto overflow-hidden">
-              {/* Slide Content container */}
-              <div className="relative h-full w-full">
-                <AnimatePresence mode="wait">
-                  {NOTICE_BOARD_SLIDES.map((slide, index) => {
-                    if (index !== currentSlide) return null;
-                    const SlideIcon = slide.icon;
-                    return (
-                      <motion.div
-                        key={slide.id}
-                        initial={{ x: 40, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: -40, opacity: 0 }}
-                        transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                        className="absolute inset-0 flex items-center px-6 pb-5 pt-1"
-                      >
-                        <div className="flex items-center space-x-4 w-full">
-                          {/* Cute Left Icon Container */}
-                          <div 
-                            className="w-14 h-14 rounded-[18px] flex items-center justify-center shrink-0 border border-[#3A2318]/5"
-                            style={{ backgroundColor: slide.iconBg }}
-                          >
-                            <SlideIcon size={26} color={slide.iconColor} strokeWidth={2.2} />
-                          </div>
-                          
-                          {/* Content text */}
-                          <div className="flex-1 text-left min-w-0">
-                            <div className="flex flex-col space-y-1.5">
-                              <h3 className="text-sm sm:text-[15px] md:text-base font-bold text-[#3A2318] tracking-tight leading-snug">
-                                {slide.title}
-                              </h3>
-                              <div>
-                                <span 
-                                  className="inline-flex px-2.5 py-0.5 rounded-full text-[9px] font-extrabold tracking-wider uppercase border border-[#3A2318]/5"
-                                  style={{ backgroundColor: slide.badgeBg, color: slide.badgeText }}
-                                >
-                                  {slide.badge}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
-                </AnimatePresence>
-              </div>
-
-              {/* Bottom Pagination Indicators */}
-              <div className="absolute bottom-3 left-0 right-0 flex justify-center space-x-1.5 z-10 pointer-events-none">
-                {NOTICE_BOARD_SLIDES.map((_, i) => (
-                  <div 
-                    key={i}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      i === currentSlide ? 'bg-[#3A2318] w-3.5' : 'bg-[#E5DEC9] w-1.5'
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
+            <HeroNoticeSlider />
           </motion.div>
 
         </div>

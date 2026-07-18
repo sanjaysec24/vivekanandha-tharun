@@ -221,11 +221,11 @@ export default function AboutPage() {
             </div>
             <div className="flex items-center space-x-4 border-t border-[#3B231A]/10 pt-4">
               <div className="w-12 h-12 rounded-full bg-[#E78F68]/10 flex items-center justify-center font-serif font-bold text-[#E78F68] text-lg border border-[#E78F68]/20">
-                TS
+                BL
               </div>
               <div>
-                <h4 className="font-serif font-bold text-[#3B231A] text-sm">Thiru. S. Swaminathan</h4>
-                <p className="text-xs text-[#3B231A]/60 uppercase tracking-widest font-mono">Chairman & Founder</p>
+                <h4 className="font-serif font-bold text-[#3B231A] text-sm">Baskaran L</h4>
+                <p className="text-xs text-[#3B231A]/60 uppercase tracking-widest font-mono">Correspondent</p>
               </div>
             </div>
           </div>
@@ -241,11 +241,11 @@ export default function AboutPage() {
             </div>
             <div className="flex items-center space-x-4 border-t border-[#3B231A]/10 pt-4">
               <div className="w-12 h-12 rounded-full bg-[#198C52]/10 flex items-center justify-center font-serif font-bold text-[#198C52] text-lg border border-[#198C52]/20">
-                RM
+                SL
               </div>
               <div>
-                <h4 className="font-serif font-bold text-[#3B231A] text-sm">Dr. Radha Meenakshi</h4>
-                <p className="text-xs text-[#3B231A]/60 uppercase tracking-widest font-mono">Academic Principal</p>
+                <h4 className="font-serif font-bold text-[#3B231A] text-sm">Sudha Lakshmi B</h4>
+                <p className="text-xs text-[#3B231A]/60 uppercase tracking-widest font-mono">Principal</p>
               </div>
             </div>
           </div>

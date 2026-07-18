@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from '../lib/router';
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle2, PhoneCall } from 'lucide-react';
+import { submitEnquiry } from '../services/enquiriesService';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -14,13 +15,14 @@ export default function ContactPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.parentName || !formData.studentName || !formData.mobileNumber || !formData.emailAddress || !formData.message) {
       alert('Please fill out all required fields.');
@@ -28,11 +30,28 @@ export default function ContactPage() {
     }
     
     setIsSubmitting(true);
-    // Simulate premium submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setSubmitError(null);
+
+    try {
+      await submitEnquiry({
+        parentName: formData.parentName,
+        studentName: formData.studentName,
+        phone: formData.mobileNumber,
+        email: formData.emailAddress,
+        gradeInterested: formData.gradeApplying,
+        message: formData.message,
+      });
+
+      // Show success only on real database creation success
       setIsSubmitted(true);
-    }, 1200);
+    } catch (err) {
+      if ((import.meta as any).env?.DEV) {
+        console.error('Firebase Enquiry Submission Error:', err);
+      }
+      setSubmitError("We couldn't submit your enquiry. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -268,6 +287,13 @@ export default function ContactPage() {
                       className="w-full bg-[#F5F1EB] border border-[#E6DCCF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#E78F68]/30 text-[#3B231A] font-medium resize-none transition-all"
                     />
                   </div>
+
+                  {/* Error Alert */}
+                  {submitError && (
+                    <div className="p-3 bg-red-50 text-red-600 text-xs rounded-xl border border-red-100 font-medium font-sans">
+                      {submitError}
+                    </div>
+                  )}
 
                   {/* Buttons */}
                   <div className="flex flex-col sm:flex-row gap-4 pt-2">

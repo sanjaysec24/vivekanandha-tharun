@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import VijayadasamiSection from './components/VijayadasamiSection';
@@ -12,7 +12,7 @@ import { CurriculumWidget, AdmissionsDrawer } from './components/InteractiveWidg
 import VLeoChatbot from './components/VLeoChatbot';
 
 // Custom router integration
-import { RouterProvider, Route } from './lib/router';
+import { RouterProvider, Route, useRouter } from './lib/router';
 
 // Page components
 import AboutPage from './pages/AboutPage';
@@ -23,14 +23,30 @@ import GalleryPage from './pages/GalleryPage';
 import ContactPage from './pages/ContactPage';
 
 export default function App() {
+  return (
+    <RouterProvider>
+      <AppContent />
+    </RouterProvider>
+  );
+}
+
+function AppContent() {
   const [isAdmissionsOpen, setIsAdmissionsOpen] = useState(false);
+  const { path, navigate } = useRouter();
 
   const openAdmissions = () => setIsAdmissionsOpen(true);
   const closeAdmissions = () => setIsAdmissionsOpen(false);
 
+  // Clean redirection for old admin/login/dashboard/settings paths to the public homepage
+  useEffect(() => {
+    const obsoleteRoutes = ['/admin', '/admin/login', '/dashboard', '/settings', '/login'];
+    if (obsoleteRoutes.includes(path) || path.startsWith('/dashboard/') || path.startsWith('/admin/')) {
+      navigate('/');
+    }
+  }, [path, navigate]);
+
   return (
-    <RouterProvider>
-      <div id="school-landing-app" className="min-h-screen bg-[#F4F0EA] text-[#3A2318] selection:bg-[#E78F68]/35 overflow-x-hidden font-sans">
+    <div id="school-landing-app" className="min-h-screen bg-[#F4F0EA] text-[#3A2318] selection:bg-[#E78F68]/35 overflow-x-hidden font-sans">
         {/* 1. Header Navigation Bar (Global) */}
         <Navbar onOpenAdmissions={openAdmissions} />
 
@@ -82,6 +98,5 @@ export default function App() {
         {/* Global Floating AI Chatbot Assistant */}
         <VLeoChatbot />
       </div>
-    </RouterProvider>
   );
 }

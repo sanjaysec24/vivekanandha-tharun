@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle, Info, Calendar, FileText, HelpCircle, ArrowRight, Star, Sparkles } from 'lucide-react';
+import AdmissionRegistrationForm from '../components/AdmissionRegistrationForm';
+import { submitEnquiry } from '../services/enquiriesService';
 
 const ELIGIBILITY = [
   { grade: 'Pre KG', ageRange: '2.5 to 3.5 Years', cutoff: 'Must complete 2 years and 6 months by June 1st' },
@@ -53,20 +55,43 @@ export default function AdmissionsPage() {
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.parentName || !formData.childName || !formData.phone) {
       alert('Please fill out the required fields (Parent Name, Child Name, Phone).');
       return;
     }
-    // Simulate API call
-    setFormSubmitted(true);
+    
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      await submitEnquiry({
+        parentName: formData.parentName,
+        studentName: formData.childName,
+        phone: formData.phone,
+        email: formData.email,
+        gradeInterested: formData.grade,
+        message: formData.msg,
+      });
+
+      setFormSubmitted(true);
+    } catch (err) {
+      if ((import.meta as any).env?.DEV) {
+        console.error('Firebase Enquiry Submission Error:', err);
+      }
+      setSubmitError("We couldn't submit your enquiry. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -227,6 +252,9 @@ export default function AdmissionsPage() {
         </div>
       </div>
 
+      {/* Premium Student Admission Registration Form Section */}
+      <AdmissionRegistrationForm />
+
       {/* Fee Enquiry Form Section */}
       <div id="fee-enquiry" className="max-w-7xl mx-auto px-6 md:px-12 py-16 border-t border-[#3B231A]/10 grid grid-cols-1 lg:grid-cols-12 gap-12">
         <div className="lg:col-span-5 space-y-6">
@@ -363,11 +391,19 @@ export default function AdmissionsPage() {
                     />
                   </div>
 
+                  {/* Error Alert */}
+                  {submitError && (
+                    <div className="p-3 bg-red-50 text-red-600 text-xs rounded-xl border border-red-100 font-medium font-sans">
+                      {submitError}
+                    </div>
+                  )}
+
                   <button
                     type="submit"
-                    className="w-full bg-[#FF8A3D] hover:bg-[#e67425] text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 uppercase text-xs tracking-wider font-mono flex items-center justify-center space-x-2 shadow-sm"
+                    disabled={isSubmitting}
+                    className="w-full bg-[#FF8A3D] hover:bg-[#e67425] text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 uppercase text-xs tracking-wider font-mono flex items-center justify-center space-x-2 shadow-sm disabled:opacity-50"
                   >
-                    <span>Submit Admission Enquiry</span>
+                    <span>{isSubmitting ? 'Submitting...' : 'Submit Admission Enquiry'}</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </motion.form>
