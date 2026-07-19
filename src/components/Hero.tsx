@@ -33,7 +33,7 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
       <div className={`absolute bottom-0 w-full ${isMobile ? 'h-[185px] sm:h-[225px]' : 'h-[360px] sm:h-[410px]'} overflow-visible pointer-events-none flex items-end justify-center`}>
         <div className="relative w-full h-full flex items-end justify-center">
           <img 
-            src="/assets/school_boy.png" 
+            src="/images/school_boy.png"
             alt="Vivekanandha School Boy" 
             className="h-full w-auto object-contain z-10 select-none pointer-events-none"
             referrerPolicy="no-referrer"
@@ -78,7 +78,7 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
       <div className={`absolute bottom-0 w-full ${isMobile ? 'h-[185px] sm:h-[225px]' : 'h-[360px] sm:h-[410px]'} overflow-visible pointer-events-none flex items-end justify-center`}>
         <div className="relative w-full h-full flex items-end justify-center">
           <img 
-            src="/assets/school_girl.png" 
+            src="/images/school_girl.png" 
             alt="Vivekanandha School Girl" 
             className="h-full w-auto object-contain z-10 select-none pointer-events-none"
             referrerPolicy="no-referrer"
