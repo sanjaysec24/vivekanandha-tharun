@@ -10,6 +10,7 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json());
+app.use("/assets", express.static(path.join(process.cwd(), "assets")));
 
 // Lazy-initialized Gemini client to prevent crashes if key is missing during startup
 let aiInstance: GoogleGenAI | null = null;

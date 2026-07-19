@@ -42,6 +42,45 @@ export function useRouter() {
   return useContext(RouterContext);
 }
 
+const ParamsContext = createContext<Record<string, string>>({});
+
+export function useParams() {
+  return useContext(ParamsContext);
+}
+
+export function matchRoutePath(routePath: string, currentPath: string): { matches: boolean; params: Record<string, string> } {
+  if (routePath === currentPath) {
+    return { matches: true, params: {} };
+  }
+  
+  if (!routePath.includes(':')) {
+    return { matches: false, params: {} };
+  }
+
+  const routeSegments = routePath.split('/');
+  const currentSegments = currentPath.split('/');
+
+  if (routeSegments.length !== currentSegments.length) {
+    return { matches: false, params: {} };
+  }
+
+  const params: Record<string, string> = {};
+
+  for (let i = 0; i < routeSegments.length; i++) {
+    const routeSeg = routeSegments[i];
+    const currentSeg = currentSegments[i];
+
+    if (routeSeg.startsWith(':')) {
+      const paramName = routeSeg.slice(1);
+      params[paramName] = decodeURIComponent(currentSeg);
+    } else if (routeSeg !== currentSeg) {
+      return { matches: false, params: {} };
+    }
+  }
+
+  return { matches: true, params };
+}
+
 interface RouteProps {
   path: string;
   element: React.ReactNode;
@@ -49,10 +88,14 @@ interface RouteProps {
 
 export function Route({ path, element }: RouteProps) {
   const { path: currentPath } = useRouter();
+  const { matches, params } = matchRoutePath(path, currentPath);
   
-  // Strict matching for path, but we can also match subpaths if needed
-  if (currentPath === path) {
-    return <>{element}</>;
+  if (matches) {
+    return (
+      <ParamsContext.Provider value={params}>
+        {element}
+      </ParamsContext.Provider>
+    );
   }
   return null;
 }

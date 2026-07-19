@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import NoticesAnnouncements from './components/NoticesAnnouncements';
 import VijayadasamiSection from './components/VijayadasamiSection';
 import StatsBar from './components/StatsBar';
 import FeatureCards from './components/FeatureCards';
@@ -20,6 +21,7 @@ import AcademicsPage from './pages/AcademicsPage';
 import AdmissionsPage from './pages/AdmissionsPage';
 import ActivitiesPage from './pages/ActivitiesPage';
 import GalleryPage from './pages/GalleryPage';
+import AlbumDetailPage from './pages/AlbumDetailPage';
 import ContactPage from './pages/ContactPage';
 
 export default function App() {
@@ -58,6 +60,9 @@ function AppContent() {
             {/* 2. Headline & Dynamic Arched Hero section */}
             <Hero onOpenAdmissions={openAdmissions} />
 
+            {/* Notices & Announcements Section */}
+            <NoticesAnnouncements />
+
             {/* Seasonal: Vijayadasami Admissions 2027 */}
             <VijayadasamiSection onOpenAdmissions={openAdmissions} />
 
@@ -87,6 +92,7 @@ function AppContent() {
         <Route path="/admissions" element={<AdmissionsPage />} />
         <Route path="/activities" element={<ActivitiesPage />} />
         <Route path="/gallery" element={<GalleryPage />} />
+        <Route path="/gallery/:albumId" element={<AlbumDetailPage />} />
         <Route path="/contact" element={<ContactPage />} />
 
         {/* 9. Premium Footer (Global) */}
