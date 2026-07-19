@@ -57,15 +57,80 @@ export default function VijayadasamiSection({ onOpenAdmissions }: VijayadasamiSe
             {/* Elegant glowing background halo */}
             <div className="absolute w-[80%] h-[80%] rounded-full bg-[#E78F68]/10 blur-3xl animate-pulse" />
 
-            {/* Traditional Kolam Line Art behind the items */}
-            <div className="absolute inset-0 pointer-events-none opacity-20">
-              <svg width="100%" height="100%" viewBox="0 0 100 100" fill="none" stroke="#3B231A" strokeWidth="0.75" className="animate-[spin_40s_linear_infinite]">
-                <circle cx="50" cy="50" r="45" strokeDasharray="3 3" />
-                <path d="M50 5 L95 50 L50 95 L5 50 Z" />
-                <path d="M50 15 C65 35 65 65 50 85 C35 65 35 35 50 15 Z" />
-                <path d="M15 50 C35 65 65 65 85 50 C65 35 35 35 15 50 Z" />
+            {/* Traditional Tamil Kolam Line Art behind the items (Subtle Breathing Animation) */}
+            <motion.div 
+              animate={{ 
+                opacity: [0.12, 0.24, 0.12], 
+                scale: [0.95, 1.02, 0.95] 
+              }}
+              transition={{ 
+                duration: 9, 
+                repeat: Infinity, 
+                ease: 'easeInOut' 
+              }}
+              className="absolute inset-0 pointer-events-none flex items-center justify-center z-0"
+            >
+              <svg 
+                width="100%" 
+                height="100%" 
+                viewBox="0 0 200 200" 
+                fill="none" 
+                stroke="#E78F68" 
+                strokeWidth="1.2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              >
+                {/* Central traditional dot and nested rings of pullis */}
+                <circle cx="100" cy="100" r="2.5" fill="#E78F68" />
+                
+                {/* Inner pulli grid */}
+                <circle cx="100" cy="70" r="1.8" fill="#E78F68" />
+                <circle cx="100" cy="130" r="1.8" fill="#E78F68" />
+                <circle cx="130" cy="100" r="1.8" fill="#E78F68" />
+                <circle cx="70" cy="100" r="1.8" fill="#E78F68" />
+                <circle cx="121" cy="79" r="1.8" fill="#E78F68" />
+                <circle cx="121" cy="121" r="1.8" fill="#E78F68" />
+                <circle cx="79" cy="121" r="1.8" fill="#E78F68" />
+                <circle cx="79" cy="79" r="1.8" fill="#E78F68" />
+
+                {/* Outer pullis */}
+                <circle cx="100" cy="40" r="1.5" fill="#E78F68" />
+                <circle cx="100" cy="160" r="1.5" fill="#E78F68" />
+                <circle cx="160" cy="100" r="1.5" fill="#E78F68" />
+                <circle cx="40" cy="100" r="1.5" fill="#E78F68" />
+                
+                {/* Traditional 8-Petal Lotus (Kamala Kolam) Symmetrical Motif */}
+                {/* Cardinal Petals */}
+                <path d="M 100,100 C 80,60 90,30 100,20 C 110,30 120,60 100,100 Z" />
+                <path d="M 100,100 C 120,140 110,170 100,180 C 90,170 80,140 100,100 Z" />
+                <path d="M 100,100 C 140,80 170,90 180,100 C 170,110 140,120 100,100 Z" />
+                <path d="M 100,100 C 60,120 30,110 20,100 C 30,90 60,80 100,100 Z" />
+
+                {/* Symmetrical Diagonal Petals */}
+                <path d="M 100,100 C 118,72 138,52 156,44 C 148,62 128,82 100,100 Z" />
+                <path d="M 100,100 C 128,118 148,138 156,156 C 138,148 118,128 100,100 Z" />
+                <path d="M 100,100 C 82,128 62,148 44,156 C 52,138 72,118 100,100 Z" />
+                <path d="M 100,100 C 72,82 52,62 44,44 C 62,52 82,72 100,100 Z" />
+
+                {/* Inner layered accents for depth */}
+                <path d="M 100,100 C 88,72 94,50 100,40 C 106,50 112,72 100,100 Z" strokeWidth="0.8" />
+                <path d="M 100,100 C 112,128 106,150 100,160 C 94,150 88,128 100,100 Z" strokeWidth="0.8" />
+                <path d="M 100,100 C 128,88 150,94 160,100 C 150,106 128,112 100,100 Z" strokeWidth="0.8" />
+                <path d="M 100,100 C 72,112 50,106 40,100 C 50,94 72,88 100,100 Z" strokeWidth="0.8" />
+
+                {/* Interlocking Sikku style arches / kambi running gracefully on the outside */}
+                <path d="M 85,35 C 85,15 115,15 115,35" strokeWidth="1.0" />
+                <path d="M 85,165 C 85,185 115,185 115,165" strokeWidth="1.0" />
+                <path d="M 165,85 C 185,85 185,115 165,115" strokeWidth="1.0" />
+                <path d="M 35,85 C 15,85 15,115 35,115" strokeWidth="1.0" />
+
+                {/* Traditional corner decorative loops */}
+                <path d="M 135,45 C 145,25 175,55 155,65" strokeWidth="0.8" />
+                <path d="M 155,135 C 175,145 145,175 135,155" strokeWidth="0.8" />
+                <path d="M 65,155 C 55,175 25,145 45,135" strokeWidth="0.8" />
+                <path d="M 45,65 C 25,55 55,25 65,45" strokeWidth="0.8" />
               </svg>
-            </div>
+            </motion.div>
 
             {/* Floating traditional motifs */}
             <motion.div 
