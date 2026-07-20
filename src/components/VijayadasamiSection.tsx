@@ -60,7 +60,7 @@ export default function VijayadasamiSection({ onOpenAdmissions }: VijayadasamiSe
             {/* Traditional Tamil Kolam Line Art behind the items (Subtle Breathing Animation) */}
             <motion.div 
               animate={{ 
-                opacity: [0.12, 0.24, 0.12], 
+                opacity: [0.35, 0.45, 0.35], 
                 scale: [0.95, 1.02, 0.95] 
               }}
               transition={{ 
@@ -76,7 +76,7 @@ export default function VijayadasamiSection({ onOpenAdmissions }: VijayadasamiSe
                 viewBox="0 0 200 200" 
                 fill="none" 
                 stroke="#E78F68" 
-                strokeWidth="1.2" 
+                strokeWidth="1.5" 
                 strokeLinecap="round" 
                 strokeLinejoin="round"
               >
