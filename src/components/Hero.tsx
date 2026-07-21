@@ -7,6 +7,9 @@ interface HeroProps {
 }
 
 export default function Hero({ onOpenAdmissions }: HeroProps) {
+  const boyImage = "/images/school_boy.png";
+  const girlImage = "/images/school_girl.png";
+
   // Click-to-animate state triggers
   const [balloonTrigger, setBalloonTrigger] = useState(0);
   const [ballTrigger, setBallTrigger] = useState(0);
@@ -33,10 +36,12 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
       <div className={`absolute bottom-0 w-full ${isMobile ? 'h-[185px] sm:h-[225px]' : 'h-[360px] sm:h-[410px]'} overflow-visible pointer-events-none flex items-end justify-center`}>
         <div className="relative w-full h-full flex items-end justify-center">
           <img 
-            src="/images/school_boy.png" 
+            src={boyImage} 
             alt="Vivekanandha School Boy" 
             className="h-full w-auto object-contain z-10 select-none pointer-events-none"
             referrerPolicy="no-referrer"
+            loading="eager"
+            decoding="async"
           />
         </div>
       </div>
@@ -78,10 +83,12 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
       <div className={`absolute bottom-0 w-full ${isMobile ? 'h-[185px] sm:h-[225px]' : 'h-[360px] sm:h-[410px]'} overflow-visible pointer-events-none flex items-end justify-center`}>
         <div className="relative w-full h-full flex items-end justify-center">
           <img 
-            src="/images/school_girl.png" 
+            src={girlImage} 
             alt="Vivekanandha School Girl" 
             className="h-full w-auto object-contain z-10 select-none pointer-events-none"
             referrerPolicy="no-referrer"
+            loading="eager"
+            decoding="async"
           />
         </div>
       </div>
