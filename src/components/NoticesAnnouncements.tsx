@@ -188,23 +188,33 @@ export default function NoticesAnnouncements() {
       }) || 'Recent Announcement'
     : 'Recent Announcement';
 
-  // Slider animation variations
-  const posterVariants = {
-    enter: {
+  // Slider animation variations using translation X and subtle scale for premium slide transitions
+  const slideVariants = {
+    enter: (dir: number) => ({
       opacity: 0,
-      y: 12,
-      scale: 0.97,
-    },
+      x: dir * 30,
+      scale: 0.98,
+    }),
     center: {
       opacity: 1,
-      y: 0,
+      x: 0,
       scale: 1,
+      transition: {
+        opacity: { duration: 0.35, ease: "easeOut" },
+        x: { type: "spring", stiffness: 180, damping: 24 },
+        scale: { duration: 0.35, ease: "easeOut" },
+      }
     },
-    exit: {
+    exit: (dir: number) => ({
       opacity: 0,
-      scale: 0.95,
-      transition: { duration: 0.25, ease: "easeInOut" }
-    },
+      x: dir * -30,
+      scale: 0.98,
+      transition: {
+        opacity: { duration: 0.25, ease: "easeIn" },
+        x: { duration: 0.25, ease: "easeIn" },
+        scale: { duration: 0.25, ease: "easeIn" },
+      }
+    }),
   };
 
   return (
@@ -239,203 +249,248 @@ export default function NoticesAnnouncements() {
           </p>
         </motion.div>
 
-        {/* Notices Slider Card */}
-        <div 
-          className="relative bg-[#FCFAF7] rounded-[32px] sm:rounded-[40px] border-2 border-[#3B231A]/8 shadow-[0_16px_50px_rgba(59,35,26,0.05)] p-6 sm:p-10 md:p-12 w-full box-border group transition-all duration-500 hover:shadow-[0_20px_60px_rgba(59,35,26,0.08)] hover:-translate-y-1"
-          onMouseEnter={() => setIsPlaying(false)}
-          onMouseLeave={() => setIsPlaying(true)}
-        >
-          {/* Decorative Tape Sticker near top-left corner */}
-          <div className="absolute -top-3.5 left-[8%] w-24 h-7 bg-[#E78F68]/15 border-x-2 border-dashed border-[#E78F68]/35 rotate-[-3deg] z-20 shadow-[0_2px_5px_rgba(0,0,0,0.01)]" />
+        {/* Notices Slider Card with Layered-Paper Depth and Premium Stylings */}
+        <div className="relative w-full group">
+          {/* Subtle warm-orange offset stacked background sheet */}
+          <div className="absolute inset-0 bg-[#E78F68]/4 border-2 border-[#3B231A]/6 rounded-[40px] sm:rounded-[48px] translate-x-2 translate-y-2 pointer-events-none transition-all duration-500 group-hover:translate-x-3 group-hover:translate-y-3" />
+          {/* Subtle soft-white offset background sheet */}
+          <div className="absolute inset-0 bg-white/40 border border-[#3B231A]/4 rounded-[40px] sm:rounded-[48px] -translate-x-1.5 -translate-y-1.5 pointer-events-none transition-all duration-500 group-hover:-translate-x-2 group-hover:-translate-y-2" />
 
-          {/* Play/Pause Control on the top-right corner of the card */}
-          {visibleNotices.length > 1 && (
-            <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20">
-              <button
-                onClick={togglePlayPause}
-                className="p-2 sm:p-2.5 rounded-full bg-white border border-[#3B231A]/10 text-[#3B231A]/60 hover:text-white hover:bg-[#E78F68] hover:border-[#E78F68] transition-all duration-300 cursor-pointer shadow-xs active:scale-90"
-                aria-label={isPlaying ? "Pause Slideshow" : "Play Slideshow"}
-              >
-                {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-              </button>
-            </div>
-          )}
+          {/* Main Card */}
+          <div 
+            className="relative bg-[#FCFAF7] rounded-[40px] sm:rounded-[48px] border-2 border-[#3B231A]/10 shadow-[0_12px_40px_rgba(59,35,26,0.03)] p-6 sm:p-10 md:p-12 w-full box-border transition-all duration-500 hover:shadow-[0_20px_50px_rgba(59,35,26,0.06)] hover:-translate-y-1"
+            onMouseEnter={() => setIsPlaying(false)}
+            onMouseLeave={() => setIsPlaying(true)}
+          >
+            {/* Play/Pause Control on the top-right corner of the card */}
+            {visibleNotices.length > 1 && (
+              <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20">
+                <button
+                  onClick={togglePlayPause}
+                  className="p-2 sm:p-2.5 rounded-full bg-white border border-[#3B231A]/10 text-[#3B231A]/60 hover:text-white hover:bg-[#E78F68] hover:border-[#E78F68] transition-all duration-300 cursor-pointer shadow-xs active:scale-90"
+                  aria-label={isPlaying ? "Pause Slideshow" : "Play Slideshow"}
+                >
+                  {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                </button>
+              </div>
+            )}
 
-          {/* Grid Layout: Poster & Information Block */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 lg:gap-12 items-center relative z-10">
-            
-            {/* Left Column: Poster frame (Visually Dominant) */}
-            <div className="md:col-span-6 lg:col-span-7 w-full flex flex-col justify-center relative">
-              <div className="relative aspect-[4/3] md:aspect-[1.15] lg:aspect-[1.2] w-full bg-[#3B231A]/4 rounded-[24px] overflow-hidden border-2 border-[#3B231A]/10 p-2 sm:p-3 shadow-[inset_0_2px_8px_rgba(59,35,26,0.02),0_10px_30px_rgba(59,35,26,0.03)] group-hover:scale-[1.005] transition-transform duration-500">
-                {/* Cute Corner Pins on the internal frame */}
-                <div className="absolute top-2.5 left-2.5 w-2.5 h-2.5 rounded-full bg-[#E78F68]/50 border border-[#3B231A]/20 z-20" />
-                <div className="absolute top-2.5 right-2.5 w-2.5 h-2.5 rounded-full bg-amber-400/50 border border-[#3B231A]/20 z-20" />
+            {/* Grid Layout: Poster & Information Block */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 lg:gap-12 items-center relative z-10">
+              
+              {/* Left Column: Poster frame (Visually Dominant as pinned memory) */}
+              <div className="md:col-span-6 lg:col-span-7 w-full flex flex-col justify-center relative">
+                <div className="relative aspect-[4/3] md:aspect-[1.15] lg:aspect-[1.2] w-full bg-white rounded-[24px] overflow-hidden border-2 border-[#3B231A]/12 p-3 sm:p-4 shadow-[0_8px_24px_rgba(59,35,26,0.03),inset_0_1px_3px_rgba(255,255,255,0.8)] hover:scale-[1.015] transition-transform duration-500 ease-out">
+                  {/* Subtle dashed inner frame */}
+                  <div className="absolute inset-2 sm:inset-3 border border-dashed border-[#3B231A]/15 rounded-[16px] pointer-events-none z-10" />
 
-                <div className="w-full h-full overflow-hidden rounded-[16px] bg-white flex items-center justify-center relative">
-                  <AnimatePresence initial={false} custom={direction} mode="wait">
-                    <motion.img
-                      key={activeIndex}
-                      variants={posterVariants}
-                      initial="enter"
-                      animate="center"
-                      exit="exit"
-                      transition={{
-                        opacity: { duration: 0.35 },
-                        scale: { duration: 0.35 },
-                        y: { type: 'spring', stiffness: 300, damping: 26 },
-                      }}
-                      src={currentNotice.posterUrl || FALLBACK_IMAGE}
-                      alt={currentNotice.title}
-                      referrerPolicy="no-referrer"
-                      className="w-full h-full object-contain select-none rounded-[16px]"
-                    />
-                  </AnimatePresence>
+                  <div className="w-full h-full overflow-hidden rounded-[12px] bg-[#FDFBF7] flex items-center justify-center relative">
+                    <AnimatePresence initial={false} custom={direction} mode="wait">
+                      <motion.img
+                        key={activeIndex}
+                        custom={direction}
+                        variants={slideVariants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        src={currentNotice.posterUrl || FALLBACK_IMAGE}
+                        alt={currentNotice.title}
+                        referrerPolicy="no-referrer"
+                        className="w-full h-full object-contain select-none rounded-[12px]"
+                      />
+                    </AnimatePresence>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Right Column: Information Block with Staggered Elements */}
-            <div className="md:col-span-6 lg:col-span-5 flex flex-col justify-between h-full py-2 space-y-6">
-              
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeIndex}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.35, delay: 0.05, ease: "easeOut" }}
-                  className="space-y-4 sm:space-y-5"
-                >
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className={`text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-xs ${getCategoryBadgeClass(currentNotice.category)}`}>
-                      {currentNotice.category || 'Announcement'}
-                    </span>
-                    <span className="flex items-center text-[10px] sm:text-xs text-[#3B231A]/65 font-mono gap-1.5 bg-[#3B231A]/4 px-3 py-1 rounded-full border border-[#3B231A]/5">
-                      <Calendar className="w-3.5 h-3.5 text-[#E78F68]" />
-                      {formattedDate}
-                    </span>
+              {/* Right Column: Information Block with Staggered Elements */}
+              <div className="md:col-span-6 lg:col-span-5 flex flex-col justify-between h-full py-2 space-y-6 overflow-hidden w-full">
+                
+                <AnimatePresence initial={false} custom={direction} mode="wait">
+                  <motion.div
+                    key={activeIndex}
+                    custom={direction}
+                    variants={slideVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    className="space-y-5 sm:space-y-6 flex flex-col justify-start"
+                  >
+                    {/* Category Badge */}
+                    <div>
+                      <span className={`inline-block text-[10px] sm:text-xs font-mono font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-xs ${getCategoryBadgeClass(currentNotice.category)}`}>
+                        {currentNotice.category || 'Announcement'}
+                      </span>
+                    </div>
+
+                    {/* Date */}
+                    <div className="flex items-center text-xs text-[#E78F68] font-mono font-bold gap-2">
+                      <Calendar className="w-4 h-4 text-[#E78F68]" />
+                      <span>{formattedDate}</span>
+                    </div>
+
+                    {/* Large Bold Notice Title with same dark-brown language */}
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-extrabold text-[#3B231A] leading-tight tracking-tight">
+                      {currentNotice.title}
+                    </h3>
+
+                    {/* Short Description */}
+                    {currentNotice.subtitle && (
+                      <p className="text-sm sm:text-base text-[#3B231A]/75 font-normal leading-relaxed">
+                        {currentNotice.subtitle}
+                      </p>
+                    )}
+
+                    {currentNotice.description && !currentNotice.subtitle && (
+                      <p className="text-sm sm:text-base text-[#3B231A]/75 font-normal leading-relaxed">
+                        {currentNotice.description}
+                      </p>
+                    )}
+
+                    {currentNotice.redirectUrl && (
+                      <div className="pt-2">
+                        <a
+                          href={currentNotice.redirectUrl}
+                          target={isExternalUrl(currentNotice.redirectUrl) ? "_blank" : undefined}
+                          rel={isExternalUrl(currentNotice.redirectUrl) ? "noopener noreferrer" : undefined}
+                          className="inline-flex items-center space-x-2 bg-[#E78F68] text-white hover:bg-[#cf744d] hover:shadow-[#E78F68]/20 active:scale-95 text-xs font-sans font-bold uppercase tracking-wider px-5 py-2.5 sm:py-3 rounded-full transition-all duration-300 shadow-md cursor-pointer group"
+                        >
+                          <span>{currentNotice.actionText || 'Explore Announcement'}</span>
+                          <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                        </a>
+                      </div>
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Playful Progress Navigation & Premium Control triggers */}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t-2 border-[#3B231A]/8 w-full mt-auto">
+                  
+                  {/* Playful Progress Indicators: 01 ─── 02 ─── 03 */}
+                  <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
+                    {visibleNotices.map((_, index) => {
+                      const isActive = index === activeIndex;
+                      return (
+                        <React.Fragment key={index}>
+                          {index > 0 && (
+                            <div className="w-6 sm:w-10 h-[2px] bg-[#3B231A]/10 rounded-full" />
+                          )}
+                          <button
+                            onClick={() => handleDotClick(index)}
+                            className="group flex items-center gap-2 focus:outline-none cursor-pointer py-1"
+                            aria-label={`Go to announcement ${index + 1}`}
+                          >
+                            <span className={`text-xs sm:text-sm font-mono font-extrabold transition-colors duration-300 ${isActive ? 'text-[#E78F68]' : 'text-[#3B231A]/40 group-hover:text-[#3B231A]/70'}`}>
+                              {String(index + 1).padStart(2, '0')}
+                            </span>
+                            {isActive && (
+                              <div className="relative w-12 sm:w-16 h-1.5 bg-[#3B231A]/10 rounded-full overflow-hidden">
+                                <motion.div
+                                  key={`${index}-${resetTrigger}-${isPlaying}`}
+                                  initial={{ width: '0%' }}
+                                  animate={isPlaying ? { width: '100%' } : { width: '0%' }}
+                                  transition={{ duration: isPlaying ? 5 : 0, ease: 'linear' }}
+                                  className="absolute left-0 top-0 h-full bg-[#E78F68] rounded-full"
+                                />
+                              </div>
+                            )}
+                          </button>
+                        </React.Fragment>
+                      );
+                    })}
                   </div>
 
-                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-sans font-bold text-[#3B231A] leading-tight tracking-tight">
-                    {currentNotice.title}
-                  </h3>
-
-                  {currentNotice.subtitle && (
-                    <p className="text-xs sm:text-sm text-[#3B231A]/75 font-normal leading-relaxed">
-                      {currentNotice.subtitle}
-                    </p>
-                  )}
-
-                  {currentNotice.description && !currentNotice.subtitle && (
-                    <p className="text-xs sm:text-sm text-[#3B231A]/75 font-normal leading-relaxed">
-                      {currentNotice.description}
-                    </p>
-                  )}
-
-                  {currentNotice.redirectUrl && (
-                    <div className="pt-2">
-                      <a
-                        href={currentNotice.redirectUrl}
-                        target={isExternalUrl(currentNotice.redirectUrl) ? "_blank" : undefined}
-                        rel={isExternalUrl(currentNotice.redirectUrl) ? "noopener noreferrer" : undefined}
-                        className="inline-flex items-center space-x-2 bg-[#E78F68] text-white hover:bg-[#cf744d] hover:shadow-[#E78F68]/20 active:scale-95 text-xs font-sans font-bold uppercase tracking-wider px-5 py-2.5 sm:py-3 rounded-full transition-all duration-300 shadow-md cursor-pointer group"
+                  {/* Circular navigation triggers */}
+                  {visibleNotices.length > 1 && (
+                    <div className="flex items-center space-x-3">
+                      <button
+                        onClick={handlePrev}
+                        className="p-2 sm:p-2.5 bg-[#FAF6F0] hover:bg-[#E78F68] hover:text-white text-[#3B231A]/80 border-2 border-[#3B231A]/12 rounded-full transition-all duration-300 shadow-xs active:scale-90 group cursor-pointer"
+                        aria-label="Previous announcement"
                       >
-                        <span>{currentNotice.actionText || 'Explore Announcement'}</span>
-                        <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                      </a>
+                        <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+                      </button>
+                      <button
+                        onClick={handleNext}
+                        className="p-2 sm:p-2.5 bg-[#FAF6F0] hover:bg-[#E78F68] hover:text-white text-[#3B231A]/80 border-2 border-[#3B231A]/12 rounded-full transition-all duration-300 shadow-xs active:scale-90 group cursor-pointer"
+                        aria-label="Next announcement"
+                      >
+                        <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                      </button>
                     </div>
                   )}
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Storytelling progress dots & arrows in a unified bar inside the right column */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t border-[#3B231A]/8 w-full mt-auto">
-                
-                {/* 01 ━━━━ 02 ━━━━ 03 Progress dots */}
-                <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
-                  {visibleNotices.map((_, index) => {
-                    const isActive = index === activeIndex;
-                    return (
-                      <React.Fragment key={index}>
-                        {index > 0 && (
-                          <div className="w-4 sm:w-6 h-[1.5px] bg-[#3B231A]/10 rounded-full" />
-                        )}
-                        <button
-                          onClick={() => handleDotClick(index)}
-                          className="group flex items-center gap-1.5 focus:outline-none cursor-pointer"
-                          aria-label={`Go to announcement ${index + 1}`}
-                        >
-                          <span className={`text-[10px] sm:text-xs font-mono font-bold transition-colors duration-300 ${isActive ? 'text-[#E78F68]' : 'text-[#3B231A]/40 group-hover:text-[#3B231A]/70'}`}>
-                            {String(index + 1).padStart(2, '0')}
-                          </span>
-                          {isActive && (
-                            <div className="relative w-8 sm:w-12 h-1 bg-[#3B231A]/10 rounded-full overflow-hidden">
-                              <motion.div
-                                key={`${index}-${resetTrigger}`}
-                                initial={{ width: '0%' }}
-                                animate={isPlaying ? { width: '100%' } : { width: '0%' }}
-                                transition={{ duration: isPlaying ? 5 : 0, ease: 'linear' }}
-                                className="absolute left-0 top-0 h-full bg-[#E78F68]"
-                              />
-                            </div>
-                          )}
-                        </button>
-                      </React.Fragment>
-                    );
-                  })}
                 </div>
 
-                {/* Arrow navigation triggers */}
-                {visibleNotices.length > 1 && (
-                  <div className="flex items-center space-x-2.5">
-                    <button
-                      onClick={handlePrev}
-                      className="p-2 sm:p-2.5 bg-[#FAF6F0] hover:bg-[#E78F68] hover:text-white text-[#3B231A]/80 border border-[#3B231A]/12 rounded-full transition-all duration-300 shadow-xs active:scale-95 group cursor-pointer"
-                      aria-label="Previous announcement"
-                    >
-                      <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-                    </button>
-                    <button
-                      onClick={handleNext}
-                      className="p-2 sm:p-2.5 bg-[#FAF6F0] hover:bg-[#E78F68] hover:text-white text-[#3B231A]/80 border border-[#3B231A]/12 rounded-full transition-all duration-300 shadow-xs active:scale-95 group cursor-pointer"
-                      aria-label="Next announcement"
-                    >
-                      <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                    </button>
-                  </div>
-                )}
               </div>
 
             </div>
 
           </div>
 
-          {/* Cute subtle mascot peeking from behind the card (bottom-right) */}
+          {/* Playful Outer Doodles - completely outside the main notice card boundaries */}
+          
+          {/* Doodle 1: Tiny Paper Airplane & flight path */}
           <motion.div 
-            className="absolute -bottom-5 right-6 w-14 h-16 z-10 pointer-events-none hidden sm:block"
-            animate={{ y: [0, -4, 0], rotate: [0, 3, 0] }}
-            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -left-16 top-16 w-12 h-12 opacity-25 pointer-events-none hidden lg:block"
+            animate={{ y: [0, -6, 0], x: [0, 4, 0], rotate: [-2, 2, -2] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           >
-            <svg viewBox="0 0 50 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-              {/* Pencil Body */}
-              <path d="M15 15 L35 15 L35 45 L25 55 L15 45 Z" fill="#E78F68" stroke="#3B231A" strokeWidth="2" />
-              {/* Eraser */}
-              <path d="M15 15 L35 15 L35 8 C35 5, 15 5, 15 8 Z" fill="#FCA5A5" stroke="#3B231A" strokeWidth="2" />
-              {/* Metal band */}
-              <rect x="15" y="12" width="20" height="4" fill="#D1D5DB" stroke="#3B231A" strokeWidth="1.5" />
-              {/* Pencil Tip */}
-              <path d="M21 49 L29 49 L25 55 Z" fill="#1F2937" />
-              {/* Smiling Eyes */}
-              <circle cx="21" cy="28" r="1.5" fill="#3B231A" />
-              <circle cx="29" cy="28" r="1.5" fill="#3B231A" />
-              {/* Mouth */}
-              <path d="M23 32 Q25 34 27 32" stroke="#3B231A" strokeWidth="1.5" strokeLinecap="round" />
-              {/* Blushing cheeks */}
-              <circle cx="18" cy="30" r="1" fill="#EF4444" opacity="0.6" />
-              <circle cx="32" cy="30" r="1" fill="#EF4444" opacity="0.6" />
+            <svg viewBox="0 0 50 50" fill="none" stroke="#3B231A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
+              <path d="M45 5 L20 25 L30 45 L45 5 Z" />
+              <path d="M45 5 L5 18 L20 25 L45 5 Z" />
+              <path d="M5 45 C 10 38, 15 32, 18 26" strokeDasharray="3 3" strokeWidth="1.5" />
             </svg>
           </motion.div>
 
+          {/* Doodle 2: Small Sparkles/Star */}
+          <motion.div 
+            className="absolute -right-14 top-10 w-9 h-9 opacity-30 pointer-events-none hidden lg:block"
+            animate={{ scale: [1, 1.15, 1], opacity: [0.25, 0.45, 0.25] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="#E78F68" strokeWidth="2.5" strokeLinecap="round" className="w-full h-full">
+              <path d="M12 3v3M12 18v3M3 12h3M18 12h3" />
+              <circle cx="12" cy="12" r="2.5" fill="#E78F68" />
+              <path d="M5 5 L7 7 M19 5 L17 7" stroke="#E78F68" strokeWidth="1.5" />
+            </svg>
+          </motion.div>
+
+          {/* Doodle 3: Small Rainbow/Cloud */}
+          <motion.div 
+            className="absolute -right-16 top-1/2 -translate-y-1/2 w-14 h-12 opacity-25 pointer-events-none hidden lg:block"
+            animate={{ y: ["-50%", "-55%", "-50%"] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <svg viewBox="0 0 50 40" fill="none" stroke="#3B231A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
+              <path d="M10 25 A 15 15 0 0 1 40 25" stroke="#E78F68" strokeWidth="1.5" strokeDasharray="2 2" />
+              <path d="M14 25 A 11 11 0 0 1 36 25" stroke="#3B231A" strokeWidth="1.5" />
+              <path d="M15 30 h20 a 5 5 0 0 0 5 -5 a 5 5 0 0 0 -5 -5 a 6 6 0 0 0 -11 -2 a 4 4 0 0 0 -9 2 a 5 5 0 0 0 0 10 Z" fill="#FCFAF7" />
+            </svg>
+          </motion.div>
+
+          {/* Doodle 4: Tiny Pencil */}
+          <motion.div 
+            className="absolute -left-14 bottom-24 w-9 h-9 opacity-25 pointer-events-none hidden lg:block"
+            animate={{ rotate: [-8, 8, -8], y: [0, -3, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="#3B231A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+            </svg>
+          </motion.div>
+
+          {/* Doodle 5: Mini Book */}
+          <motion.div 
+            className="absolute -right-14 bottom-16 w-10 h-10 opacity-25 pointer-events-none hidden lg:block"
+            animate={{ y: [0, -4, 0], rotate: [-3, 3, -3] }}
+            transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="#3B231A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+            </svg>
+          </motion.div>
         </div>
 
         {/* Warm Emotional Concluding Story block */}
