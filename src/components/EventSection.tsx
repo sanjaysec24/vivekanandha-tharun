@@ -28,13 +28,14 @@ export default function EventSection({ onOpenAdmissions }: EventSectionProps) {
               </svg>
             </div>
 
-            {/* Mother and son looking at tablet */}
-            <div className="relative w-full h-full min-h-[260px] rounded-[24px] overflow-hidden border-4 border-white/25 shadow-lg z-10">
+            {/* Mascot Image inside Green Container */}
+            <div className="relative w-full h-full min-h-[260px] flex items-center justify-center z-10 p-2">
               <img
-                src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&q=80&w=800"
-                alt="Mother and child studying happily"
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover grayscale-[10%] hover:grayscale-0 transition-all duration-500"
+                src="/images/vleo_mascot.png"
+                alt="V-Leo Mascot"
+                loading="lazy"
+                decoding="async"
+                className="w-[80%] h-[80%] max-h-[280px] object-contain object-center drop-shadow-2xl hover:scale-105 transition-all duration-500"
               />
             </div>
           </div>

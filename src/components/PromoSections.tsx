@@ -40,8 +40,10 @@ export default function PromoSections({ onOpenAdmissions }: PromoSectionsProps) 
           {/* V-Leo 3D Lion Mascot */}
           <div className="absolute right-2 bottom-0 w-[42%] max-w-[240px] z-10 pointer-events-none flex items-end justify-end">
             <img
-              src="/images/v_leo_mascot.png"
-              alt="V-Leo Lion Mascot at Vivekanandha School"
+              src="/images/vleo_mascot.png"
+              alt="V-Leo Mascot"
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-contain object-bottom drop-shadow-xl"
             />
           </div>
@@ -146,8 +148,10 @@ export default function PromoSections({ onOpenAdmissions }: PromoSectionsProps) 
             {/* Soft blue arched backdrop */}
             <div className="w-[280px] sm:w-[340px] md:w-[400px] aspect-[1/1] bg-[#5B92E5] rounded-[36px] rounded-tl-[180px] rounded-br-[180px] overflow-hidden relative shadow-lg">
               <img
-                src="/images/school_girl.png"
+                src="/images/tec_girl.png"
                 alt="Empowered child smiling"
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-contain object-bottom pt-4 hover:scale-105 transition-all duration-700"
               />
             </div>
