@@ -37,13 +37,12 @@ export default function PromoSections({ onOpenAdmissions }: PromoSectionsProps) 
             </p>
           </div>
 
-          {/* Child graphic / book stack peaking */}
-          <div className="absolute right-0 bottom-0 w-[200px] md:w-[260px] aspect-[4/5] z-10 pointer-events-none transform translate-y-6 md:translate-y-4 translate-x-2">
+          {/* V-Leo 3D Lion Mascot */}
+          <div className="absolute right-2 bottom-0 w-[42%] max-w-[240px] z-10 pointer-events-none flex items-end justify-end">
             <img
-              src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&q=80&w=400"
-              alt="Confident student at Vivekanandha School"
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover rounded-tl-[64px] rounded-br-[32px] border-l-4 border-t-4 border-white shadow-xl"
+              src="/images/v_leo_mascot.png"
+              alt="V-Leo Lion Mascot at Vivekanandha School"
+              className="w-full h-full object-contain object-bottom drop-shadow-xl"
             />
           </div>
 
@@ -147,10 +146,9 @@ export default function PromoSections({ onOpenAdmissions }: PromoSectionsProps) 
             {/* Soft blue arched backdrop */}
             <div className="w-[280px] sm:w-[340px] md:w-[400px] aspect-[1/1] bg-[#5B92E5] rounded-[36px] rounded-tl-[180px] rounded-br-[180px] overflow-hidden relative shadow-lg">
               <img
-                src="https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&q=80&w=800"
+                src="/images/school_girl.png"
                 alt="Empowered child smiling"
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover grayscale-[10%] hover:grayscale-0 transition-all duration-700"
+                className="w-full h-full object-contain object-bottom pt-4 hover:scale-105 transition-all duration-700"
               />
             </div>
 
