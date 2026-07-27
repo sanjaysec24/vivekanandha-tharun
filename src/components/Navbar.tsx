@@ -1,17 +1,167 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, Sparkles } from 'lucide-react';
 import { navigationItems } from '../data';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useRouter } from '../lib/router';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 interface NavbarProps {
   onOpenAdmissions: () => void;
 }
 
+interface BrandingCMSData {
+  logo?: string;
+  logoUrl?: string;
+  navbarLogo?: string;
+  schoolLogo?: string;
+  logo_url?: string;
+  
+  schoolName?: string;
+  name?: string;
+  title?: string;
+  school_name?: string;
+  
+  schoolSubtitle?: string;
+  subtitle?: string;
+  campusSubtitle?: string;
+  school_subtitle?: string;
+  
+  accentDotColor?: string;
+  accentColor?: string;
+  dotColor?: string;
+  accent_dot_color?: string;
+  dot_color?: string;
+  
+  logoSize?: string | number;
+  size?: string | number;
+  logo_size?: string | number;
+  
+  logoContainerAppearance?: string;
+  containerAppearance?: string;
+  logoContainerBg?: string;
+  containerBg?: string;
+  logoContainerBorder?: string;
+  containerBorder?: string;
+  logoContainerShape?: string;
+  containerShape?: string;
+}
+
+const DEFAULT_BRANDING = {
+  logo: "/images/vleo_mascot.png",
+  schoolName: "VIVEKANANDHA",
+  schoolSubtitle: "School–UTR",
+  accentDotColor: "#E78F68",
+};
+
 export default function Navbar({ onOpenAdmissions }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [cmsData, setCmsData] = useState<BrandingCMSData | null>(null);
   const { path } = useRouter();
+
+  useEffect(() => {
+    if (!db) return;
+
+    const unsub = onSnapshot(
+      doc(db, 'website_cms', 'branding'),
+      (docSnap) => {
+        if (docSnap.exists()) {
+          setCmsData(docSnap.data() as BrandingCMSData);
+        }
+      },
+      (err) => {
+        console.warn('Error reading website_cms/branding from Firestore:', err);
+      }
+    );
+
+    return () => unsub();
+  }, []);
+
+  const logo =
+    cmsData?.logo ||
+    cmsData?.logoUrl ||
+    cmsData?.navbarLogo ||
+    cmsData?.schoolLogo ||
+    cmsData?.logo_url ||
+    DEFAULT_BRANDING.logo;
+
+  const schoolName =
+    cmsData?.schoolName ||
+    cmsData?.name ||
+    cmsData?.title ||
+    cmsData?.school_name ||
+    DEFAULT_BRANDING.schoolName;
+
+  const schoolSubtitle =
+    cmsData?.schoolSubtitle ??
+    cmsData?.subtitle ??
+    cmsData?.campusSubtitle ??
+    cmsData?.school_subtitle ??
+    DEFAULT_BRANDING.schoolSubtitle;
+
+  const accentDotColor =
+    cmsData?.accentDotColor ||
+    cmsData?.accentColor ||
+    cmsData?.dotColor ||
+    cmsData?.accent_dot_color ||
+    cmsData?.dot_color ||
+    DEFAULT_BRANDING.accentDotColor;
+
+  const rawLogoSize = cmsData?.logoSize || cmsData?.size || cmsData?.logo_size;
+  let logoSizeStyle: React.CSSProperties | undefined = undefined;
+  let logoSizeClasses = "w-9 h-9 md:w-10 md:h-10";
+
+  if (typeof rawLogoSize === 'number') {
+    logoSizeStyle = { width: `${rawLogoSize}px`, height: `${rawLogoSize}px` };
+    logoSizeClasses = "";
+  } else if (typeof rawLogoSize === 'string' && rawLogoSize.trim() !== '') {
+    const trimmed = rawLogoSize.trim();
+    if (/^\d+$/.test(trimmed)) {
+      logoSizeStyle = { width: `${trimmed}px`, height: `${trimmed}px` };
+      logoSizeClasses = "";
+    } else if (/^\d+(px|rem|em|%)$/.test(trimmed)) {
+      logoSizeStyle = { width: trimmed, height: trimmed };
+      logoSizeClasses = "";
+    } else if (trimmed === 'small') {
+      logoSizeClasses = "w-7 h-7";
+    } else if (trimmed === 'medium') {
+      logoSizeClasses = "w-9 h-9 md:w-10 md:h-10";
+    } else if (trimmed === 'large') {
+      logoSizeClasses = "w-11 h-11 md:w-12 md:h-12";
+    } else if (trimmed.includes('w-') || trimmed.includes('h-')) {
+      logoSizeClasses = trimmed;
+    } else {
+      logoSizeStyle = { width: trimmed, height: trimmed };
+      logoSizeClasses = "";
+    }
+  }
+
+  const rawContainerBg = cmsData?.logoContainerBg || cmsData?.containerBg;
+  const rawContainerBorder = cmsData?.logoContainerBorder || cmsData?.containerBorder;
+  const rawContainerShape = cmsData?.logoContainerShape || cmsData?.containerShape;
+  const rawAppearance = cmsData?.logoContainerAppearance || cmsData?.containerAppearance;
+
+  const containerStyle: React.CSSProperties = {};
+  if (rawContainerBg) {
+    containerStyle.backgroundColor = rawContainerBg;
+  }
+  if (rawContainerBorder) {
+    if (rawContainerBorder.includes(' ') || rawContainerBorder.startsWith('#') || rawContainerBorder.startsWith('rgb')) {
+      containerStyle.borderColor = rawContainerBorder;
+    }
+  }
+
+  let containerShapeClass = "rounded-full";
+  if (rawContainerShape) {
+    if (rawContainerShape.includes('rounded')) {
+      containerShapeClass = rawContainerShape;
+    } else if (rawContainerShape === 'square') {
+      containerShapeClass = 'rounded-none';
+    } else if (rawContainerShape === 'rounded' || rawContainerShape === 'rounded-md') {
+      containerShapeClass = 'rounded-xl';
+    }
+  }
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -25,13 +175,17 @@ export default function Navbar({ onOpenAdmissions }: NavbarProps) {
           className="flex items-center space-x-3 group text-left transition-all duration-200"
         >
           {/* Circular School Logo Container */}
-          <div className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-white border border-[#EAB308]/40 shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+          <div 
+            style={containerStyle}
+            className={`w-11 h-11 md:w-12 md:h-12 ${containerShapeClass} bg-white border border-[#EAB308]/40 shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0 group-hover:scale-105 transition-transform duration-300 ${rawAppearance || ''}`}
+          >
             <img 
-              src="/images/vleo_mascot.png" 
-              alt="Vivekanandha School Logo" 
+              src={logo} 
+              alt={`${schoolName} Logo`} 
               loading="lazy"
               decoding="async"
-              className="w-9 h-9 md:w-10 md:h-10 object-contain p-0.5" 
+              style={logoSizeStyle}
+              className={`${logoSizeClasses} object-contain p-0.5`} 
             />
           </div>
 
@@ -39,13 +193,18 @@ export default function Navbar({ onOpenAdmissions }: NavbarProps) {
           <div className="flex flex-col justify-center">
             <div className="flex items-center space-x-1.5">
               <span className="text-base sm:text-lg md:text-xl font-black text-[#3A2318] tracking-tight leading-none group-hover:text-[#E78F68] transition-colors duration-200">
-                VIVEKANANDHA
+                {schoolName}
               </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#E78F68]" />
+              <span 
+                className="w-1.5 h-1.5 rounded-full" 
+                style={{ backgroundColor: accentDotColor }}
+              />
             </div>
-            <span className="text-xs md:text-sm font-extrabold text-[#3A2318]/85 tracking-normal leading-tight">
-              School–UTR
-            </span>
+            {schoolSubtitle && (
+              <span className="text-xs md:text-sm font-extrabold text-[#3A231A]/85 tracking-normal leading-tight">
+                {schoolSubtitle}
+              </span>
+            )}
           </div>
         </Link>
 
