@@ -37,7 +37,7 @@ export default function PromoSections({ onOpenAdmissions }: PromoSectionsProps) 
             </p>
           </div>
 
-          {/* V-Leo 3D Lion Mascot */}
+          {/* V-Leo Lion Mascot */}
           <div className="absolute right-2 bottom-0 w-[42%] max-w-[240px] z-10 pointer-events-none flex items-end justify-end">
             <img
               src="/images/vleo_mascot.png"

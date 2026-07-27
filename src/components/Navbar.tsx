@@ -19,12 +19,34 @@ export default function Navbar({ onOpenAdmissions }: NavbarProps) {
     <nav id="navbar-container" className="sticky top-0 z-50 bg-[#F4F0EA]/95 backdrop-blur-md border-b border-[#3A2318]/10 px-6 py-4 md:px-12">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Brand Logo */}
-        <Link id="brand-logo" to="/" className="flex items-center space-x-2 text-2xl font-serif font-bold text-[#3A2318] tracking-tight group">
-          <span className="relative">
-            Vivekanandha School
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#E78F68] transition-all duration-300 group-hover:w-full"></span>
-          </span>
-          <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#E78F68] animate-pulse"></span>
+        <Link 
+          id="brand-logo" 
+          to="/" 
+          className="flex items-center space-x-3 group text-left transition-all duration-200"
+        >
+          {/* Circular School Logo Container */}
+          <div className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-white border border-[#EAB308]/40 shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+            <img 
+              src="/images/vleo_mascot.png" 
+              alt="Vivekanandha School Logo" 
+              loading="lazy"
+              decoding="async"
+              className="w-9 h-9 md:w-10 md:h-10 object-contain p-0.5" 
+            />
+          </div>
+
+          {/* School Name & Campus Subtitle */}
+          <div className="flex flex-col justify-center">
+            <div className="flex items-center space-x-1.5">
+              <span className="text-base sm:text-lg md:text-xl font-black text-[#3A2318] tracking-tight leading-none group-hover:text-[#E78F68] transition-colors duration-200">
+                VIVEKANANDHA
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#E78F68]" />
+            </div>
+            <span className="text-xs md:text-sm font-extrabold text-[#3A2318]/85 tracking-normal leading-tight">
+              School–UTR
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Navigation Items */}

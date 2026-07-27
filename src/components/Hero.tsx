@@ -1,14 +1,120 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../lib/firebase';
+import { useRouter } from '../lib/router';
 import { IllustrationDefs } from './TamilIllustrations';
 
 interface HeroProps {
   onOpenAdmissions: () => void;
 }
 
+interface HeroCMSData {
+  heroBoyImage?: string;
+  boyImage?: string;
+  boyImageUrl?: string;
+  heroGirlImage?: string;
+  girlImage?: string;
+  girlImageUrl?: string;
+  mainHeroTitle?: string;
+  mainTitle?: string;
+  title?: string;
+  scriptSubtitle?: string;
+  subtitle?: string;
+  description?: string;
+  heroDescription?: string;
+  primaryButtonText?: string;
+  primaryBtnText?: string;
+  primaryButtonLabel?: string;
+  primaryButtonUrl?: string;
+  primaryBtnUrl?: string;
+  primaryButtonLink?: string;
+  secondaryButtonText?: string;
+  secondaryBtnText?: string;
+  secondaryButtonLabel?: string;
+  secondaryButtonUrl?: string;
+  secondaryBtnUrl?: string;
+  secondaryButtonLink?: string;
+}
+
+const DEFAULT_HERO = {
+  boyImage: "/images/school_boy.png",
+  girlImage: "/images/school_girl.png",
+  mainHeroTitle: "BUILDING \n AMBITIOUS MINDS",
+  scriptSubtitle: "for Tomorrow's World",
+  description: "We don't just teach lessons. We inspire creativity, confidence, curiosity and character through joyful learning experiences.",
+  primaryButtonText: "Apply Now",
+  primaryButtonUrl: "",
+  secondaryButtonText: "Book a School Visit",
+  secondaryButtonUrl: "",
+};
+
 export default function Hero({ onOpenAdmissions }: HeroProps) {
-  const boyImage = "/images/school_boy.png";
-  const girlImage = "/images/school_girl.png";
+  const { navigate } = useRouter();
+  const [cmsData, setCmsData] = useState<HeroCMSData | null>(null);
+
+  useEffect(() => {
+    if (!db) return;
+
+    const unsub = onSnapshot(
+      doc(db, 'website_cms', 'hero'),
+      (docSnap) => {
+        if (docSnap.exists()) {
+          setCmsData(docSnap.data() as HeroCMSData);
+        }
+      },
+      (err) => {
+        console.warn('Error reading website_cms/hero from Firestore:', err);
+      }
+    );
+
+    return () => unsub();
+  }, []);
+
+  const boyImage = cmsData?.heroBoyImage || cmsData?.boyImage || cmsData?.boyImageUrl || DEFAULT_HERO.boyImage;
+  const girlImage = cmsData?.heroGirlImage || cmsData?.girlImage || cmsData?.girlImageUrl || DEFAULT_HERO.girlImage;
+  const mainHeroTitle = cmsData?.mainHeroTitle || cmsData?.mainTitle || cmsData?.title || DEFAULT_HERO.mainHeroTitle;
+  const scriptSubtitle = cmsData?.scriptSubtitle || cmsData?.subtitle || DEFAULT_HERO.scriptSubtitle;
+  const description = cmsData?.description || cmsData?.heroDescription || DEFAULT_HERO.description;
+  const primaryButtonText = cmsData?.primaryButtonText || cmsData?.primaryBtnText || cmsData?.primaryButtonLabel || DEFAULT_HERO.primaryButtonText;
+  const primaryButtonUrl = cmsData?.primaryButtonUrl || cmsData?.primaryBtnUrl || cmsData?.primaryButtonLink || DEFAULT_HERO.primaryButtonUrl;
+  const secondaryButtonText = cmsData?.secondaryButtonText || cmsData?.secondaryBtnText || cmsData?.secondaryButtonLabel || DEFAULT_HERO.secondaryButtonText;
+  const secondaryButtonUrl = cmsData?.secondaryButtonUrl || cmsData?.secondaryBtnUrl || cmsData?.secondaryButtonLink || DEFAULT_HERO.secondaryButtonUrl;
+
+  const handleButtonClick = (url: string | undefined) => {
+    if (url && url.trim() !== '') {
+      const trimmedUrl = url.trim();
+      if (trimmedUrl.startsWith('http://') || trimmedUrl.startsWith('https://')) {
+        window.open(trimmedUrl, '_blank', 'noopener,noreferrer');
+        return;
+      }
+      if (trimmedUrl.startsWith('/')) {
+        navigate(trimmedUrl);
+        return;
+      }
+      if (trimmedUrl.startsWith('#')) {
+        const el = document.querySelector(trimmedUrl);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+          return;
+        }
+      }
+    }
+    onOpenAdmissions();
+  };
+
+  const renderTitle = (text: string) => {
+    const lines = text.split(/<br\s*\/?>|\n/gi);
+    if (lines.length > 1) {
+      return lines.map((line, idx) => (
+        <React.Fragment key={idx}>
+          {line.trim()}
+          {idx < lines.length - 1 && <br />}
+        </React.Fragment>
+      ));
+    }
+    return text;
+  };
 
   // Click-to-animate state triggers
   const [balloonTrigger, setBalloonTrigger] = useState(0);
@@ -406,13 +512,13 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
           >
             {/* Playful bold chunky headline */}
             <h1 className="text-[34px] sm:text-[54px] md:text-[64px] lg:text-[68px] xl:text-[76px] font-bungee text-[#3B231A] leading-[1.08] tracking-tight max-w-[98%] mx-auto block uppercase">
-              BUILDING <br /> AMBITIOUS MINDS
+              {renderTitle(mainHeroTitle)}
             </h1>
 
             {/* Handwritten cursive orange subtitle */}
             <div className="relative mt-2 inline-block">
               <span className="font-caveat text-4xl sm:text-[44px] md:text-[52px] lg:text-[56px] xl:text-[62px] font-bold text-[#FF8A3D] tracking-wide block transform -rotate-1 px-4">
-                for Tomorrow's World
+                {scriptSubtitle}
               </span>
               {/* Hand-drawn Underline & Strokes */}
               <svg className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-48 sm:w-64 md:w-80 h-3 overflow-visible" viewBox="0 0 200 10" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
@@ -483,17 +589,17 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
             className="pt-2 flex flex-col sm:flex-row gap-3.5 sm:gap-4 items-center justify-center w-full max-w-md mx-auto"
           >
             <button
-              onClick={onOpenAdmissions}
+              onClick={() => handleButtonClick(primaryButtonUrl)}
               className="w-full sm:w-auto bg-[#FF8A3D] text-white font-bold px-8 py-4 rounded-[16px] shadow-[0_4px_12px_rgba(255,138,61,0.15)] hover:bg-[#e67425] hover:shadow-[0_6px_16px_rgba(255,138,61,0.22)] transition-all duration-300 flex items-center justify-center space-x-2 text-sm uppercase tracking-wider font-sans transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
             >
-              <span>Apply Now</span>
+              <span>{primaryButtonText}</span>
               <span className="text-lg font-light leading-none">↗</span>
             </button>
             <button
-              onClick={onOpenAdmissions}
+              onClick={() => handleButtonClick(secondaryButtonUrl)}
               className="w-full sm:w-auto border-2 border-[#3B231A]/15 text-[#3B231A] bg-transparent hover:bg-[#3B231A]/5 font-bold px-8 py-4 rounded-[16px] transition-all duration-300 flex items-center justify-center space-x-2 text-sm uppercase tracking-wider font-sans transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
             >
-              <span>Book a School Visit</span>
+              <span>{secondaryButtonText}</span>
             </button>
           </motion.div>
 
@@ -504,7 +610,7 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
             transition={{ duration: 0.9, delay: 0.4 }}
             className="text-[13px] sm:text-base text-[#3B231A]/85 max-w-xl mx-auto font-sans font-normal leading-relaxed px-2"
           >
-            We don't just teach lessons. We inspire creativity, confidence, curiosity and character through joyful learning experiences.
+            {description}
           </motion.p>
 
         </div>

@@ -14,10 +14,11 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="text-xs uppercase tracking-widest font-bold text-[#E78F68]">Programs</h4>
             <ul className="space-y-2.5 text-sm text-[#F5F1EB]/70">
-              <li><Link to="/academics" className="hover:text-white transition-colors">For Pre-School</Link></li>
-              <li><Link to="/academics" className="hover:text-white transition-colors">For Kindergarten</Link></li>
-              <li><Link to="/academics" className="hover:text-white transition-colors">For Primary Academy</Link></li>
-              <li><Link to="/academics" className="hover:text-white transition-colors">Forest Schooling</Link></li>
+              <li><Link to="/academics" className="hover:text-white transition-colors">Pre-KG</Link></li>
+              <li><Link to="/academics" className="hover:text-white transition-colors">LKG</Link></li>
+              <li><Link to="/academics" className="hover:text-white transition-colors">UKG</Link></li>
+              <li><Link to="/academics" className="hover:text-white transition-colors">Primary School (Grades I–V)</Link></li>
+              <li><Link to="/academics" className="hover:text-white transition-colors">Co-Curricular Activities</Link></li>
             </ul>
           </div>
 
@@ -26,9 +27,10 @@ export default function Footer() {
             <h4 className="text-xs uppercase tracking-widest font-bold text-[#EAB308]">Institution</h4>
             <ul className="space-y-2.5 text-sm text-[#F5F1EB]/70">
               <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/academics" className="hover:text-white transition-colors">Our Academics</Link></li>
-              <li><Link to="/about" className="hover:text-white transition-colors">Faculty Directory</Link></li>
-              <li><Link to="/about" className="hover:text-white transition-colors">Careers</Link></li>
+              <li><Link to="/academics" className="hover:text-white transition-colors">Academics</Link></li>
+              <li><Link to="/admissions" className="hover:text-white transition-colors">Admissions</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">Gallery</Link></li>
+              <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
             </ul>
           </div>
 
@@ -36,10 +38,11 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="text-xs uppercase tracking-widest font-bold text-[#5B92E5]">Admissions</h4>
             <ul className="space-y-2.5 text-sm text-[#F5F1EB]/70">
-              <li><Link to="/admissions" className="hover:text-white transition-colors">Tuition & Plans</Link></li>
-              <li><Link to="/admissions" className="hover:text-white transition-colors">Admissions Guide</Link></li>
-              <li><Link to="/admissions" className="hover:text-white transition-colors">Private Tour Booking</Link></li>
-              <li><Link to="/admissions" className="hover:text-white transition-colors">Scholarship Criteria</Link></li>
+              <li><Link to="/admissions" className="hover:text-white transition-colors">Admission Process</Link></li>
+              <li><Link to="/admissions" className="hover:text-white transition-colors">Fee Structure</Link></li>
+              <li><Link to="/admissions" className="hover:text-white transition-colors">Transport Facility</Link></li>
+              <li><Link to="/admissions" className="hover:text-white transition-colors">Scholarships</Link></li>
+              <li><Link to="/admissions" className="hover:text-white transition-colors">FAQs</Link></li>
             </ul>
           </div>
 
@@ -47,16 +50,17 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="text-xs uppercase tracking-widest font-bold text-emerald-400">Resources</h4>
             <ul className="space-y-2.5 text-sm text-[#F5F1EB]/70">
-              <li><Link to="/about" className="hover:text-white transition-colors">Press & Media</Link></li>
-              <li><Link to="/about" className="hover:text-white transition-colors">Parent Council Portal</Link></li>
-              <li><Link to="/about" className="hover:text-white transition-colors">Medical Center Info</Link></li>
-              <li><Link to="/about" className="hover:text-white transition-colors">Transportation Paths</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">School Calendar</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">Events & Notices</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">Downloads</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">Parent Guidelines</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">Mandatory Disclosure</Link></li>
             </ul>
           </div>
 
           {/* Column 5: Social Media Profiles */}
           <div className="space-y-4 col-span-2 md:col-span-1">
-            <h4 className="text-xs uppercase tracking-widest font-bold text-white">Social Registry</h4>
+            <h4 className="text-xs uppercase tracking-widest font-bold text-white">Follow Us</h4>
             <div className="flex space-x-3.5">
               <a href="#" className="w-9 h-9 rounded-full bg-[#F5F1EB]/5 flex items-center justify-center hover:bg-[#E78F68] hover:text-white transition-all duration-300" aria-label="LinkedIn">
                 <Linkedin className="w-4 h-4" />
@@ -69,7 +73,7 @@ export default function Footer() {
               </a>
             </div>
             <p className="text-[11px] text-[#F5F1EB]/50 font-sans leading-relaxed">
-              *Follow our weekly forest chronicles & student highlights.
+              Stay connected with our school community for the latest updates, celebrations and student achievements.
             </p>
           </div>
 
@@ -85,7 +89,7 @@ export default function Footer() {
               <span className="w-3 h-3 rounded-full bg-[#E78F68]" />
             </Link>
             <p className="text-xs text-[#F5F1EB]/60 font-sans font-light">
-              THE SCHOOL FOR AMBITIOUS MINDS
+              Nurturing Knowledge • Character • Excellence
             </p>
           </div>
 
@@ -98,8 +102,10 @@ export default function Footer() {
                 <MapPin className="w-5 h-5" />
               </div>
               <div>
-                <h5 className="text-xs font-bold uppercase tracking-wider text-white group-hover:text-[#E78F68] transition-colors">Find a School</h5>
-                <p className="text-[11px] text-[#F5F1EB]/60 mt-0.5">NH-47 Bypass Road, Avinashi Main Road, Coimbatore, Tamil Nadu</p>
+                <h5 className="text-xs font-bold uppercase tracking-wider text-white group-hover:text-[#E78F68] transition-colors">Find Us</h5>
+                <p className="text-[11px] text-[#F5F1EB]/60 mt-0.5 leading-tight">
+                  Vedapalayam Road, Uthiramerur – 603406, Kanchipuram District, Tamil Nadu, India
+                </p>
               </div>
             </Link>
 
@@ -110,7 +116,7 @@ export default function Footer() {
               </div>
               <div>
                 <h5 className="text-xs font-bold uppercase tracking-wider text-white group-hover:text-[#EAB308] transition-colors">Admissions & Info</h5>
-                <p className="text-[11px] text-[#F5F1EB]/60 mt-0.5">admissions@vivekanandha.edu.in</p>
+                <p className="text-[11px] text-[#F5F1EB]/60 mt-0.5">admissions@vivekanandhaschool.edu.in</p>
               </div>
             </Link>
 
@@ -121,7 +127,7 @@ export default function Footer() {
               </div>
               <div>
                 <h5 className="text-xs font-bold uppercase tracking-wider text-white group-hover:text-[#5B92E5] transition-colors">Parent Portal</h5>
-                <p className="text-[11px] text-[#F5F1EB]/60 mt-0.5">Secure App & School Records</p>
+                <p className="text-[11px] text-[#F5F1EB]/60 mt-0.5">Access Attendance, Homework, Circulars & Fee Details</p>
               </div>
             </Link>
 
@@ -133,18 +139,16 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#F5F1EB]/50 font-sans font-light">
           <div className="flex space-x-6">
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Use</a>
-            <Link to="/contact" className="hover:text-white transition-colors">Contact Registrar</Link>
-          </div>
-
-          <div className="flex items-center space-x-1.5">
-            <span>Design by Rylic Studio • Adapted with</span>
-            <Heart className="w-3 h-3 text-[#E78F68] fill-current" />
-            <span>for Vivekanandha School.</span>
+            <a href="#" className="hover:text-white transition-colors">Terms & Conditions</a>
+            <Link to="/contact" className="hover:text-white transition-colors">Contact Office</Link>
           </div>
 
           <div>
-            <span>© 2027 Vivekanandha School. All rights reserved.</span>
+            <span>Designed & Developed for Vivekanandha School</span>
+          </div>
+
+          <div>
+            <span>© 2027 Vivekanandha School, Uthiramerur. All Rights Reserved.</span>
           </div>
         </div>
 

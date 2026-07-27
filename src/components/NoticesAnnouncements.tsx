@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, Variants } from 'motion/react';
 import { ChevronLeft, ChevronRight, Calendar, ExternalLink, Play, Pause } from 'lucide-react';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { db } from '../lib/firebase';
@@ -189,7 +189,7 @@ export default function NoticesAnnouncements() {
     : 'Recent Announcement';
 
   // Slider animation variations using translation X and subtle scale for premium slide transitions
-  const slideVariants = {
+  const slideVariants: Variants = {
     enter: (dir: number) => ({
       opacity: 0,
       x: dir * 30,
@@ -200,9 +200,8 @@ export default function NoticesAnnouncements() {
       x: 0,
       scale: 1,
       transition: {
-        opacity: { duration: 0.35, ease: "easeOut" },
-        x: { type: "spring", stiffness: 180, damping: 24 },
-        scale: { duration: 0.35, ease: "easeOut" },
+        duration: 0.35,
+        ease: "easeOut",
       }
     },
     exit: (dir: number) => ({
@@ -210,9 +209,8 @@ export default function NoticesAnnouncements() {
       x: dir * -30,
       scale: 0.98,
       transition: {
-        opacity: { duration: 0.25, ease: "easeIn" },
-        x: { duration: 0.25, ease: "easeIn" },
-        scale: { duration: 0.25, ease: "easeIn" },
+        duration: 0.25,
+        ease: "easeIn",
       }
     }),
   };
