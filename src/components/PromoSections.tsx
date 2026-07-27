@@ -102,6 +102,142 @@ interface PromotionsCMSData {
   badge2?: string;
 }
 
+interface StatItem {
+  value?: string;
+  number?: string;
+  title?: string;
+  label?: string;
+  description?: string;
+  subtitle?: string;
+  icon?: string;
+}
+
+interface EducationalHighlightCMSData {
+  // Badge
+  admissionsBadge?: string;
+  badge?: string;
+  badgeText?: string;
+  badge_text?: string;
+  admissions_badge?: string;
+
+  // Heading & Highlighted Word
+  heading?: string;
+  title?: string;
+  mainHeading?: string;
+  main_heading?: string;
+  highlightedWord?: string;
+  highlightWord?: string;
+  highlight?: string;
+  highlighted_word?: string;
+  highlight_word?: string;
+  headingSuffix?: string;
+  heading_suffix?: string;
+  suffix?: string;
+
+  // Description
+  description?: string;
+  subheading?: string;
+  subtitle?: string;
+  content?: string;
+
+  // Button Text & URL
+  buttonText?: string;
+  btnText?: string;
+  buttonLabel?: string;
+  button_text?: string;
+  btn_text?: string;
+  buttonUrl?: string;
+  btnUrl?: string;
+  buttonLink?: string;
+  button_url?: string;
+  btn_url?: string;
+  link?: string;
+  url?: string;
+
+  // Right Side Image (Cloudinary URL or standard)
+  rightSideImage?: string;
+  image?: string;
+  imageUrl?: string;
+  rightImage?: string;
+  right_side_image?: string;
+  image_url?: string;
+  cloudinaryUrl?: string;
+
+  // Statistics
+  statistics?: StatItem[];
+  stats?: StatItem[];
+  metrics?: StatItem[];
+  items?: StatItem[];
+  // Flat statistics fields
+  stat1Value?: string;
+  stat1_value?: string;
+  stat1Label?: string;
+  stat1_label?: string;
+  stat1Title?: string;
+  stat1Description?: string;
+  stat1_description?: string;
+  
+  stat2Value?: string;
+  stat2_value?: string;
+  stat2Label?: string;
+  stat2_label?: string;
+  stat2Title?: string;
+  stat2Description?: string;
+  stat2_description?: string;
+
+  // Appearance Colours
+  appearance?: {
+    accentColor?: string;
+    highlightColor?: string;
+    backdropColor?: string;
+    imageBackdropColor?: string;
+    buttonBgColor?: string;
+    buttonTextColor?: string;
+    badgeBgColor?: string;
+    textColor?: string;
+  };
+  colors?: {
+    accentColor?: string;
+    highlightColor?: string;
+    backdropColor?: string;
+    imageBackdropColor?: string;
+    buttonBgColor?: string;
+    buttonTextColor?: string;
+    badgeBgColor?: string;
+    textColor?: string;
+  };
+  accentColor?: string;
+  accent_color?: string;
+  highlightColor?: string;
+  highlight_color?: string;
+  themeColor?: string;
+  primaryColor?: string;
+  backdropColor?: string;
+  imageBackdropColor?: string;
+  backdrop_color?: string;
+  buttonBgColor?: string;
+  button_bg_color?: string;
+  buttonTextColor?: string;
+  button_text_color?: string;
+  badgeBgColor?: string;
+  badge_bg_color?: string;
+  textColor?: string;
+  text_color?: string;
+}
+
+function getSafeString(val: any): string {
+  if (val === null || val === undefined) return '';
+  if (typeof val === 'string') return val.trim();
+  if (typeof val === 'number' || typeof val === 'boolean') return String(val).trim();
+  if (typeof val === 'object') {
+    if (typeof val.secure_url === 'string') return val.secure_url.trim();
+    if (typeof val.url === 'string') return val.url.trim();
+    if (typeof val.src === 'string') return val.src.trim();
+    if (typeof val.path === 'string') return val.path.trim();
+  }
+  return String(val).trim();
+}
+
 const DEFAULT_LEFT = {
   badge: '',
   title: 'Confidence that builds a brighter future.',
@@ -125,11 +261,12 @@ const DEFAULT_RIGHT = {
 export default function PromoSections({ onOpenAdmissions }: PromoSectionsProps) {
   const { navigate } = useRouter();
   const [cmsData, setCmsData] = useState<PromotionsCMSData | null>(null);
+  const [eduData, setEduData] = useState<EducationalHighlightCMSData | null>(null);
 
   useEffect(() => {
     if (!db) return;
 
-    const unsub = onSnapshot(
+    const unsubPromos = onSnapshot(
       doc(db, 'website_cms', 'promotions'),
       (docSnap) => {
         if (docSnap.exists()) {
@@ -141,7 +278,22 @@ export default function PromoSections({ onOpenAdmissions }: PromoSectionsProps) 
       }
     );
 
-    return () => unsub();
+    const unsubEdu = onSnapshot(
+      doc(db, 'website_cms', 'educational_highlight'),
+      (docSnap) => {
+        if (docSnap.exists()) {
+          setEduData(docSnap.data() as EducationalHighlightCMSData);
+        }
+      },
+      (err) => {
+        console.warn('Error reading website_cms/educational_highlight from Firestore:', err);
+      }
+    );
+
+    return () => {
+      unsubPromos();
+      unsubEdu();
+    };
   }, []);
 
   // Left card data resolution
@@ -284,9 +436,256 @@ export default function PromoSections({ onOpenAdmissions }: PromoSectionsProps) 
     cmsData?.bgColor2 ||
     DEFAULT_RIGHT.bgColor;
 
-  const handleButtonClick = (url: string | undefined) => {
-    if (url && url.trim() !== '') {
-      const trimmedUrl = url.trim();
+  // Educational Highlight CMS Data Resolution
+  const eduBadge = getSafeString(
+    eduData?.admissionsBadge ||
+    eduData?.badge ||
+    eduData?.badgeText ||
+    eduData?.badge_text ||
+    eduData?.admissions_badge
+  ) || 'Admissions On Going';
+
+  const eduHeadingRaw = getSafeString(
+    eduData?.heading ||
+    eduData?.title ||
+    eduData?.mainHeading ||
+    eduData?.main_heading
+  ) || 'Empower your kids to think, be';
+
+  const eduHighlightWord = getSafeString(
+    eduData?.highlightedWord ||
+    eduData?.highlightWord ||
+    eduData?.highlight ||
+    eduData?.highlighted_word ||
+    eduData?.highlight_word
+  ) || 'smarter';
+
+  const eduHeadingSuffix = getSafeString(
+    eduData?.headingSuffix ||
+    eduData?.heading_suffix ||
+    eduData?.suffix
+  ) || 'and sharper';
+
+  const eduDescription = getSafeString(
+    eduData?.description ||
+    eduData?.subheading ||
+    eduData?.subtitle ||
+    eduData?.content
+  ) || 'Encourage children to think critically, be exceptionally creative, and solve practical, real-world problems for a better, more harmonious future.';
+
+  const eduButtonText = getSafeString(
+    eduData?.buttonText ||
+    eduData?.btnText ||
+    eduData?.buttonLabel ||
+    eduData?.button_text ||
+    eduData?.btn_text
+  ) || 'Get Educated';
+
+  const eduButtonUrl = getSafeString(
+    eduData?.buttonUrl ||
+    eduData?.btnUrl ||
+    eduData?.buttonLink ||
+    eduData?.button_url ||
+    eduData?.btn_url ||
+    eduData?.link ||
+    eduData?.url
+  );
+
+  const rawEduImage =
+    eduData?.cloudinaryUrl ||
+    eduData?.rightSideImage ||
+    eduData?.image ||
+    eduData?.imageUrl ||
+    eduData?.rightImage ||
+    eduData?.right_side_image ||
+    eduData?.image_url;
+
+  const eduImageUrl = getSafeString(rawEduImage);
+
+  // Image handling: if eduData has been fetched and image is explicitly empty or 'none', set to null to hide gracefully without placeholder.
+  // If eduData is null (e.g. initial load or fallback), fallback to default image.
+  const eduImage =
+    eduData !== null
+      ? (eduImageUrl !== '' && eduImageUrl !== 'none' ? eduImageUrl : null)
+      : '/images/tec_girl.png';
+
+  // Statistics
+  const statsList =
+    eduData?.statistics ||
+    eduData?.stats ||
+    eduData?.metrics ||
+    eduData?.items;
+
+  const stat1Val = getSafeString(
+    statsList?.[0]?.value ||
+    statsList?.[0]?.number ||
+    eduData?.stat1Value ||
+    eduData?.stat1_value
+  ) || '45M+';
+
+  const stat1Lbl = getSafeString(
+    statsList?.[0]?.label ||
+    statsList?.[0]?.title ||
+    eduData?.stat1Label ||
+    eduData?.stat1_label ||
+    eduData?.stat1Title
+  ) || 'Scholar Hours';
+
+  const stat1Desc = getSafeString(
+    statsList?.[0]?.description ||
+    statsList?.[0]?.subtitle ||
+    eduData?.stat1Description ||
+    eduData?.stat1_description
+  ) || 'Logged across global community programs.';
+
+  const stat2Val = getSafeString(
+    statsList?.[1]?.value ||
+    statsList?.[1]?.number ||
+    eduData?.stat2Value ||
+    eduData?.stat2_value
+  ) || '164+';
+
+  const stat2Lbl = getSafeString(
+    statsList?.[1]?.label ||
+    statsList?.[1]?.title ||
+    eduData?.stat2Label ||
+    eduData?.stat2_label ||
+    eduData?.stat2Title
+  ) || 'Olympiad Honors';
+
+  const stat2Desc = getSafeString(
+    statsList?.[1]?.description ||
+    statsList?.[1]?.subtitle ||
+    eduData?.stat2Description ||
+    eduData?.stat2_description
+  ) || 'Gold distinctions in chess & sciences.';
+
+  // Appearance Colours
+  const eduAccentColor = getSafeString(
+    eduData?.appearance?.accentColor ||
+    eduData?.appearance?.highlightColor ||
+    eduData?.colors?.accentColor ||
+    eduData?.colors?.highlightColor ||
+    eduData?.accentColor ||
+    eduData?.accent_color ||
+    eduData?.highlightColor ||
+    eduData?.highlight_color ||
+    eduData?.themeColor ||
+    eduData?.primaryColor
+  ) || '#4B8B77';
+
+  const eduBackdropColor = getSafeString(
+    eduData?.appearance?.imageBackdropColor ||
+    eduData?.appearance?.backdropColor ||
+    eduData?.colors?.imageBackdropColor ||
+    eduData?.colors?.backdropColor ||
+    eduData?.imageBackdropColor ||
+    eduData?.backdropColor ||
+    eduData?.backdrop_color
+  ) || '#5B92E5';
+
+  const eduButtonBgColor = getSafeString(
+    eduData?.appearance?.buttonBgColor ||
+    eduData?.colors?.buttonBgColor ||
+    eduData?.buttonBgColor ||
+    eduData?.button_bg_color
+  ) || '#E78F68';
+
+  const eduButtonTextColor = getSafeString(
+    eduData?.appearance?.buttonTextColor ||
+    eduData?.colors?.buttonTextColor ||
+    eduData?.buttonTextColor ||
+    eduData?.button_text_color
+  ) || '#FFFFFF';
+
+  const eduBadgeBgColor = getSafeString(
+    eduData?.appearance?.badgeBgColor ||
+    eduData?.colors?.badgeBgColor ||
+    eduData?.badgeBgColor ||
+    eduData?.badge_bg_color
+  );
+
+  const eduTextColor = getSafeString(
+    eduData?.appearance?.textColor ||
+    eduData?.colors?.textColor ||
+    eduData?.textColor ||
+    eduData?.text_color
+  ) || '#3B231A';
+
+  const handleEduButtonClick = () => {
+    const trimmedUrl = getSafeString(eduButtonUrl);
+    if (trimmedUrl !== '') {
+      if (trimmedUrl.startsWith('http://') || trimmedUrl.startsWith('https://')) {
+        window.open(trimmedUrl, '_blank', 'noopener,noreferrer');
+        return;
+      }
+      if (trimmedUrl.startsWith('/')) {
+        navigate(trimmedUrl);
+        return;
+      }
+      if (trimmedUrl.startsWith('#')) {
+        const el = document.querySelector(trimmedUrl);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+          return;
+        }
+      }
+    }
+    onOpenAdmissions();
+  };
+
+  const renderEduHeading = () => {
+    if (!eduHeadingRaw) return null;
+
+    if (eduHeadingRaw.includes('{highlight}') || eduHeadingRaw.includes('{word}')) {
+      const parts = eduHeadingRaw.split(/\{highlight\}|\{word\}/);
+      return (
+        <>
+          {parts[0]}
+          <span className="italic" style={{ color: eduAccentColor }}>
+            {eduHighlightWord}
+          </span>
+          {parts[1] || ''}
+        </>
+      );
+    }
+
+    if (eduHighlightWord !== '') {
+      const lowerHeading = eduHeadingRaw.toLowerCase();
+      const lowerHighlight = eduHighlightWord.toLowerCase();
+      const matchIndex = lowerHeading.indexOf(lowerHighlight);
+
+      if (matchIndex !== -1) {
+        const prefix = eduHeadingRaw.slice(0, matchIndex);
+        const matchedWord = eduHeadingRaw.slice(matchIndex, matchIndex + eduHighlightWord.length);
+        const suffix = eduHeadingRaw.slice(matchIndex + eduHighlightWord.length);
+
+        return (
+          <>
+            {prefix}
+            <span className="italic" style={{ color: eduAccentColor }}>
+              {matchedWord}
+            </span>
+            {suffix}
+          </>
+        );
+      }
+    }
+
+    return (
+      <>
+        {eduHeadingRaw}{' '}
+        <span className="italic" style={{ color: eduAccentColor }}>
+          {eduHighlightWord}
+        </span>
+        {eduHeadingSuffix ? ` ${eduHeadingSuffix}` : ''}
+      </>
+    );
+  };
+
+  const handleButtonClick = (url: any) => {
+    const trimmedUrl = getSafeString(url);
+    if (trimmedUrl !== '') {
       if (trimmedUrl.startsWith('http://') || trimmedUrl.startsWith('https://')) {
         window.open(trimmedUrl, '_blank', 'noopener,noreferrer');
         return;
@@ -431,30 +830,43 @@ export default function PromoSections({ onOpenAdmissions }: PromoSectionsProps) 
 
       </div>
 
-      {/* SECTION 7: Two-Column "Empower Children" Section */}
+      {/* SECTION 7: Two-Column "Empower Children" / Educational Highlight Section */}
       <div id="empower-section" className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         
         {/* Left details (5 cols) */}
         <div id="empower-left" className="lg:col-span-5 space-y-6">
-          <div className="inline-flex items-center space-x-1.5 bg-[#4B8B77]/10 text-[#4B8B77] border border-[#4B8B77]/20 px-3.5 py-1 rounded-full text-xs font-semibold">
-            <span className="w-2 h-2 rounded-full bg-[#4B8B77] inline-block"></span>
-            <span>Admissions On Going</span>
-          </div>
+          {eduBadge && (
+            <div 
+              className="inline-flex items-center space-x-1.5 px-3.5 py-1 rounded-full text-xs font-semibold border"
+              style={{
+                backgroundColor: eduBadgeBgColor || `${eduAccentColor}1A`,
+                borderColor: `${eduAccentColor}33`,
+                color: eduAccentColor,
+              }}
+            >
+              <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: eduAccentColor }}></span>
+              <span>{eduBadge}</span>
+            </div>
+          )}
 
-          <h2 className="text-3xl md:text-5xl font-serif font-bold text-[#3B231A] leading-[1.15] tracking-tight">
-            Empower your kids to think, be <span className="text-[#4B8B77] italic">smarter</span> and sharper
+          <h2 className="text-3xl md:text-5xl font-serif font-bold leading-[1.15] tracking-tight" style={{ color: eduTextColor }}>
+            {renderEduHeading()}
           </h2>
 
-          <p className="text-base text-[#3B231A]/75 font-sans font-light leading-relaxed">
-            Encourage children to think critically, be exceptionally creative, and solve practical, real-world problems for a better, more harmonious future.
+          <p className="text-base font-sans font-light leading-relaxed" style={{ color: eduTextColor, opacity: 0.8 }}>
+            {eduDescription}
           </p>
 
           <div className="pt-2">
             <button
-              onClick={onOpenAdmissions}
-              className="group inline-flex items-center space-x-2 bg-[#E78F68] text-white font-semibold px-7 py-3.5 rounded-full hover:bg-[#d07b53] transition-all duration-300 shadow-md cursor-pointer"
+              onClick={handleEduButtonClick}
+              style={{
+                backgroundColor: eduButtonBgColor,
+                color: eduButtonTextColor,
+              }}
+              className="group inline-flex items-center space-x-2 font-semibold px-7 py-3.5 rounded-full hover:opacity-90 transition-all duration-300 shadow-md cursor-pointer"
             >
-              <span>Get Educated</span>
+              <span>{eduButtonText}</span>
               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </button>
           </div>
@@ -470,19 +882,29 @@ export default function PromoSections({ onOpenAdmissions }: PromoSectionsProps) 
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            {/* Soft blue arched backdrop */}
-            <div className="w-[280px] sm:w-[340px] md:w-[400px] aspect-[1/1] bg-[#5B92E5] rounded-[36px] rounded-tl-[180px] rounded-br-[180px] overflow-hidden relative shadow-lg">
-              <img
-                src="/images/tec_girl.png"
-                alt="Empowered child smiling"
-                loading="lazy"
-                decoding="async"
-                className="w-full h-full object-contain object-bottom pt-4 hover:scale-105 transition-all duration-700"
-              />
-            </div>
+            {/* Soft blue arched backdrop with dynamic image */}
+            {eduImage && (
+              <div 
+                className="w-[280px] sm:w-[340px] md:w-[400px] aspect-[1/1] rounded-[36px] rounded-tl-[180px] rounded-br-[180px] overflow-hidden relative shadow-lg"
+                style={{ backgroundColor: eduBackdropColor }}
+              >
+                <img
+                  src={eduImage}
+                  alt={eduHeadingRaw || 'Educational Highlight'}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-contain object-bottom pt-4 hover:scale-105 transition-all duration-700"
+                />
+              </div>
+            )}
 
             {/* Small floating decorative planet on right margin */}
-            <div className="absolute -right-6 top-8 w-14 h-14 bg-gradient-to-tr from-[#4B8B77] to-emerald-400 rounded-full border-4 border-white shadow-xl flex items-center justify-center animate-bounce duration-[6000ms]">
+            <div 
+              className="absolute -right-6 top-8 w-14 h-14 rounded-full border-4 border-white shadow-xl flex items-center justify-center animate-bounce duration-[6000ms]"
+              style={{
+                background: `linear-gradient(to top right, ${eduAccentColor}, #34d399)`
+              }}
+            >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" className="transform rotate-12">
                 <circle cx="12" cy="12" r="8" />
                 <path d="M2 12C2 12 6 8 12 8C18 8 22 12 22 12" />
@@ -492,30 +914,36 @@ export default function PromoSections({ onOpenAdmissions }: PromoSectionsProps) 
             </div>
 
             {/* Floating double statistics board */}
-            <div 
-              id="empower-stats-overlay"
-              className="absolute -bottom-10 right-4 left-4 md:-left-12 md:right-auto bg-white border border-[#3B231A]/10 p-6 rounded-[28px] shadow-xl grid grid-cols-2 gap-6 divide-x divide-[#3B231A]/10 z-20 max-w-md"
-            >
-              {/* Stat Column 1 */}
-              <div className="flex items-start space-x-3">
-                <CheckCircle2 className="w-5 h-5 text-[#4B8B77] shrink-0 mt-0.5 animate-pulse" />
-                <div>
-                  <h4 className="text-xl font-serif font-bold text-[#3B231A]">45M+</h4>
-                  <p className="text-[10px] text-[#3B231A]/70 uppercase tracking-wider font-semibold">Scholar Hours</p>
-                  <p className="text-[10px] text-[#3B231A]/50 mt-1">Logged across global community programs.</p>
-                </div>
-              </div>
+            {(stat1Val || stat2Val) && (
+              <div 
+                id="empower-stats-overlay"
+                className="absolute -bottom-10 right-4 left-4 md:-left-12 md:right-auto bg-white border border-[#3B231A]/10 p-6 rounded-[28px] shadow-xl grid grid-cols-2 gap-6 divide-x divide-[#3B231A]/10 z-20 max-w-md"
+              >
+                {/* Stat Column 1 */}
+                {stat1Val && (
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5 animate-pulse" style={{ color: eduAccentColor }} />
+                    <div>
+                      <h4 className="text-xl font-serif font-bold text-[#3B231A]">{stat1Val}</h4>
+                      {stat1Lbl && <p className="text-[10px] text-[#3B231A]/70 uppercase tracking-wider font-semibold">{stat1Lbl}</p>}
+                      {stat1Desc && <p className="text-[10px] text-[#3B231A]/50 mt-1">{stat1Desc}</p>}
+                    </div>
+                  </div>
+                )}
 
-              {/* Stat Column 2 */}
-              <div className="pl-4 flex items-start space-x-3">
-                <Sun className="w-5 h-5 text-[#EAB308] shrink-0 mt-0.5 animate-spin duration-[8000ms]" />
-                <div>
-                  <h4 className="text-xl font-serif font-bold text-[#3B231A]">164+</h4>
-                  <p className="text-[10px] text-[#3B231A]/70 uppercase tracking-wider font-semibold">Olympiad Honors</p>
-                  <p className="text-[10px] text-[#3B231A]/50 mt-1">Gold distinctions in chess & sciences.</p>
-                </div>
+                {/* Stat Column 2 */}
+                {stat2Val && (
+                  <div className="pl-4 flex items-start space-x-3">
+                    <Sun className="w-5 h-5 text-[#EAB308] shrink-0 mt-0.5 animate-spin duration-[8000ms]" />
+                    <div>
+                      <h4 className="text-xl font-serif font-bold text-[#3B231A]">{stat2Val}</h4>
+                      {stat2Lbl && <p className="text-[10px] text-[#3B231A]/70 uppercase tracking-wider font-semibold">{stat2Lbl}</p>}
+                      {stat2Desc && <p className="text-[10px] text-[#3B231A]/50 mt-1">{stat2Desc}</p>}
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
 
           </motion.div>
 

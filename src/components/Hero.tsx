@@ -10,31 +10,265 @@ interface HeroProps {
 }
 
 interface HeroCMSData {
+  // Images
   heroBoyImage?: string;
   boyImage?: string;
   boyImageUrl?: string;
+  hero_boy_image?: string;
+
   heroGirlImage?: string;
   girlImage?: string;
   girlImageUrl?: string;
+  hero_girl_image?: string;
+
+  // Content
   mainHeroTitle?: string;
   mainTitle?: string;
   title?: string;
+  heroTitle?: string;
+  hero_title?: string;
+  headline?: string;
+  heading?: string;
+  main_title?: string;
+  titleText?: string;
+  headingText?: string;
+
   scriptSubtitle?: string;
   subtitle?: string;
+  script_subtitle?: string;
+  heroSubtitle?: string;
+
   description?: string;
   heroDescription?: string;
+  hero_description?: string;
+
+  // Primary Button
   primaryButtonText?: string;
   primaryBtnText?: string;
   primaryButtonLabel?: string;
+  primary_button_text?: string;
+
   primaryButtonUrl?: string;
   primaryBtnUrl?: string;
   primaryButtonLink?: string;
+  primary_button_url?: string;
+
+  // Secondary Button
   secondaryButtonText?: string;
   secondaryBtnText?: string;
   secondaryButtonLabel?: string;
+  secondary_button_text?: string;
+
   secondaryButtonUrl?: string;
   secondaryBtnUrl?: string;
   secondaryButtonLink?: string;
+  secondary_button_url?: string;
+
+  // Main Title Typography Settings
+  titleFontFamily?: string;
+  title_font_family?: string;
+  titleFont?: string;
+
+  titleFontWeight?: string | number;
+  title_font_weight?: string | number;
+
+  titleFontSizeDesktop?: string | number;
+  titleDesktopFontSize?: string | number;
+  title_font_size_desktop?: string | number;
+  desktopFontSize?: string | number;
+
+  titleFontSizeTablet?: string | number;
+  titleTabletFontSize?: string | number;
+  title_font_size_tablet?: string | number;
+  tabletFontSize?: string | number;
+
+  titleFontSizeMobile?: string | number;
+  titleMobileFontSize?: string | number;
+  title_font_size_mobile?: string | number;
+  mobileFontSize?: string | number;
+
+  titleColor?: string;
+  titleColour?: string;
+  title_color?: string;
+  title_colour?: string;
+
+  titleLetterSpacing?: string;
+  title_letter_spacing?: string;
+  letterSpacing?: string;
+
+  titleLineHeight?: string | number;
+  title_line_height?: string | number;
+  lineHeight?: string | number;
+
+  titleTextAlign?: string;
+  title_text_align?: string;
+  textAlign?: string;
+  textAlignment?: string;
+
+  // Script Subtitle Typography
+  subtitleFontFamily?: string;
+  subtitle_font_family?: string;
+  scriptSubtitleFontFamily?: string;
+
+  subtitleFontWeight?: string | number;
+  subtitle_font_weight?: string | number;
+  scriptSubtitleFontWeight?: string | number;
+
+  subtitleFontSize?: string | number;
+  subtitle_font_size?: string | number;
+  scriptSubtitleFontSize?: string | number;
+
+  subtitleColor?: string;
+  subtitleColour?: string;
+  subtitle_color?: string;
+  scriptSubtitleColor?: string;
+
+  subtitleLetterSpacing?: string;
+  subtitle_letter_spacing?: string;
+
+  subtitleLineHeight?: string | number;
+  subtitle_line_height?: string | number;
+
+  // Description Typography
+  descriptionFontFamily?: string;
+  description_font_family?: string;
+
+  descriptionFontWeight?: string | number;
+  description_font_weight?: string | number;
+
+  descriptionFontSize?: string | number;
+  description_font_size?: string | number;
+
+  descriptionColor?: string;
+  descriptionColour?: string;
+  description_color?: string;
+
+  descriptionMaxWidth?: string | number;
+  description_max_width?: string | number;
+  maxWidth?: string | number;
+
+  // Primary Button Styles
+  primaryButtonFontSize?: string | number;
+  primaryBtnFontSize?: string | number;
+  primary_button_font_size?: string | number;
+
+  primaryButtonFontWeight?: string | number;
+  primaryBtnFontWeight?: string | number;
+  primary_button_font_weight?: string | number;
+
+  primaryButtonBorderRadius?: string | number;
+  primaryBtnBorderRadius?: string | number;
+  primary_button_border_radius?: string | number;
+
+  primaryButtonPaddingX?: string | number;
+  primaryBtnPaddingX?: string | number;
+  primary_button_padding_x?: string | number;
+  primaryButtonHorizontalPadding?: string | number;
+
+  primaryButtonPaddingY?: string | number;
+  primaryBtnPaddingY?: string | number;
+  primary_button_padding_y?: string | number;
+  primaryButtonVerticalPadding?: string | number;
+
+  primaryButtonBgColor?: string;
+  primaryBtnBgColor?: string;
+  primary_button_bg_color?: string;
+  primaryButtonBackgroundColor?: string;
+
+  primaryButtonTextColor?: string;
+  primaryBtnTextColor?: string;
+  primary_button_text_color?: string;
+
+  // Secondary Button Styles
+  secondaryButtonFontSize?: string | number;
+  secondaryBtnFontSize?: string | number;
+  secondary_button_font_size?: string | number;
+
+  secondaryButtonFontWeight?: string | number;
+  secondaryBtnFontWeight?: string | number;
+  secondary_button_font_weight?: string | number;
+
+  secondaryButtonBorderRadius?: string | number;
+  secondaryBtnBorderRadius?: string | number;
+  secondary_button_border_radius?: string | number;
+
+  secondaryButtonPaddingX?: string | number;
+  secondaryBtnPaddingX?: string | number;
+  secondary_button_padding_x?: string | number;
+  secondaryButtonHorizontalPadding?: string | number;
+
+  secondaryButtonPaddingY?: string | number;
+  secondaryBtnPaddingY?: string | number;
+  secondary_button_padding_y?: string | number;
+  secondaryButtonVerticalPadding?: string | number;
+
+  secondaryButtonBgColor?: string;
+  secondaryBtnBgColor?: string;
+  secondary_button_bg_color?: string;
+  secondaryButtonBackgroundColor?: string;
+
+  secondaryButtonTextColor?: string;
+  secondaryBtnTextColor?: string;
+  secondary_button_text_color?: string;
+
+  // Hero Layout
+  topPadding?: string | number;
+  paddingTop?: string | number;
+  top_padding?: string | number;
+  heroPaddingTop?: string | number;
+
+  bottomPadding?: string | number;
+  paddingBottom?: string | number;
+  bottom_padding?: string | number;
+  heroPaddingBottom?: string | number;
+
+  sectionHeight?: string | number;
+  minHeight?: string | number;
+  heroHeight?: string | number;
+  section_height?: string | number;
+
+  contentGap?: string | number;
+  gap?: string | number;
+  content_gap?: string | number;
+  spaceY?: string | number;
+
+  // Decorative Elements
+  showBalloon?: boolean;
+  balloonVisible?: boolean;
+  balloon_visible?: boolean;
+
+  showRainbow?: boolean;
+  rainbowVisible?: boolean;
+  rainbow_visible?: boolean;
+
+  showPaperPlane?: boolean;
+  showAirplane?: boolean;
+  paperPlaneVisible?: boolean;
+  airplane_visible?: boolean;
+
+  showStars?: boolean;
+  starsVisible?: boolean;
+  stars_visible?: boolean;
+
+  showTennisBall?: boolean;
+  showBall?: boolean;
+  tennisBallVisible?: boolean;
+  ball_visible?: boolean;
+
+  decorations?: {
+    balloon?: boolean;
+    showBalloon?: boolean;
+    rainbow?: boolean;
+    showRainbow?: boolean;
+    paperPlane?: boolean;
+    showPaperPlane?: boolean;
+    airplane?: boolean;
+    stars?: boolean;
+    showStars?: boolean;
+    tennisBall?: boolean;
+    showTennisBall?: boolean;
+    ball?: boolean;
+  };
 }
 
 const DEFAULT_HERO = {
@@ -56,11 +290,39 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
   useEffect(() => {
     if (!db) return;
 
+    console.log('Hero CMS subscribed');
     const unsub = onSnapshot(
       doc(db, 'website_cms', 'hero'),
       (docSnap) => {
         if (docSnap.exists()) {
-          setCmsData(docSnap.data() as HeroCMSData);
+          const data = docSnap.data() as HeroCMSData;
+          console.log('Hero document received:', data);
+          const headlineText =
+            data.mainHeroTitle ||
+            data.mainTitle ||
+            data.title ||
+            data.heroTitle ||
+            data.hero_title ||
+            data.headline ||
+            data.heading ||
+            data.main_title ||
+            data.titleText ||
+            data.headingText;
+          console.log('Headline:', headlineText);
+          console.log('Typography received:', {
+            fontFamily: data.titleFontFamily || data.title_font_family || data.titleFont,
+            fontWeight: data.titleFontWeight || data.title_font_weight,
+            desktopSize: data.titleFontSizeDesktop || data.titleDesktopFontSize || data.title_font_size_desktop || data.desktopFontSize,
+            tabletSize: data.titleFontSizeTablet || data.titleTabletFontSize || data.title_font_size_tablet || data.tabletFontSize,
+            mobileSize: data.titleFontSizeMobile || data.titleMobileFontSize || data.title_font_size_mobile || data.mobileFontSize,
+            letterSpacing: data.titleLetterSpacing || data.title_letter_spacing || data.letterSpacing,
+            lineHeight: data.titleLineHeight || data.title_line_height || data.lineHeight,
+            textColor: data.titleColor || data.titleColour || data.title_color || data.title_colour,
+            textAlign: data.titleTextAlign || data.title_text_align || data.textAlign || data.textAlignment,
+          });
+          setCmsData(data);
+        } else {
+          console.log('Hero document received: document does not exist in website_cms/hero');
         }
       },
       (err) => {
@@ -71,15 +333,115 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
     return () => unsub();
   }, []);
 
-  const boyImage = cmsData?.heroBoyImage || cmsData?.boyImage || cmsData?.boyImageUrl || DEFAULT_HERO.boyImage;
-  const girlImage = cmsData?.heroGirlImage || cmsData?.girlImage || cmsData?.girlImageUrl || DEFAULT_HERO.girlImage;
-  const mainHeroTitle = cmsData?.mainHeroTitle || cmsData?.mainTitle || cmsData?.title || DEFAULT_HERO.mainHeroTitle;
-  const scriptSubtitle = cmsData?.scriptSubtitle || cmsData?.subtitle || DEFAULT_HERO.scriptSubtitle;
-  const description = cmsData?.description || cmsData?.heroDescription || DEFAULT_HERO.description;
-  const primaryButtonText = cmsData?.primaryButtonText || cmsData?.primaryBtnText || cmsData?.primaryButtonLabel || DEFAULT_HERO.primaryButtonText;
-  const primaryButtonUrl = cmsData?.primaryButtonUrl || cmsData?.primaryBtnUrl || cmsData?.primaryButtonLink || DEFAULT_HERO.primaryButtonUrl;
-  const secondaryButtonText = cmsData?.secondaryButtonText || cmsData?.secondaryBtnText || cmsData?.secondaryButtonLabel || DEFAULT_HERO.secondaryButtonText;
-  const secondaryButtonUrl = cmsData?.secondaryButtonUrl || cmsData?.secondaryBtnUrl || cmsData?.secondaryButtonLink || DEFAULT_HERO.secondaryButtonUrl;
+  const boyImage = cmsData?.heroBoyImage || cmsData?.boyImage || cmsData?.boyImageUrl || cmsData?.hero_boy_image || DEFAULT_HERO.boyImage;
+  const girlImage = cmsData?.heroGirlImage || cmsData?.girlImage || cmsData?.girlImageUrl || cmsData?.hero_girl_image || DEFAULT_HERO.girlImage;
+  const mainHeroTitle =
+    cmsData?.mainHeroTitle ||
+    cmsData?.mainTitle ||
+    cmsData?.title ||
+    cmsData?.heroTitle ||
+    cmsData?.hero_title ||
+    cmsData?.headline ||
+    cmsData?.heading ||
+    cmsData?.main_title ||
+    cmsData?.titleText ||
+    cmsData?.headingText ||
+    DEFAULT_HERO.mainHeroTitle;
+
+  console.log('Rendering Hero title:', mainHeroTitle);
+  const scriptSubtitle = cmsData?.scriptSubtitle || cmsData?.subtitle || cmsData?.script_subtitle || cmsData?.heroSubtitle || DEFAULT_HERO.scriptSubtitle;
+  const description = cmsData?.description || cmsData?.heroDescription || cmsData?.hero_description || DEFAULT_HERO.description;
+  const primaryButtonText = cmsData?.primaryButtonText || cmsData?.primaryBtnText || cmsData?.primaryButtonLabel || cmsData?.primary_button_text || DEFAULT_HERO.primaryButtonText;
+  const primaryButtonUrl = cmsData?.primaryButtonUrl || cmsData?.primaryBtnUrl || cmsData?.primaryButtonLink || cmsData?.primary_button_url || DEFAULT_HERO.primaryButtonUrl;
+  const secondaryButtonText = cmsData?.secondaryButtonText || cmsData?.secondaryBtnText || cmsData?.secondaryButtonLabel || cmsData?.secondary_button_text || DEFAULT_HERO.secondaryButtonText;
+  const secondaryButtonUrl = cmsData?.secondaryButtonUrl || cmsData?.secondaryBtnUrl || cmsData?.secondaryButtonLink || cmsData?.secondary_button_url || DEFAULT_HERO.secondaryButtonUrl;
+
+  // Main Title Typography
+  const titleFontFamily = cmsData?.titleFontFamily || cmsData?.title_font_family || cmsData?.titleFont;
+  const titleFontWeight = cmsData?.titleFontWeight || cmsData?.title_font_weight;
+  const titleColor = cmsData?.titleColor || cmsData?.titleColour || cmsData?.title_color || cmsData?.title_colour;
+  const titleLetterSpacing = cmsData?.titleLetterSpacing || cmsData?.title_letter_spacing || cmsData?.letterSpacing;
+  const titleLineHeight = cmsData?.titleLineHeight || cmsData?.title_line_height || cmsData?.lineHeight;
+  const titleTextAlign = cmsData?.titleTextAlign || cmsData?.title_text_align || cmsData?.textAlign || cmsData?.textAlignment;
+
+  const titleDesktopFontSize = cmsData?.titleFontSizeDesktop || cmsData?.titleDesktopFontSize || cmsData?.title_font_size_desktop || cmsData?.desktopFontSize;
+  const titleTabletFontSize = cmsData?.titleFontSizeTablet || cmsData?.titleTabletFontSize || cmsData?.title_font_size_tablet || cmsData?.tabletFontSize;
+  const titleMobileFontSize = cmsData?.titleFontSizeMobile || cmsData?.titleMobileFontSize || cmsData?.title_font_size_mobile || cmsData?.mobileFontSize;
+
+  // Script Subtitle Typography
+  const subtitleFontFamily = cmsData?.subtitleFontFamily || cmsData?.subtitle_font_family || cmsData?.scriptSubtitleFontFamily;
+  const subtitleFontWeight = cmsData?.subtitleFontWeight || cmsData?.subtitle_font_weight || cmsData?.scriptSubtitleFontWeight;
+  const subtitleFontSize = cmsData?.subtitleFontSize || cmsData?.subtitle_font_size || cmsData?.scriptSubtitleFontSize;
+  const subtitleColor = cmsData?.subtitleColor || cmsData?.subtitleColour || cmsData?.subtitle_color || cmsData?.scriptSubtitleColor;
+  const subtitleLetterSpacing = cmsData?.subtitleLetterSpacing || cmsData?.subtitle_letter_spacing;
+  const subtitleLineHeight = cmsData?.subtitleLineHeight || cmsData?.subtitle_line_height;
+
+  // Description Typography
+  const descriptionFontFamily = cmsData?.descriptionFontFamily || cmsData?.description_font_family;
+  const descriptionFontWeight = cmsData?.descriptionFontWeight || cmsData?.description_font_weight;
+  const descriptionFontSize = cmsData?.descriptionFontSize || cmsData?.description_font_size;
+  const descriptionColor = cmsData?.descriptionColor || cmsData?.descriptionColour || cmsData?.description_color;
+  const descriptionMaxWidth = cmsData?.descriptionMaxWidth || cmsData?.description_max_width || cmsData?.maxWidth;
+
+  // Primary Button Styles
+  const primaryBtnFontSize = cmsData?.primaryButtonFontSize || cmsData?.primaryBtnFontSize || cmsData?.primary_button_font_size;
+  const primaryBtnFontWeight = cmsData?.primaryButtonFontWeight || cmsData?.primaryBtnFontWeight || cmsData?.primary_button_font_weight;
+  const primaryBtnBorderRadius = cmsData?.primaryButtonBorderRadius || cmsData?.primaryBtnBorderRadius || cmsData?.primary_button_border_radius;
+  const primaryBtnPaddingX = cmsData?.primaryButtonPaddingX || cmsData?.primaryBtnPaddingX || cmsData?.primary_button_padding_x || cmsData?.primaryButtonHorizontalPadding;
+  const primaryBtnPaddingY = cmsData?.primaryButtonPaddingY || cmsData?.primaryBtnPaddingY || cmsData?.primary_button_padding_y || cmsData?.primaryButtonVerticalPadding;
+  const primaryBtnBgColor = cmsData?.primaryButtonBgColor || cmsData?.primaryBtnBgColor || cmsData?.primary_button_bg_color || cmsData?.primaryButtonBackgroundColor;
+  const primaryBtnTextColor = cmsData?.primaryButtonTextColor || cmsData?.primaryBtnTextColor || cmsData?.primary_button_text_color;
+
+  // Secondary Button Styles
+  const secondaryBtnFontSize = cmsData?.secondaryButtonFontSize || cmsData?.secondaryBtnFontSize || cmsData?.secondary_button_font_size;
+  const secondaryBtnFontWeight = cmsData?.secondaryButtonFontWeight || cmsData?.secondaryBtnFontWeight || cmsData?.secondary_button_font_weight;
+  const secondaryBtnBorderRadius = cmsData?.secondaryButtonBorderRadius || cmsData?.secondaryBtnBorderRadius || cmsData?.secondary_button_border_radius;
+  const secondaryBtnPaddingX = cmsData?.secondaryButtonPaddingX || cmsData?.secondaryBtnPaddingX || cmsData?.secondary_button_padding_x || cmsData?.secondaryButtonHorizontalPadding;
+  const secondaryBtnPaddingY = cmsData?.secondaryButtonPaddingY || cmsData?.secondaryBtnPaddingY || cmsData?.secondary_button_padding_y || cmsData?.secondaryButtonVerticalPadding;
+  const secondaryBtnBgColor = cmsData?.secondaryButtonBgColor || cmsData?.secondaryBtnBgColor || cmsData?.secondary_button_bg_color || cmsData?.secondaryButtonBackgroundColor;
+  const secondaryBtnTextColor = cmsData?.secondaryButtonTextColor || cmsData?.secondaryBtnTextColor || cmsData?.secondary_button_text_color;
+
+  // Hero Layout
+  const topPadding = cmsData?.topPadding || cmsData?.paddingTop || cmsData?.top_padding || cmsData?.heroPaddingTop;
+  const bottomPadding = cmsData?.bottomPadding || cmsData?.paddingBottom || cmsData?.bottom_padding || cmsData?.heroPaddingBottom;
+  const sectionHeight = cmsData?.sectionHeight || cmsData?.minHeight || cmsData?.heroHeight || cmsData?.section_height;
+  const contentGap = cmsData?.contentGap || cmsData?.gap || cmsData?.content_gap || cmsData?.spaceY;
+
+  // Formatting helpers
+  const formatUnit = (val: string | number | undefined, defaultVal: string): string => {
+    if (val === undefined || val === null || val === '') return defaultVal;
+    if (typeof val === 'number') return `${val}px`;
+    if (/^\d+$/.test(String(val).trim())) return `${String(val).trim()}px`;
+    return String(val).trim();
+  };
+
+  const isVisible = (val: any, altVal: any): boolean => {
+    if (val === false || altVal === false) return false;
+    if (val === true || altVal === true) return true;
+    return true;
+  };
+
+  // Decorative Elements Visibility
+  const showBalloon = isVisible(
+    cmsData?.showBalloon ?? cmsData?.balloonVisible ?? cmsData?.balloon_visible,
+    cmsData?.decorations?.balloon ?? cmsData?.decorations?.showBalloon
+  );
+  const showRainbow = isVisible(
+    cmsData?.showRainbow ?? cmsData?.rainbowVisible ?? cmsData?.rainbow_visible,
+    cmsData?.decorations?.rainbow ?? cmsData?.decorations?.showRainbow
+  );
+  const showPaperPlane = isVisible(
+    cmsData?.showPaperPlane ?? cmsData?.showAirplane ?? cmsData?.paperPlaneVisible ?? cmsData?.airplane_visible,
+    cmsData?.decorations?.paperPlane ?? cmsData?.decorations?.showPaperPlane ?? cmsData?.decorations?.airplane
+  );
+  const showStars = isVisible(
+    cmsData?.showStars ?? cmsData?.starsVisible ?? cmsData?.stars_visible,
+    cmsData?.decorations?.stars ?? cmsData?.decorations?.showStars
+  );
+  const showTennisBall = isVisible(
+    cmsData?.showTennisBall ?? cmsData?.showBall ?? cmsData?.tennisBallVisible ?? cmsData?.ball_visible,
+    cmsData?.decorations?.tennisBall ?? cmsData?.decorations?.showTennisBall ?? cmsData?.decorations?.ball
+  );
 
   const handleButtonClick = (url: string | undefined) => {
     if (url && url.trim() !== '') {
@@ -225,105 +587,135 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
     <section 
       id="hero-section" 
       className="relative bg-[#F4F0EA] min-h-[780px] lg:h-[820px] flex items-center px-4 sm:px-8 md:px-12 py-12 lg:py-4 overflow-hidden select-none box-border"
+      style={{
+        paddingTop: topPadding ? formatUnit(topPadding, '') : undefined,
+        paddingBottom: bottomPadding ? formatUnit(bottomPadding, '') : undefined,
+        minHeight: sectionHeight ? formatUnit(sectionHeight, '') : undefined,
+      }}
     >
       <IllustrationDefs />
+
+      {/* Dynamic Title Font Size Style Override */}
+      <style>{`
+        .hero-main-title-dynamic {
+          font-size: ${formatUnit(titleMobileFontSize, '34px')};
+        }
+        @media (min-width: 640px) {
+          .hero-main-title-dynamic {
+            font-size: ${formatUnit(titleTabletFontSize, '54px')};
+          }
+        }
+        @media (min-width: 1024px) {
+          .hero-main-title-dynamic {
+            font-size: ${formatUnit(titleDesktopFontSize, '76px')};
+          }
+        }
+      `}</style>
       
       {/* ================= PLAYFUL DECORATIVE DOODLES ================= */}
       
       {/* Upper-Left: Playful Hot Air Balloon */}
-      <motion.div 
-        animate={balloonTrigger > 0 
-          ? { y: [0, -35, 0], rotate: [0, -5, 5, 0] } 
-          : { y: [0, -8, 0] }
-        }
-        transition={balloonTrigger > 0 
-          ? { duration: 1.2, ease: "easeInOut" } 
-          : { repeat: Infinity, repeatType: "mirror", duration: 4, ease: "easeInOut" }
-        }
-        onClick={() => setBalloonTrigger(p => p + 1)}
-        className="absolute top-[8%] left-[4%] sm:left-[8%] lg:left-[10%] xl:left-[14%] z-20 cursor-pointer select-none"
-      >
-        <svg width="55" height="75" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-md">
-          <path d="M30 5C17.29 5 7 15.29 7 28C7 38.64 13.56 44.52 19.33 49.64C21.43 51.5 23.57 53.4 24.5 56H35.5C36.43 53.4 38.57 51.5 40.67 49.64C46.44 44.52 53 38.64 53 28C53 15.29 42.71 5 30 5Z" fill="#E74C3C" stroke="#3A2318" strokeWidth="2.5" />
-          <path d="M30 5C24 5 17 15 17 28C17 38 21.5 44.5 24.5 56" stroke="white" strokeWidth="3.5" fill="none" />
-          <path d="M30 5C36 5 43 15 43 28C43 38 38.5 44.5 35.5 56" stroke="white" strokeWidth="3.5" fill="none" />
-          <line x1="22" y1="56" x2="24" y2="66" stroke="#3A2318" strokeWidth="2" />
-          <line x1="38" y1="56" x2="36" y2="66" stroke="#3A2318" strokeWidth="2" />
-          <rect x="23" y="66" width="14" height="8" rx="1.5" fill="#EAB308" stroke="#3A2318" strokeWidth="2" />
-        </svg>
-      </motion.div>
+      {showBalloon && (
+        <motion.div 
+          animate={balloonTrigger > 0 
+            ? { y: [0, -35, 0], rotate: [0, -5, 5, 0] } 
+            : { y: [0, -8, 0] }
+          }
+          transition={balloonTrigger > 0 
+            ? { duration: 1.2, ease: "easeInOut" } 
+            : { repeat: Infinity, repeatType: "mirror", duration: 4, ease: "easeInOut" }
+          }
+          onClick={() => setBalloonTrigger(p => p + 1)}
+          className="absolute top-[8%] left-[4%] sm:left-[8%] lg:left-[10%] xl:left-[14%] z-20 cursor-pointer select-none"
+        >
+          <svg width="55" height="75" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-md">
+            <path d="M30 5C17.29 5 7 15.29 7 28C7 38.64 13.56 44.52 19.33 49.64C21.43 51.5 23.57 53.4 24.5 56H35.5C36.43 53.4 38.57 51.5 40.67 49.64C46.44 44.52 53 38.64 53 28C53 15.29 42.71 5 30 5Z" fill="#E74C3C" stroke="#3A2318" strokeWidth="2.5" />
+            <path d="M30 5C24 5 17 15 17 28C17 38 21.5 44.5 24.5 56" stroke="white" strokeWidth="3.5" fill="none" />
+            <path d="M30 5C36 5 43 15 43 28C43 38 38.5 44.5 35.5 56" stroke="white" strokeWidth="3.5" fill="none" />
+            <line x1="22" y1="56" x2="24" y2="66" stroke="#3A2318" strokeWidth="2" />
+            <line x1="38" y1="56" x2="36" y2="66" stroke="#3A2318" strokeWidth="2" />
+            <rect x="23" y="66" width="14" height="8" rx="1.5" fill="#EAB308" stroke="#3A2318" strokeWidth="2" />
+          </svg>
+        </motion.div>
+      )}
 
       {/* Upper-Right: Playful Sparkly Tennis Ball */}
-      <motion.div 
-        animate={ballTrigger > 0 
-          ? { scale: [1, 1.2, 1], rotate: [12, 372, 12] } 
-          : { y: [0, -6, 0] }
-        }
-        transition={ballTrigger > 0 
-          ? { duration: 0.8, ease: "easeOut" } 
-          : { repeat: Infinity, repeatType: "mirror", duration: 3.2, ease: "easeInOut" }
-        }
-        onClick={() => setBallTrigger(p => p + 1)}
-        className="absolute top-[8%] right-[4%] sm:right-[8%] lg:right-[10%] xl:right-[14%] z-20 cursor-pointer select-none"
-      >
-        <svg width="55" height="55" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-sm">
-          <line x1="52" y1="18" x2="62" y2="10" stroke="#FF8A3D" strokeWidth="3" strokeLinecap="round" />
-          <line x1="56" y1="28" x2="66" y2="28" stroke="#FF8A3D" strokeWidth="3" strokeLinecap="round" />
-          <line x1="48" y1="12" x2="52" y2="4" stroke="#FF8A3D" strokeWidth="3" strokeLinecap="round" />
-          <circle cx="30" cy="40" r="20" fill="#A4D826" stroke="#3A2318" strokeWidth="2.5" />
-          <path d="M14 27C21 30 21 44 14 53" stroke="white" strokeWidth="3.5" strokeLinecap="round" fill="none" />
-          <path d="M46 27C39 30 39 44 46 53" stroke="white" strokeWidth="3.5" strokeLinecap="round" fill="none" />
-        </svg>
-      </motion.div>
+      {showTennisBall && (
+        <motion.div 
+          animate={ballTrigger > 0 
+            ? { scale: [1, 1.2, 1], rotate: [12, 372, 12] } 
+            : { y: [0, -6, 0] }
+          }
+          transition={ballTrigger > 0 
+            ? { duration: 0.8, ease: "easeOut" } 
+            : { repeat: Infinity, repeatType: "mirror", duration: 3.2, ease: "easeInOut" }
+          }
+          onClick={() => setBallTrigger(p => p + 1)}
+          className="absolute top-[8%] right-[4%] sm:right-[8%] lg:right-[10%] xl:right-[14%] z-20 cursor-pointer select-none"
+        >
+          <svg width="55" height="55" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-sm">
+            <line x1="52" y1="18" x2="62" y2="10" stroke="#FF8A3D" strokeWidth="3" strokeLinecap="round" />
+            <line x1="56" y1="28" x2="66" y2="28" stroke="#FF8A3D" strokeWidth="3" strokeLinecap="round" />
+            <line x1="48" y1="12" x2="52" y2="4" stroke="#FF8A3D" strokeWidth="3" strokeLinecap="round" />
+            <circle cx="30" cy="40" r="20" fill="#A4D826" stroke="#3A2318" strokeWidth="2.5" />
+            <path d="M14 27C21 30 21 44 14 53" stroke="white" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+            <path d="M46 27C39 30 39 44 46 53" stroke="white" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+          </svg>
+        </motion.div>
+      )}
 
       {/* Upper-Right Center: Paper Airplane */}
-      <motion.div 
-        animate={airplaneTrigger > 0 
-          ? { x: [0, 80, -120, 0], y: [0, -40, -10, 0], rotate: [0, -15, 10, 0] } 
-          : { y: [0, -5, 0], x: [0, 5, 0] }
-        }
-        transition={airplaneTrigger > 0 
-          ? { duration: 1.8, ease: "easeInOut" } 
-          : { repeat: Infinity, repeatType: "mirror", duration: 5, ease: "easeInOut" }
-        }
-        onClick={() => setAirplaneTrigger(p => p + 1)}
-        className="absolute top-[15%] right-[25%] lg:right-[28%] z-20 cursor-pointer select-none hidden sm:block"
-      >
-        <div className="relative">
-          <svg width="45" height="35" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform -rotate-12 drop-shadow-sm">
-            <path d="M5 20L45 5L30 35L22 25L5 20Z" fill="#F5F5F5" stroke="#3A2318" strokeWidth="2" strokeLinejoin="round" />
-            <path d="M45 5L22 25L18 35L22 25" fill="#E5E5E5" stroke="#3A2318" strokeWidth="2" strokeLinejoin="round" />
-          </svg>
-          <svg className="absolute top-6 -left-12 w-12 h-6 overflow-visible" viewBox="0 0 50 20" fill="none">
-            <path d="M0 15 C 15 15, 30 10, 45 5" stroke="#3A2318" strokeWidth="1.5" strokeDasharray="3,3" strokeLinecap="round" fill="none" />
-          </svg>
-        </div>
-      </motion.div>
+      {showPaperPlane && (
+        <motion.div 
+          animate={airplaneTrigger > 0 
+            ? { x: [0, 80, -120, 0], y: [0, -40, -10, 0], rotate: [0, -15, 10, 0] } 
+            : { y: [0, -5, 0], x: [0, 5, 0] }
+          }
+          transition={airplaneTrigger > 0 
+            ? { duration: 1.8, ease: "easeInOut" } 
+            : { repeat: Infinity, repeatType: "mirror", duration: 5, ease: "easeInOut" }
+          }
+          onClick={() => setAirplaneTrigger(p => p + 1)}
+          className="absolute top-[15%] right-[25%] lg:right-[28%] z-20 cursor-pointer select-none hidden sm:block"
+        >
+          <div className="relative">
+            <svg width="45" height="35" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform -rotate-12 drop-shadow-sm">
+              <path d="M5 20L45 5L30 35L22 25L5 20Z" fill="#F5F5F5" stroke="#3A2318" strokeWidth="2" strokeLinejoin="round" />
+              <path d="M45 5L22 25L18 35L22 25" fill="#E5E5E5" stroke="#3A2318" strokeWidth="2" strokeLinejoin="round" />
+            </svg>
+            <svg className="absolute top-6 -left-12 w-12 h-6 overflow-visible" viewBox="0 0 50 20" fill="none">
+              <path d="M0 15 C 15 15, 30 10, 45 5" stroke="#3A2318" strokeWidth="1.5" strokeDasharray="3,3" strokeLinecap="round" fill="none" />
+            </svg>
+          </div>
+        </motion.div>
+      )}
 
       {/* Upper-Left Center: Rainbow + Clouds */}
-      <motion.div 
-        animate={rainbowTrigger > 0 
-          ? { scale: [1, 1.12, 1], rotate: [0, -5, 5, 0] } 
-          : { y: [0, -4, 0] }
-        }
-        transition={rainbowTrigger > 0 
-          ? { duration: 0.8 } 
-          : { repeat: Infinity, repeatType: "mirror", duration: 6, ease: "easeInOut" }
-        }
-        onClick={() => setRainbowTrigger(p => p + 1)}
-        className="absolute top-[15%] left-[25%] lg:left-[28%] z-20 cursor-pointer select-none hidden sm:block"
-      >
-        <svg width="55" height="40" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-xs">
-          <path d="M 12 30 A 18 18 0 0 1 48 30" stroke="#FF4D4D" strokeWidth="3.5" fill="none" />
-          <path d="M 16 30 A 14 14 0 0 1 44 30" stroke="#FF9F43" strokeWidth="3.5" fill="none" />
-          <path d="M 20 30 A 10 10 0 0 1 40 30" stroke="#4CD137" strokeWidth="3.5" fill="none" />
-          <path d="M 24 30 A 6 6 0 0 1 36 30" stroke="#00A8FF" strokeWidth="3.5" fill="none" />
-          <circle cx="12" cy="30" r="6" fill="white" stroke="#3A2318" strokeWidth="1.5" />
-          <circle cx="16" cy="32" r="5" fill="white" stroke="#3A2318" strokeWidth="1.5" />
-          <circle cx="48" cy="30" r="6" fill="white" stroke="#3A2318" strokeWidth="1.5" />
-          <circle cx="44" cy="32" r="5" fill="white" stroke="#3A2318" strokeWidth="1.5" />
-        </svg>
-      </motion.div>
+      {showRainbow && (
+        <motion.div 
+          animate={rainbowTrigger > 0 
+            ? { scale: [1, 1.12, 1], rotate: [0, -5, 5, 0] } 
+            : { y: [0, -4, 0] }
+          }
+          transition={rainbowTrigger > 0 
+            ? { duration: 0.8 } 
+            : { repeat: Infinity, repeatType: "mirror", duration: 6, ease: "easeInOut" }
+          }
+          onClick={() => setRainbowTrigger(p => p + 1)}
+          className="absolute top-[15%] left-[25%] lg:left-[28%] z-20 cursor-pointer select-none hidden sm:block"
+        >
+          <svg width="55" height="40" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-xs">
+            <path d="M 12 30 A 18 18 0 0 1 48 30" stroke="#FF4D4D" strokeWidth="3.5" fill="none" />
+            <path d="M 16 30 A 14 14 0 0 1 44 30" stroke="#FF9F43" strokeWidth="3.5" fill="none" />
+            <path d="M 20 30 A 10 10 0 0 1 40 30" stroke="#4CD137" strokeWidth="3.5" fill="none" />
+            <path d="M 24 30 A 6 6 0 0 1 36 30" stroke="#00A8FF" strokeWidth="3.5" fill="none" />
+            <circle cx="12" cy="30" r="6" fill="white" stroke="#3A2318" strokeWidth="1.5" />
+            <circle cx="16" cy="32" r="5" fill="white" stroke="#3A2318" strokeWidth="1.5" />
+            <circle cx="48" cy="30" r="6" fill="white" stroke="#3A2318" strokeWidth="1.5" />
+            <circle cx="44" cy="32" r="5" fill="white" stroke="#3A2318" strokeWidth="1.5" />
+          </svg>
+        </motion.div>
+      )}
 
       {/* Middle-Right: Space Rocket */}
       <motion.div 
@@ -419,34 +811,37 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
         </svg>
       </motion.div>
 
-      {/* Twinkling Star */}
-      <motion.div 
-        animate={starTrigger > 0 
-          ? { scale: [1, 1.6, 0.8, 1.2, 1] } 
-          : { opacity: [0.4, 1, 0.4], scale: [0.9, 1.1, 0.9] }
-        }
-        transition={starTrigger > 0 
-          ? { duration: 0.8 } 
-          : { repeat: Infinity, duration: 2.2, ease: "easeInOut" }
-        }
-        onClick={() => setStarTrigger(p => p + 1)}
-        className="absolute top-[28%] left-[10%] lg:left-[21%] z-20 cursor-pointer select-none hidden sm:block"
-      >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L15 9L22 10L17 15L19 22L12 18L5 22L7 15L2 10L9 9L12 2Z" fill="#F1C40F" stroke="#3A2318" strokeWidth="1.5" strokeLinejoin="round" />
-        </svg>
-      </motion.div>
+      {/* Twinkling Stars */}
+      {showStars && (
+        <>
+          <motion.div 
+            animate={starTrigger > 0 
+              ? { scale: [1, 1.6, 0.8, 1.2, 1] } 
+              : { opacity: [0.4, 1, 0.4], scale: [0.9, 1.1, 0.9] }
+            }
+            transition={starTrigger > 0 
+              ? { duration: 0.8 } 
+              : { repeat: Infinity, duration: 2.2, ease: "easeInOut" }
+            }
+            onClick={() => setStarTrigger(p => p + 1)}
+            className="absolute top-[28%] left-[10%] lg:left-[21%] z-20 cursor-pointer select-none hidden sm:block"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L15 9L22 10L17 15L19 22L12 18L5 22L7 15L2 10L9 9L12 2Z" fill="#F1C40F" stroke="#3A2318" strokeWidth="1.5" strokeLinejoin="round" />
+            </svg>
+          </motion.div>
 
-      {/* Orange Star */}
-      <motion.div 
-        animate={{ opacity: [1, 0.3, 1], scale: [1, 0.8, 1] }}
-        transition={{ repeat: Infinity, duration: 2.8, delay: 0.5 }}
-        className="absolute top-[28%] right-[10%] lg:right-[21%] z-20 select-none hidden sm:block"
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L15 9L22 10L17 15L19 22L12 18L5 22L7 15L2 10L9 9L12 2Z" fill="#FF8A3D" stroke="#3A2318" strokeWidth="1.5" strokeLinejoin="round" />
-        </svg>
-      </motion.div>
+          <motion.div 
+            animate={{ opacity: [1, 0.3, 1], scale: [1, 0.8, 1] }}
+            transition={{ repeat: Infinity, duration: 2.8, delay: 0.5 }}
+            className="absolute top-[28%] right-[10%] lg:right-[21%] z-20 select-none hidden sm:block"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L15 9L22 10L17 15L19 22L12 18L5 22L7 15L2 10L9 9L12 2Z" fill="#FF8A3D" stroke="#3A2318" strokeWidth="1.5" strokeLinejoin="round" />
+            </svg>
+          </motion.div>
+        </>
+      )}
 
       {/* Floating Music Note near girl */}
       <motion.div 
@@ -501,7 +896,11 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
 
 
         {/* CENTER COLUMN: Central content with perfect layout and custom typography */}
-        <div id="hero-center-column" className="col-span-1 lg:col-span-6 flex flex-col items-center justify-center text-center space-y-6 sm:space-y-7 px-2">
+        <div 
+          id="hero-center-column" 
+          className="col-span-1 lg:col-span-6 flex flex-col items-center justify-center text-center space-y-6 sm:space-y-7 px-2"
+          style={{ gap: contentGap ? formatUnit(contentGap, '') : undefined }}
+        >
           
           {/* Header & Subtitle */}
           <motion.div
@@ -511,20 +910,40 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
             className="space-y-4 w-full"
           >
             {/* Playful bold chunky headline */}
-            <h1 className="text-[34px] sm:text-[54px] md:text-[64px] lg:text-[68px] xl:text-[76px] font-bungee text-[#3B231A] leading-[1.08] tracking-tight max-w-[98%] mx-auto block uppercase">
+            <h1 
+              className="hero-main-title-dynamic font-bungee text-[#3B231A] leading-[1.08] tracking-tight max-w-[98%] mx-auto block uppercase"
+              style={{
+                fontFamily: titleFontFamily || undefined,
+                fontWeight: titleFontWeight || undefined,
+                color: titleColor || undefined,
+                letterSpacing: titleLetterSpacing || undefined,
+                lineHeight: titleLineHeight || undefined,
+                textAlign: (titleTextAlign as any) || undefined,
+              }}
+            >
               {renderTitle(mainHeroTitle)}
             </h1>
 
             {/* Handwritten cursive orange subtitle */}
             <div className="relative mt-2 inline-block">
-              <span className="font-caveat text-4xl sm:text-[44px] md:text-[52px] lg:text-[56px] xl:text-[62px] font-bold text-[#FF8A3D] tracking-wide block transform -rotate-1 px-4">
+              <span 
+                className="font-caveat text-4xl sm:text-[44px] md:text-[52px] lg:text-[56px] xl:text-[62px] font-bold text-[#FF8A3D] tracking-wide block transform -rotate-1 px-4"
+                style={{
+                  fontFamily: subtitleFontFamily || undefined,
+                  fontWeight: subtitleFontWeight || undefined,
+                  fontSize: subtitleFontSize ? formatUnit(subtitleFontSize, '') : undefined,
+                  color: subtitleColor || undefined,
+                  letterSpacing: subtitleLetterSpacing || undefined,
+                  lineHeight: subtitleLineHeight || undefined,
+                }}
+              >
                 {scriptSubtitle}
               </span>
               {/* Hand-drawn Underline & Strokes */}
               <svg className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-48 sm:w-64 md:w-80 h-3 overflow-visible" viewBox="0 0 200 10" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                <path d="M5 8C50 3 150 3 195 8" stroke="#FF8A3D" strokeWidth="4.5" strokeLinecap="round" />
-                <path d="M192 3C195 5 198 2 199 4" stroke="#FF8A3D" strokeWidth="2.5" strokeLinecap="round" />
-                <path d="M4 2C2 4 1 2 0 3" stroke="#FF8A3D" strokeWidth="2.5" strokeLinecap="round" />
+                <path d="M5 8C50 3 150 3 195 8" stroke={subtitleColor || "#FF8A3D"} strokeWidth="4.5" strokeLinecap="round" />
+                <path d="M192 3C195 5 198 2 199 4" stroke={subtitleColor || "#FF8A3D"} strokeWidth="2.5" strokeLinecap="round" />
+                <path d="M4 2C2 4 1 2 0 3" stroke={subtitleColor || "#FF8A3D"} strokeWidth="2.5" strokeLinecap="round" />
               </svg>
             </div>
           </motion.div>
@@ -590,14 +1009,36 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
           >
             <button
               onClick={() => handleButtonClick(primaryButtonUrl)}
-              className="w-full sm:w-auto bg-[#FF8A3D] text-white font-bold px-8 py-4 rounded-[16px] shadow-[0_4px_12px_rgba(255,138,61,0.15)] hover:bg-[#e67425] hover:shadow-[0_6px_16px_rgba(255,138,61,0.22)] transition-all duration-300 flex items-center justify-center space-x-2 text-sm uppercase tracking-wider font-sans transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+              className="w-full sm:w-auto font-bold px-8 py-4 rounded-[16px] shadow-[0_4px_12px_rgba(255,138,61,0.15)] hover:shadow-[0_6px_16px_rgba(255,138,61,0.22)] transition-all duration-300 flex items-center justify-center space-x-2 text-sm uppercase tracking-wider font-sans transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+              style={{
+                fontSize: primaryBtnFontSize ? formatUnit(primaryBtnFontSize, '') : undefined,
+                fontWeight: primaryBtnFontWeight || undefined,
+                borderRadius: primaryBtnBorderRadius ? formatUnit(primaryBtnBorderRadius, '16px') : undefined,
+                paddingLeft: primaryBtnPaddingX ? formatUnit(primaryBtnPaddingX, '') : undefined,
+                paddingRight: primaryBtnPaddingX ? formatUnit(primaryBtnPaddingX, '') : undefined,
+                paddingTop: primaryBtnPaddingY ? formatUnit(primaryBtnPaddingY, '') : undefined,
+                paddingBottom: primaryBtnPaddingY ? formatUnit(primaryBtnPaddingY, '') : undefined,
+                backgroundColor: primaryBtnBgColor || '#FF8A3D',
+                color: primaryBtnTextColor || '#FFFFFF',
+              }}
             >
               <span>{primaryButtonText}</span>
               <span className="text-lg font-light leading-none">↗</span>
             </button>
             <button
               onClick={() => handleButtonClick(secondaryButtonUrl)}
-              className="w-full sm:w-auto border-2 border-[#3B231A]/15 text-[#3B231A] bg-transparent hover:bg-[#3B231A]/5 font-bold px-8 py-4 rounded-[16px] transition-all duration-300 flex items-center justify-center space-x-2 text-sm uppercase tracking-wider font-sans transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+              className="w-full sm:w-auto border-2 border-[#3B231A]/15 font-bold px-8 py-4 rounded-[16px] transition-all duration-300 flex items-center justify-center space-x-2 text-sm uppercase tracking-wider font-sans transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+              style={{
+                fontSize: secondaryBtnFontSize ? formatUnit(secondaryBtnFontSize, '') : undefined,
+                fontWeight: secondaryBtnFontWeight || undefined,
+                borderRadius: secondaryBtnBorderRadius ? formatUnit(secondaryBtnBorderRadius, '16px') : undefined,
+                paddingLeft: secondaryBtnPaddingX ? formatUnit(secondaryBtnPaddingX, '') : undefined,
+                paddingRight: secondaryBtnPaddingX ? formatUnit(secondaryBtnPaddingX, '') : undefined,
+                paddingTop: secondaryBtnPaddingY ? formatUnit(secondaryBtnPaddingY, '') : undefined,
+                paddingBottom: secondaryBtnPaddingY ? formatUnit(secondaryBtnPaddingY, '') : undefined,
+                backgroundColor: secondaryBtnBgColor || 'transparent',
+                color: secondaryBtnTextColor || '#3B231A',
+              }}
             >
               <span>{secondaryButtonText}</span>
             </button>
@@ -609,6 +1050,13 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.9, delay: 0.4 }}
             className="text-[13px] sm:text-base text-[#3B231A]/85 max-w-xl mx-auto font-sans font-normal leading-relaxed px-2"
+            style={{
+              fontFamily: descriptionFontFamily || undefined,
+              fontWeight: descriptionFontWeight || undefined,
+              fontSize: descriptionFontSize ? formatUnit(descriptionFontSize, '') : undefined,
+              color: descriptionColor || undefined,
+              maxWidth: descriptionMaxWidth ? formatUnit(descriptionMaxWidth, '') : undefined,
+            }}
           >
             {description}
           </motion.p>
