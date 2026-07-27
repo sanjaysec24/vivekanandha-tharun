@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { BookOpen, Award, Shield, Users, Heart, Sparkles, ArrowRight } from 'lucide-react';
+import { BookOpen, Award, Shield, Users, Heart, Sparkles, ArrowRight, GraduationCap, CheckCircle2 } from 'lucide-react';
 
 export default function AboutPage() {
   return (
@@ -11,26 +11,133 @@ export default function AboutPage() {
       transition={{ duration: 0.5 }}
       className="bg-[#F5F1EB] min-h-screen text-[#3B231A]"
     >
-      {/* Hero Header */}
-      <div className="relative overflow-hidden bg-[#3B231A] text-[#F5F1EB] py-20 px-6 md:px-12 text-center">
-        {/* Subtle background Kolam line art decoration */}
-        <div className="absolute inset-0 opacity-5 pointer-events-none z-0">
-          <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path d="M10 80 Q 50 20 90 80" stroke="white" strokeWidth="1" fill="none" strokeDasharray="3 3" />
-            <circle cx="50" cy="50" r="40" stroke="white" strokeWidth="0.5" strokeDasharray="4 4" />
+      {/* Hero Header / About Us Introduction */}
+      <div className="relative overflow-hidden bg-gradient-to-b from-[#2B1710] via-[#3B231A] to-[#2E1A12] text-[#F5F1EB] py-16 sm:py-20 md:py-28 px-4 sm:px-6 md:px-12 text-center border-b border-[#E78F68]/15">
+        {/* Soft Ambient Radial Lights & Glow Filters */}
+        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[320px] sm:w-[600px] md:w-[800px] h-[280px] sm:h-[400px] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#E78F68]/20 via-[#E78F68]/05 to-transparent blur-3xl pointer-events-none z-0" />
+        <div className="absolute bottom-0 right-10 w-72 h-72 bg-[#198C52]/10 blur-3xl rounded-full pointer-events-none z-0" />
+        <div className="absolute top-1/3 left-10 w-64 h-64 bg-[#E78F68]/10 blur-3xl rounded-full pointer-events-none z-0" />
+
+        {/* Minimal Premium Kolam / Abstract Tamil Geometric Accents */}
+        <div className="absolute inset-0 opacity-[0.07] pointer-events-none z-0 flex items-center justify-center">
+          <svg width="100%" height="100%" viewBox="0 0 1000 600" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <circle cx="500" cy="300" r="280" stroke="url(#kolamGrad)" strokeWidth="1.2" strokeDasharray="6 6" />
+            <circle cx="500" cy="300" r="200" stroke="url(#kolamGrad)" strokeWidth="1" />
+            <circle cx="500" cy="300" r="120" stroke="url(#kolamGrad)" strokeWidth="1" strokeDasharray="4 4" />
+            <path d="M 500 20 L 500 580 M 200 300 L 800 300" stroke="url(#kolamGrad)" strokeWidth="0.8" strokeDasharray="3 3" />
+            <defs>
+              <linearGradient id="kolamGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#E78F68" />
+                <stop offset="100%" stopColor="#FFFFFF" />
+              </linearGradient>
+            </defs>
           </svg>
         </div>
 
-        <div className="max-w-4xl mx-auto space-y-4 relative z-10">
-          <span className="inline-block bg-[#E78F68]/20 border border-[#E78F68]/30 text-[#E78F68] text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest">
-            Our Legacy
-          </span>
-          <h1 className="text-4xl md:text-[52px] font-serif font-bold tracking-tight">
-            Nurturing Hearts & <span className="text-[#E78F68] italic font-normal">Empowering Minds</span>
-          </h1>
-          <p className="text-base md:text-[18px] text-[#F5F1EB]/80 max-w-2xl mx-auto font-light leading-relaxed font-sans">
-            Founded with a vision to blend ancient Tamil cultural wisdom with modern future-ready education, Vivekanandha School stands as a beacon of academic excellence and character.
-          </p>
+        {/* Floating Ambient Particles / Geometry Dots */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <div className="absolute top-12 left-[15%] w-1.5 h-1.5 rounded-full bg-[#E78F68]/40 animate-pulse" />
+          <div className="absolute top-28 right-[18%] w-2 h-2 rounded-full bg-[#F5F1EB]/30 animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute bottom-16 left-[22%] w-2 h-2 rounded-full bg-[#E78F68]/30 animate-pulse" style={{ animationDelay: '2s' }} />
+          <div className="absolute bottom-20 right-[15%] w-1.5 h-1.5 rounded-full bg-[#F5F1EB]/40 animate-pulse" style={{ animationDelay: '1.5s' }} />
+        </div>
+
+        {/* Central Glassmorphism Card Container */}
+        <div className="max-w-4xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="backdrop-blur-md bg-white/[0.035] border border-white/10 rounded-3xl p-6 sm:p-10 md:p-14 shadow-[0_20px_50px_rgba(0,0,0,0.35)] space-y-6 sm:space-y-8 relative overflow-hidden"
+          >
+            {/* Top Subtle Highlight Line */}
+            <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-[#E78F68]/50 to-transparent" />
+
+            {/* Small Eyebrow Label */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="inline-flex items-center space-x-2 bg-[#E78F68]/15 border border-[#E78F68]/30 text-[#E78F68] text-[11px] sm:text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-[0.2em] shadow-sm backdrop-blur-sm"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#E78F68] animate-ping" />
+              <span>Our Legacy</span>
+            </motion.div>
+
+            {/* Large Premium Heading */}
+            <motion.h1
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] font-serif font-bold tracking-tight leading-[1.15] text-[#F5F1EB]"
+            >
+              Nurturing Hearts &{' '}
+              <span className="relative inline-block font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-[#E78F68] via-[#F8B393] to-[#E78F68] drop-shadow-sm">
+                Empowering Minds
+                <svg className="absolute -bottom-1 left-0 w-full h-2 text-[#E78F68]/60 overflow-visible" viewBox="0 0 100 20" preserveAspectRatio="none">
+                  <path d="M 0 10 Q 50 18 100 10" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                </svg>
+              </span>
+            </motion.h1>
+
+            {/* Supporting Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="text-base sm:text-lg md:text-[19px] text-[#F5F1EB]/85 max-w-2xl mx-auto font-light leading-relaxed font-sans"
+            >
+              Founded with a vision to blend ancient Tamil cultural wisdom with modern future-ready education, Vivekanandha School stands as a beacon of academic excellence and character.
+            </motion.p>
+
+            {/* Premium Trust Strip / Indicators */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="pt-6 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-left"
+            >
+              <div className="flex items-center space-x-2.5 bg-white/[0.04] border border-white/08 hover:border-[#E78F68]/40 p-3 sm:p-3.5 rounded-2xl transition-all duration-300">
+                <div className="p-2 rounded-xl bg-[#E78F68]/15 text-[#E78F68] shrink-0">
+                  <Award className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+                <div>
+                  <p className="text-xs sm:text-sm font-semibold text-[#F5F1EB]">Academic Excellence</p>
+                  <p className="text-[10px] sm:text-xs text-[#F5F1EB]/60">25+ Years Legacy</p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2.5 bg-white/[0.04] border border-white/08 hover:border-[#198C52]/40 p-3 sm:p-3.5 rounded-2xl transition-all duration-300">
+                <div className="p-2 rounded-xl bg-[#198C52]/15 text-[#198C52] shrink-0">
+                  <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+                <div>
+                  <p className="text-xs sm:text-sm font-semibold text-[#F5F1EB]">CBSE Curriculum</p>
+                  <p className="text-[10px] sm:text-xs text-[#F5F1EB]/60">Holistic Learning</p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2.5 bg-white/[0.04] border border-white/08 hover:border-[#E78F68]/40 p-3 sm:p-3.5 rounded-2xl transition-all duration-300">
+                <div className="p-2 rounded-xl bg-[#E78F68]/15 text-[#E78F68] shrink-0">
+                  <Users className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+                <div>
+                  <p className="text-xs sm:text-sm font-semibold text-[#F5F1EB]">Experienced Faculty</p>
+                  <p className="text-[10px] sm:text-xs text-[#F5F1EB]/60">Dedicated Mentors</p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2.5 bg-white/[0.04] border border-white/08 hover:border-[#5B92E5]/40 p-3 sm:p-3.5 rounded-2xl transition-all duration-300">
+                <div className="p-2 rounded-xl bg-[#5B92E5]/15 text-[#5B92E5] shrink-0">
+                  <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+                <div>
+                  <p className="text-xs sm:text-sm font-semibold text-[#F5F1EB]">Future Ready</p>
+                  <p className="text-[10px] sm:text-xs text-[#F5F1EB]/60">STEM & Culture</p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
 
