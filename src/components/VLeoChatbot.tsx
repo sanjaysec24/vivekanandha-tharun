@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { X, Send, Phone, Mail, Globe, CornerDownRight, Sparkles, AlertCircle, RefreshCcw } from "lucide-react";
+import { X, Send, Phone, Mail, Globe, CornerDownRight, Sparkles, AlertCircle } from "lucide-react";
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 interface Message {
   id: string;
@@ -11,12 +13,143 @@ interface Message {
   shouldEscalate?: boolean;
 }
 
-const HOVER_BUBBLES = [
+interface ChatbotCMSData {
+  // Launcher Icon
+  launcherIcon?: string;
+  launcher_icon?: string;
+  launcherIconUrl?: string;
+  launcher_icon_url?: string;
+  launcherAvatar?: string;
+  mascotIcon?: string;
+  launcherImage?: string;
+
+  // Header Avatar
+  headerAvatar?: string;
+  header_avatar?: string;
+  headerAvatarUrl?: string;
+  header_avatar_url?: string;
+  botAvatar?: string;
+  avatarUrl?: string;
+  avatar?: string;
+
+  // Assistant Name
+  assistantName?: string;
+  assistant_name?: string;
+  botName?: string;
+  bot_name?: string;
+  name?: string;
+  assistantNameEn?: string;
+  assistantNameTa?: string;
+  assistant_name_ta?: string;
+  botNameTa?: string;
+  bot_name_ta?: string;
+  nameTa?: string;
+
+  // Assistant Subtitle
+  assistantSubtitle?: string;
+  assistant_subtitle?: string;
+  subtitle?: string;
+  subtitleEn?: string;
+  assistantSubtitleTa?: string;
+  assistant_subtitle_ta?: string;
+  subtitleTa?: string;
+
+  // Status
+  status?: string;
+  statusText?: string;
+  status_text?: string;
+  statusEn?: string;
+  statusTa?: string;
+  statusTextTa?: string;
+  status_text_ta?: string;
+
+  // Language Button
+  languageButtonText?: string;
+  language_button_text?: string;
+  languageButtonLabel?: string;
+  languageButtonEn?: string;
+  languageButtonTa?: string;
+
+  // Greeting / Hover
+  greeting?: string;
+  greetingText?: string;
+  hoverGreeting?: string;
+  hover_greeting?: string;
+  hoverBubbles?: string[] | string;
+  hover_bubbles?: string[] | string;
+  autoGreeting?: string;
+
+  // Welcome Message
+  welcomeMessage?: string;
+  welcome_message?: string;
+  welcomeGreeting?: string;
+  welcome_greeting?: string;
+  greetingMessage?: string;
+  welcomeMessageEn?: string;
+  welcomeMessageTa?: string;
+  welcome_message_ta?: string;
+  welcomeGreetingTa?: string;
+
+  // Capabilities List
+  capabilitiesList?: string[] | string;
+  capabilities_list?: string[] | string;
+  capabilities?: string[] | string;
+  capabilitiesListTa?: string[] | string;
+  capabilitiesTa?: string[] | string;
+
+  // Quick Actions
+  quickActions?: Array<{ label?: string; labelTa?: string; label_ta?: string; query?: string; text?: string }> | string[];
+  quick_actions?: Array<{ label?: string; labelTa?: string; label_ta?: string; query?: string; text?: string }> | string[];
+  actions?: Array<{ label?: string; labelTa?: string; query?: string }> | string[];
+
+  // Input Placeholder
+  inputPlaceholder?: string;
+  input_placeholder?: string;
+  placeholder?: string;
+  placeholderEn?: string;
+  inputPlaceholderTa?: string;
+  input_placeholder_ta?: string;
+  placeholderTa?: string;
+
+  // Appearance Colours
+  headerBgColor?: string;
+  header_bg_color?: string;
+  headerBg?: string;
+
+  accentColor?: string;
+  accent_color?: string;
+  primaryColor?: string;
+  primary_color?: string;
+
+  chatBgColor?: string;
+  chat_bg_color?: string;
+  chatBg?: string;
+
+  userBubbleBgColor?: string;
+  user_bubble_bg_color?: string;
+  userBubbleBg?: string;
+
+  botBubbleBgColor?: string;
+  bot_bubble_bg_color?: string;
+  botBubbleBg?: string;
+
+  launcherBgColor?: string;
+  launcher_bg_color?: string;
+  launcherBg?: string;
+
+  appearanceColours?: Record<string, string>;
+  appearanceColors?: Record<string, string>;
+  colors?: Record<string, string>;
+}
+
+const DEFAULT_HOVER_BUBBLES = [
   "🦁 Need help?",
   "Ask V-Leo",
   "Admissions Assistant",
   "How can I help?",
 ];
+
+const DEFAULT_MASCOT_IMAGE = "/images/vleo_mascot.png";
 
 export default function VLeoChatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,28 +160,124 @@ export default function VLeoChatbot() {
   const [hoverBubble, setHoverBubble] = useState<string | null>(null);
   const [showSparkles, setShowSparkles] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [cmsData, setCmsData] = useState<ChatbotCMSData | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatWindowRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!db) return;
+
+    const unsub = onSnapshot(
+      doc(db, 'website_cms', 'chatbot'),
+      (docSnap) => {
+        if (docSnap.exists()) {
+          setCmsData(docSnap.data() as ChatbotCMSData);
+        }
+      },
+      (err) => {
+        console.warn('Error reading website_cms/chatbot from Firestore:', err);
+      }
+    );
+
+    return () => unsub();
+  }, []);
 
   const formatTime = () => {
     const now = new Date();
     return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
-  // English & Tamil localized text
-  const t = {
-    en: {
-      botName: "🦁 V-Leo AI",
-      subtitle: "Your School Companion",
-      status: "Online",
-      inputPlaceholder: "Ask V-Leo anything...",
-      escalationText: "Would you like to connect directly with our admissions desk?",
-      callSchool: "Call Admissions (+91 94445 47474)",
-      whatsApp: "WhatsApp Admissions",
-      sendEmail: "Send Email",
-      quickActionsTitle: "Quick Actions",
-      welcomeGreeting: `Hello 👋
+  // --- Dynamic Values with Fallbacks ---
+
+  // Images
+  const launcherIcon =
+    cmsData?.launcherIcon ||
+    cmsData?.launcher_icon ||
+    cmsData?.launcherIconUrl ||
+    cmsData?.launcher_icon_url ||
+    cmsData?.launcherAvatar ||
+    cmsData?.mascotIcon ||
+    cmsData?.launcherImage ||
+    DEFAULT_MASCOT_IMAGE;
+
+  const headerAvatar =
+    cmsData?.headerAvatar ||
+    cmsData?.header_avatar ||
+    cmsData?.headerAvatarUrl ||
+    cmsData?.header_avatar_url ||
+    cmsData?.botAvatar ||
+    cmsData?.avatarUrl ||
+    cmsData?.avatar ||
+    launcherIcon;
+
+  // Assistant Name
+  const botNameEn =
+    cmsData?.assistantName ||
+    cmsData?.assistant_name ||
+    cmsData?.botName ||
+    cmsData?.bot_name ||
+    cmsData?.name ||
+    cmsData?.assistantNameEn ||
+    "🦁 V-Leo AI";
+
+  const botNameTa =
+    cmsData?.assistantNameTa ||
+    cmsData?.assistant_name_ta ||
+    cmsData?.botNameTa ||
+    cmsData?.bot_name_ta ||
+    cmsData?.nameTa ||
+    "🦁 வி-லியோ AI";
+
+  const currentBotName = language === "en" ? botNameEn : botNameTa;
+
+  // Subtitle
+  const subtitleEn =
+    cmsData?.assistantSubtitle ||
+    cmsData?.assistant_subtitle ||
+    cmsData?.subtitle ||
+    cmsData?.subtitleEn ||
+    "Your School Companion";
+
+  const subtitleTa =
+    cmsData?.assistantSubtitleTa ||
+    cmsData?.assistant_subtitle_ta ||
+    cmsData?.subtitleTa ||
+    "உங்கள் பள்ளி வழிகாட்டி";
+
+  const currentSubtitle = language === "en" ? subtitleEn : subtitleTa;
+
+  // Status
+  const statusEn =
+    cmsData?.status ||
+    cmsData?.statusText ||
+    cmsData?.status_text ||
+    cmsData?.statusEn ||
+    "Online";
+
+  const statusTa =
+    cmsData?.statusTa ||
+    cmsData?.statusTextTa ||
+    cmsData?.status_text_ta ||
+    "ஆன்லைனில் உள்ளார்";
+
+  const currentStatus = language === "en" ? statusEn : statusTa;
+
+  // Language Button
+  const langBtnTextEn =
+    cmsData?.languageButtonTa ||
+    cmsData?.languageButtonText ||
+    cmsData?.language_button_text ||
+    "தமிழ்";
+
+  const langBtnTextTa =
+    cmsData?.languageButtonEn ||
+    "EN";
+
+  const currentLangBtnText = language === "en" ? langBtnTextEn : langBtnTextTa;
+
+  // Welcome Message & Capabilities
+  const defaultWelcomeGreetingEn = `Hello 👋
 I'm V-Leo, your AI School Companion.
 
 I can help you with:
@@ -60,19 +289,9 @@ I can help you with:
 • Gallery
 • Campus Visits
 • School Timings
-• General Questions`,
-    },
-    ta: {
-      botName: "🦁 வி-லியோ AI",
-      subtitle: "உங்கள் பள்ளி வழிகாட்டி",
-      status: "ஆன்லைனில் உள்ளார்",
-      inputPlaceholder: "வி-லியோவிடம் ஏதேனும் கேட்கவும்...",
-      escalationText: "எங்கள் சேர்க்கை அலுவலகத்தை நேரடியாக தொடர்பு கொள்ள விரும்புகிறீர்களா?",
-      callSchool: "பள்ளியை அழைக்க (+91 94445 47474)",
-      whatsApp: "வாட்ஸ்அப் சேர்க்கை",
-      sendEmail: "மின்னஞ்சல் அனுப்பவும்",
-      quickActionsTitle: "விரைவு உதவி",
-      welcomeGreeting: `வணக்கம் 👋
+• General Questions`;
+
+  const defaultWelcomeGreetingTa = `வணக்கம் 👋
 நான் வி-லியோ (V-Leo), விவேகானந்தா பள்ளியின் AI வழிகாட்டி.
 
 நான் உங்களுக்கு பின்வருவனவற்றில் உதவ முடியும்:
@@ -84,21 +303,203 @@ I can help you with:
 • புகைப்படங்கள் (Gallery)
 • பள்ளி வருகை (Campus Visit)
 • பள்ளி நேரம் (Timings)
-• பொதுவான கேள்விகள்`,
+• பொதுவான கேள்விகள்`;
+
+  const rawCapabilitiesEn =
+    cmsData?.capabilitiesList ||
+    cmsData?.capabilities_list ||
+    cmsData?.capabilities;
+
+  const rawCapabilitiesTa =
+    cmsData?.capabilitiesListTa ||
+    cmsData?.capabilitiesTa;
+
+  const formatCapabilitiesText = (caps: string[] | string | undefined, defaultText: string) => {
+    if (!caps) return defaultText;
+    if (Array.isArray(caps) && caps.length > 0) {
+      return `Hello 👋\nI'm ${botNameEn.replace(/^[^\w]+/, '').trim() || 'V-Leo'}, your AI School Companion.\n\nI can help you with:\n` + caps.map(c => `• ${c}`).join('\n');
+    }
+    if (typeof caps === 'string' && caps.trim() !== '') {
+      return caps;
+    }
+    return defaultText;
+  };
+
+  const welcomeEn =
+    cmsData?.welcomeMessage ||
+    cmsData?.welcome_message ||
+    cmsData?.welcomeGreeting ||
+    cmsData?.welcome_greeting ||
+    cmsData?.welcomeMessageEn ||
+    cmsData?.greetingMessage ||
+    (rawCapabilitiesEn ? formatCapabilitiesText(rawCapabilitiesEn, defaultWelcomeGreetingEn) : defaultWelcomeGreetingEn);
+
+  const welcomeTa =
+    cmsData?.welcomeMessageTa ||
+    cmsData?.welcome_message_ta ||
+    cmsData?.welcomeGreetingTa ||
+    (rawCapabilitiesTa ? formatCapabilitiesText(rawCapabilitiesTa, defaultWelcomeGreetingTa) : defaultWelcomeGreetingTa);
+
+  const currentWelcomeMessage = language === "en" ? welcomeEn : welcomeTa;
+
+  // Hover Bubbles
+  const rawHoverBubbles = cmsData?.hoverBubbles || cmsData?.hover_bubbles;
+  let cmsHoverBubbles: string[] = [];
+
+  if (Array.isArray(rawHoverBubbles)) {
+    cmsHoverBubbles = rawHoverBubbles.map(b => String(b)).filter(Boolean);
+  } else if (typeof rawHoverBubbles === 'string' && rawHoverBubbles.trim() !== '') {
+    cmsHoverBubbles = [rawHoverBubbles.trim()];
+  } else {
+    const singleG = cmsData?.greeting || cmsData?.hoverGreeting || cmsData?.hover_greeting || cmsData?.autoGreeting || cmsData?.greetingText;
+    if (typeof singleG === 'string' && singleG.trim() !== '') {
+      cmsHoverBubbles = [singleG.trim()];
+    }
+  }
+
+  const hoverBubblesList = cmsHoverBubbles.length > 0 ? cmsHoverBubbles : DEFAULT_HOVER_BUBBLES;
+
+  // Quick Actions
+  const DEFAULT_QUICK_ACTIONS = [
+    { label: "Admissions", labelTa: "சேர்க்கை", query: "Tell me about admission process and eligibility for 2027" },
+    { label: "Fee Details", labelTa: "கட்டணம்", query: "What is the fee structure at Vivekanandha School?" },
+    { label: "Academics", labelTa: "பாடத்திட்டம்", query: "What grades and curriculum do you offer?" },
+    { label: "Events", labelTa: "நிகழ்வுகள்", query: "What are the upcoming events and celebrations?" },
+    { label: "Transport", labelTa: "பேருந்து", query: "What are the school transport routes and facilities?" },
+    { label: "Gallery", labelTa: "புகைப்படங்கள்", query: "Where can I view photos of campus activities?" },
+    { label: "Book Visit", labelTa: "நேரில் வர", query: "How can I book a campus visit to Vivekanandha School?" },
+    { label: "Contact Office", labelTa: "தொடர்பு", query: "What is the office address, phone number and email?" },
+  ];
+
+  const rawQuickActions = cmsData?.quickActions || cmsData?.quick_actions || cmsData?.actions;
+  let quickActionsList = DEFAULT_QUICK_ACTIONS;
+
+  if (Array.isArray(rawQuickActions) && rawQuickActions.length > 0) {
+    quickActionsList = rawQuickActions.map((item: any) => {
+      if (typeof item === 'string') {
+        return {
+          label: item,
+          labelTa: item,
+          query: `Tell me about ${item}`
+        };
+      }
+      return {
+        label: item.label || item.text || item.title || "Help",
+        labelTa: item.labelTa || item.label_ta || item.textTa || item.label || item.text || "உதவி",
+        query: item.query || item.prompt || `Tell me about ${item.label || item.text || "this"}`
+      };
+    });
+  }
+
+  // Input Placeholder
+  const inputPlaceholderEn =
+    cmsData?.inputPlaceholder ||
+    cmsData?.input_placeholder ||
+    cmsData?.placeholder ||
+    cmsData?.placeholderEn ||
+    "Ask V-Leo anything...";
+
+  const inputPlaceholderTa =
+    cmsData?.inputPlaceholderTa ||
+    cmsData?.input_placeholder_ta ||
+    cmsData?.placeholderTa ||
+    "வி-லியோவிடம் ஏதேனும் கேட்கவும்...";
+
+  const currentInputPlaceholder = language === "en" ? inputPlaceholderEn : inputPlaceholderTa;
+
+  // Appearance Colors
+  const colorsObj = cmsData?.appearanceColours || cmsData?.appearanceColors || cmsData?.colors || {};
+
+  const headerBgColor =
+    cmsData?.headerBgColor ||
+    cmsData?.header_bg_color ||
+    cmsData?.headerBg ||
+    colorsObj.headerBgColor ||
+    colorsObj.headerBg ||
+    colorsObj.header ||
+    "#4A2C21";
+
+  const accentColor =
+    cmsData?.accentColor ||
+    cmsData?.accent_color ||
+    cmsData?.primaryColor ||
+    cmsData?.primary_color ||
+    colorsObj.accentColor ||
+    colorsObj.accent ||
+    colorsObj.primary ||
+    "#E78F68";
+
+  const chatBgColor =
+    cmsData?.chatBgColor ||
+    cmsData?.chat_bg_color ||
+    cmsData?.chatBg ||
+    colorsObj.chatBgColor ||
+    colorsObj.chatBg ||
+    colorsObj.background ||
+    "#FAF7F2";
+
+  const userBubbleBgColor =
+    cmsData?.userBubbleBgColor ||
+    cmsData?.user_bubble_bg_color ||
+    cmsData?.userBubbleBg ||
+    colorsObj.userBubbleBgColor ||
+    colorsObj.userBubbleBg ||
+    colorsObj.userBubble ||
+    accentColor;
+
+  const botBubbleBgColor =
+    cmsData?.botBubbleBgColor ||
+    cmsData?.bot_bubble_bg_color ||
+    cmsData?.botBubbleBg ||
+    colorsObj.botBubbleBgColor ||
+    colorsObj.botBubbleBg ||
+    colorsObj.botBubble ||
+    "#FFFFFF";
+
+  const launcherBgColor =
+    cmsData?.launcherBgColor ||
+    cmsData?.launcher_bg_color ||
+    cmsData?.launcherBg ||
+    colorsObj.launcherBgColor ||
+    colorsObj.launcherBg ||
+    colorsObj.launcher ||
+    "#FFFFFF";
+
+  // Static Localized Text
+  const t = {
+    en: {
+      escalationText: "Would you like to connect directly with our admissions desk?",
+      callSchool: "Call Admissions (+91 94445 47474)",
+      whatsApp: "WhatsApp Admissions",
+      sendEmail: "Send Email",
+      quickActionsTitle: "Quick Actions",
+    },
+    ta: {
+      escalationText: "எங்கள் சேர்க்கை அலுவலகத்தை நேரடியாக தொடர்பு கொள்ள விரும்புகிறீர்களா?",
+      callSchool: "பள்ளியை அழைக்க (+91 94445 47474)",
+      whatsApp: "வாட்ஸ்அப் சேர்க்கை",
+      sendEmail: "மின்னஞ்சல் அனுப்பவும்",
+      quickActionsTitle: "விரைவு உதவி",
     },
   };
 
-  // Initialize welcome message when language changes
+  // Update welcome message when language changes or currentWelcomeMessage updates
   useEffect(() => {
-    setMessages([
-      {
-        id: "welcome",
-        sender: "bot",
-        text: t[language].welcomeGreeting,
-        timestamp: formatTime(),
-      },
-    ]);
-  }, [language]);
+    setMessages((prev) => {
+      const userHasSentMessages = prev.some((m) => m.sender === "user");
+      if (!userHasSentMessages) {
+        return [
+          {
+            id: "welcome",
+            sender: "bot",
+            text: currentWelcomeMessage,
+            timestamp: formatTime(),
+          },
+        ];
+      }
+      return prev;
+    });
+  }, [language, currentWelcomeMessage]);
 
   // Scroll to bottom on new messages or thinking state
   useEffect(() => {
@@ -122,7 +523,8 @@ I can help you with:
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!hasInteracted && !isOpen) {
-        setHoverBubble("Admissions for 2027 are open! Need help?");
+        const autoMsg = hoverBubblesList[0] || "Admissions for 2027 are open! Need help?";
+        setHoverBubble(autoMsg);
         // Auto-hide after 5 seconds
         const hideTimer = setTimeout(() => {
           setHoverBubble(null);
@@ -132,7 +534,7 @@ I can help you with:
     }, 45000);
 
     return () => clearTimeout(timer);
-  }, [hasInteracted, isOpen]);
+  }, [hasInteracted, isOpen, hoverBubblesList]);
 
   const handleMascotClick = () => {
     setHasInteracted(true);
@@ -148,7 +550,7 @@ I can help you with:
 
   const handleMascotHover = () => {
     if (!isOpen && !hoverBubble) {
-      const randomBubble = HOVER_BUBBLES[Math.floor(Math.random() * HOVER_BUBBLES.length)];
+      const randomBubble = hoverBubblesList[Math.floor(Math.random() * hoverBubblesList.length)];
       setHoverBubble(randomBubble);
     }
   };
@@ -229,17 +631,6 @@ I can help you with:
     }
   };
 
-  const quickActions = [
-    { label: "Admissions", labelTa: "சேர்க்கை", query: "Tell me about admission process and eligibility for 2027" },
-    { label: "Fee Details", labelTa: "கட்டணம்", query: "What is the fee structure at Vivekanandha School?" },
-    { label: "Academics", labelTa: "பாடத்திட்டம்", query: "What grades and curriculum do you offer?" },
-    { label: "Events", labelTa: "நிகழ்வுகள்", query: "What are the upcoming events and celebrations?" },
-    { label: "Transport", labelTa: "பேருந்து", query: "What are the school transport routes and facilities?" },
-    { label: "Gallery", labelTa: "புகைப்படங்கள்", query: "Where can I view photos of campus activities?" },
-    { label: "Book Visit", labelTa: "நேரில் வர", query: "How can I book a campus visit to Vivekanandha School?" },
-    { label: "Contact Office", labelTa: "தொடர்பு", query: "What is the office address, phone number and email?" },
-  ];
-
   return (
     <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 font-sans select-none pointer-events-auto">
       {/* Floating AI Panel */}
@@ -248,7 +639,7 @@ I can help you with:
           <motion.div
             ref={chatWindowRef}
             role="dialog"
-            aria-label="V-Leo AI Assistant"
+            aria-label={`${currentBotName} Assistant`}
             initial={{ opacity: 0, y: 40, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.94 }}
@@ -256,13 +647,16 @@ I can help you with:
             className="fixed bottom-20 right-4 md:right-6 flex flex-col bg-white border border-[#E6DCCF] shadow-[0_20px_60px_rgba(58,35,24,0.22)] overflow-hidden w-[calc(100vw-32px)] sm:w-[380px] md:w-[420px] h-[78vh] max-h-[620px] rounded-[28px]"
           >
             {/* Glassmorphic Header */}
-            <div className="flex items-center justify-between px-5 h-[74px] bg-[#4A2C21]/95 backdrop-blur-md text-white shrink-0 border-b border-white/10">
+            <div 
+              style={{ backgroundColor: headerBgColor }}
+              className="flex items-center justify-between px-5 h-[74px] backdrop-blur-md text-white shrink-0 border-b border-white/10"
+            >
               <div className="flex items-center gap-3">
                 {/* Mascot Avatar */}
                 <div className="relative flex items-center justify-center w-11 h-11 bg-white/10 rounded-full border border-white/20 shadow-inner overflow-hidden flex-shrink-0">
                   <img
-                    src="/images/vleo_mascot.png"
-                    alt="V-Leo AI Mascot"
+                    src={headerAvatar}
+                    alt={`${currentBotName} Mascot`}
                     loading="lazy"
                     decoding="async"
                     className="w-9 h-9 object-contain"
@@ -272,15 +666,15 @@ I can help you with:
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-[16px] tracking-tight text-[#FAF7F2]">
-                      {t[language].botName}
+                      {currentBotName}
                     </span>
                     <span className="text-[10px] bg-[#25D366]/20 text-[#6CE5A3] px-2 py-0.5 rounded-full font-semibold border border-[#25D366]/40 flex items-center gap-1">
                       <span className="w-1.5 h-1.5 bg-[#25D366] rounded-full animate-pulse"></span>
-                      {t[language].status}
+                      {currentStatus}
                     </span>
                   </div>
                   <p className="text-[11px] text-[#D5C2B1] font-medium leading-none mt-0.5">
-                    {t[language].subtitle}
+                    {currentSubtitle}
                   </p>
                 </div>
               </div>
@@ -293,8 +687,8 @@ I can help you with:
                   title="Switch Language / மொழியை மாற்ற"
                   aria-label="Switch Language"
                 >
-                  <Globe className="w-3.5 h-3.5 text-[#E78F68]" />
-                  <span>{language === "en" ? "தமிழ்" : "EN"}</span>
+                  <Globe className="w-3.5 h-3.5" style={{ color: accentColor }} />
+                  <span>{currentLangBtnText}</span>
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
@@ -307,7 +701,10 @@ I can help you with:
             </div>
 
             {/* Chat Body & Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#FAF7F2] scrollbar-thin scrollbar-thumb-amber-200">
+            <div 
+              style={{ backgroundColor: chatBgColor }}
+              className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-amber-200"
+            >
               {messages.map((msg) => (
                 <div key={msg.id} className="space-y-1.5">
                   <div
@@ -319,8 +716,10 @@ I can help you with:
                     {msg.sender === "bot" && (
                       <div className="w-8 h-8 rounded-full bg-white border border-[#E6DCCF] flex items-center justify-center shadow-sm shrink-0 overflow-hidden mt-0.5">
                         <img
-                          src="/images/vleo_mascot.png"
-                          alt="V-Leo"
+                          src={headerAvatar}
+                          alt={currentBotName}
+                          loading="lazy"
+                          decoding="async"
                           className="w-6 h-6 object-contain"
                         />
                       </div>
@@ -329,10 +728,13 @@ I can help you with:
                     <div
                       className={`max-w-[82%] px-4 py-3 text-[13.5px] leading-relaxed shadow-sm ${
                         msg.sender === "user"
-                          ? "bg-[#E78F68] text-white rounded-2xl rounded-tr-xs"
-                          : "bg-white text-[#3A2318] border border-[#E6DCCF] rounded-2xl rounded-tl-xs"
+                          ? "text-white rounded-2xl rounded-tr-xs"
+                          : "text-[#3A2318] border border-[#E6DCCF] rounded-2xl rounded-tl-xs"
                       }`}
-                      style={{ whiteSpace: "pre-wrap" }}
+                      style={{
+                        backgroundColor: msg.sender === "user" ? userBubbleBgColor : botBubbleBgColor,
+                        whiteSpace: "pre-wrap"
+                      }}
                     >
                       {msg.text}
                       <div
@@ -354,7 +756,7 @@ I can help you with:
                           onClick={() => handleSendMessage(q)}
                           className="self-start text-xs text-[#4A2C21] hover:text-[#E78F68] bg-white hover:bg-[#F4EFE6] px-3.5 py-1.5 rounded-full border border-[#DED4C7] shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer text-left font-medium"
                         >
-                          <CornerDownRight className="w-3 h-3 text-[#E78F68] shrink-0" />
+                          <CornerDownRight className="w-3 h-3 shrink-0" style={{ color: accentColor }} />
                           <span>{q}</span>
                         </button>
                       ))}
@@ -365,7 +767,7 @@ I can help you with:
                   {msg.sender === "bot" && msg.shouldEscalate && (
                     <div className="ml-10 bg-white border border-amber-200 rounded-2xl p-3.5 space-y-2.5 mt-2 shadow-sm">
                       <div className="flex gap-2 text-[#3A2318]">
-                        <AlertCircle className="w-4 h-4 text-[#E78F68] shrink-0 mt-0.5" />
+                        <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" style={{ color: accentColor }} />
                         <span className="text-xs font-semibold leading-normal">
                           {t[language].escalationText}
                         </span>
@@ -391,7 +793,8 @@ I can help you with:
                         </a>
                         <a
                           href="mailto:admissions@vivekanandhaschool.edu.in"
-                          className="flex items-center justify-center gap-2 text-xs font-bold py-2 bg-[#4A2C21] text-white hover:bg-[#321E16] rounded-xl transition-all shadow-xs"
+                          style={{ backgroundColor: headerBgColor }}
+                          className="flex items-center justify-center gap-2 text-xs font-bold py-2 text-white rounded-xl transition-all shadow-xs"
                         >
                           <Mail className="w-3.5 h-3.5" />
                           <span>{t[language].sendEmail}</span>
@@ -411,17 +814,19 @@ I can help you with:
                     className="w-8 h-8 rounded-full bg-white border border-[#E6DCCF] flex items-center justify-center shadow-sm shrink-0 overflow-hidden"
                   >
                     <img
-                      src="/images/vleo_mascot.png"
+                      src={headerAvatar}
                       alt="Thinking Mascot"
+                      loading="lazy"
+                      decoding="async"
                       className="w-6 h-6 object-contain"
                     />
                   </motion.div>
                   <div className="bg-white border border-[#E6DCCF] rounded-2xl rounded-tl-xs px-4 py-3 shadow-sm flex items-center gap-2">
-                    <span className="text-xs font-semibold text-[#4A2C21]">V-Leo is thinking</span>
+                    <span className="text-xs font-semibold text-[#4A2C21]">{currentBotName} is thinking</span>
                     <div className="flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 bg-[#E78F68] rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></span>
-                      <span className="w-1.5 h-1.5 bg-[#E78F68] rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></span>
-                      <span className="w-1.5 h-1.5 bg-[#E78F68] rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></span>
+                      <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ backgroundColor: accentColor, animationDelay: "0ms" }}></span>
+                      <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ backgroundColor: accentColor, animationDelay: "150ms" }}></span>
+                      <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ backgroundColor: accentColor, animationDelay: "300ms" }}></span>
                     </div>
                   </div>
                 </div>
@@ -436,7 +841,7 @@ I can help you with:
                 {t[language].quickActionsTitle}
               </p>
               <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none scroll-smooth">
-                {quickActions.map((act, idx) => {
+                {quickActionsList.map((act, idx) => {
                   const label = language === "ta" ? act.labelTa : act.label;
                   return (
                     <button
@@ -463,7 +868,7 @@ I can help you with:
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder={t[language].inputPlaceholder}
+                placeholder={currentInputPlaceholder}
                 disabled={isThinking}
                 className="flex-1 px-4 py-2 text-[13.5px] text-[#3A2318] placeholder-[#A39281] bg-[#FAF7F2] border border-[#E6DCCF] rounded-full focus:outline-none focus:border-[#4A2C21] focus:ring-1 focus:ring-[#4A2C21] transition-all disabled:opacity-50"
               />
@@ -471,7 +876,8 @@ I can help you with:
                 type="submit"
                 disabled={!inputValue.trim() || isThinking}
                 aria-label="Send Message"
-                className="p-2.5 bg-[#4A2C21] hover:bg-[#E78F68] text-white rounded-full transition-all disabled:opacity-30 disabled:cursor-not-allowed shrink-0 cursor-pointer shadow-sm active:scale-95"
+                style={{ backgroundColor: accentColor }}
+                className="p-2.5 text-white rounded-full transition-all disabled:opacity-30 disabled:cursor-not-allowed shrink-0 cursor-pointer shadow-sm active:scale-95 hover:brightness-110"
               >
                 <Send className="w-4 h-4" />
               </button>
@@ -532,8 +938,9 @@ I can help you with:
         }
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        aria-label="Open V-Leo AI Assistant"
-        className="group relative flex items-center justify-center w-[64px] h-[64px] sm:w-[72px] sm:h-[72px] md:w-[78px] md:h-[78px] bg-white/90 backdrop-blur-xl border-2 border-white/90 shadow-[0_12px_32px_rgba(74,44,33,0.18)] rounded-full p-2 cursor-pointer transition-all duration-300 hover:shadow-[0_16px_40px_rgba(234,179,8,0.28)] hover:border-amber-200/90"
+        aria-label={`Open ${currentBotName} Assistant`}
+        style={{ backgroundColor: launcherBgColor }}
+        className="group relative flex items-center justify-center w-[64px] h-[64px] sm:w-[72px] sm:h-[72px] md:w-[78px] md:h-[78px] backdrop-blur-xl border-2 border-white/90 shadow-[0_12px_32px_rgba(74,44,33,0.18)] rounded-full p-2 cursor-pointer transition-all duration-300 hover:shadow-[0_16px_40px_rgba(234,179,8,0.28)] hover:border-amber-200/90"
       >
         {/* Soft Golden Ambient Glow Effect */}
         <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-amber-400/20 via-orange-300/10 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
@@ -542,8 +949,8 @@ I can help you with:
         <div className="relative w-full h-full rounded-full border border-[#EAB308]/35 flex items-center justify-center p-1.5 bg-gradient-to-b from-white to-[#FFFDF9] shadow-inner overflow-hidden">
           {/* Centered School Lion Emblem Icon */}
           <img
-            src="/images/vleo_mascot.png"
-            alt="Vivekanandha School Lion Emblem"
+            src={launcherIcon}
+            alt={`${currentBotName} Launcher Emblem`}
             loading="lazy"
             decoding="async"
             className="w-full h-full object-contain p-0.5 filter drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
@@ -558,4 +965,3 @@ I can help you with:
     </div>
   );
 }
-
