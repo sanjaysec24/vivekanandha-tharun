@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { Trophy, Palette, Atom, Flame, Sun, Sparkles, Award, Star, Compass } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Trophy, Palette, Atom, Flame, Sun, Sparkles, Award, Star, Compass, Music, Mic, Theater, Ticket, Calendar, MapPin, Users, PartyPopper, Crown, CheckCircle2, Bot, FlaskConical, Shirt, Clock, ChevronRight, Zap, Flower2, School, Building2, Lightbulb, BookOpen, Smile, Camera, Layers } from 'lucide-react';
 
 const ACTIVITIES = [
   {
@@ -128,52 +128,222 @@ export default function ActivitiesPage() {
       </div>
 
       {/* Annual Day Celebrations section */}
-      <div className="bg-[#EAE4D9] py-16 border-y border-[#3B231A]/10">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2">
-              <span className="h-0.5 w-8 bg-[#E78F68]"></span>
-              <span className="text-sm font-semibold uppercase tracking-wider text-[#E78F68]">The Grand Gala</span>
+      <div className="bg-[#EAE4D9] py-20 border-y border-[#3B231A]/10 relative overflow-hidden">
+        {/* Subtle Warm Spotlight Gradients & Decorative Background Curves */}
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-b from-[#E78F68]/20 via-[#E78F68]/5 to-transparent blur-3xl pointer-events-none rounded-full" />
+        <div className="absolute -bottom-24 right-10 w-[500px] h-[300px] bg-gradient-to-t from-[#D4AF37]/15 via-[#198C52]/5 to-transparent blur-3xl pointer-events-none rounded-full" />
+
+        <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center relative z-10">
+          
+          {/* Left Side (5 cols): Typography & Glass Statistics Cards */}
+          <div className="lg:col-span-5 space-y-7">
+            <div className="space-y-3">
+              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-[#E78F68]/20 to-[#D4AF37]/20 border border-[#E78F68]/30 px-3.5 py-1.5 rounded-full shadow-sm">
+                <Sparkles className="w-4 h-4 text-[#E78F68] animate-pulse" />
+                <span className="text-xs font-bold uppercase tracking-widest text-[#3B231A]">
+                  The Grand Gala Celebration
+                </span>
+              </div>
+              
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-[#3B231A] tracking-tight leading-[1.15]">
+                Our Spectacular <br className="hidden sm:block" />
+                <span className="bg-gradient-to-r from-[#3B231A] via-[#E78F68] to-[#9B2222] bg-clip-text text-transparent">
+                  Annual Day
+                </span>
+              </h2>
             </div>
-            
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#3B231A] tracking-tight">
-              Our Spectacular Annual Day
-            </h2>
             
             <p className="text-sm md:text-base text-[#3B231A]/85 font-sans font-light leading-relaxed">
               Every year, Vivekanandha School hosts its celebrated <strong>Annual Day</strong>—a grand thematic stage production where 100% of our nursery and primary children participate. No child is left out. From colorful, coordinated synchronized dances representing seasonal rain patterns to powerful historical dramas of ancient Kings and poets, our children build massive stage confidence and collaborative memories.
             </p>
 
-            <div className="grid grid-cols-2 gap-4 pt-2">
-              <div className="bg-white/80 p-4 rounded-xl border border-[#3B231A]/5">
-                <div className="font-serif font-bold text-lg text-[#E78F68]">100%</div>
-                <div className="text-[10px] uppercase font-mono tracking-wider text-[#3B231A]/60 mt-1">Student Stage Participation</div>
-              </div>
-              <div className="bg-white/80 p-4 rounded-xl border border-[#3B231A]/5">
-                <div className="font-serif font-bold text-lg text-[#198C52]">2,000+</div>
-                <div className="text-[10px] uppercase font-mono tracking-wider text-[#3B231A]/60 mt-1">Enthusiastic Spectators</div>
-              </div>
+            {/* Glass-like Statistic Cards Grid */}
+            <div className="grid grid-cols-2 gap-3.5 pt-2">
+              <motion.div 
+                whileHover={{ y: -3 }}
+                className="bg-white/70 backdrop-blur-md p-4 rounded-2xl border border-white/80 shadow-[0_8px_20px_-6px_rgba(59,35,26,0.08)] relative overflow-hidden group"
+              >
+                <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-[#E78F68]/20 to-transparent rounded-bl-2xl pointer-events-none" />
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-serif font-extrabold text-2xl md:text-3xl text-[#E78F68]">100%</span>
+                  <div className="p-1.5 rounded-xl bg-[#E78F68]/10 text-[#E78F68]">
+                    <Users className="w-4 h-4" />
+                  </div>
+                </div>
+                <div className="text-[11px] font-bold uppercase tracking-wider text-[#3B231A]/80 font-mono">
+                  Student Participation
+                </div>
+                <div className="text-[10px] text-[#3B231A]/50 font-sans mt-0.5">Every single child on stage</div>
+              </motion.div>
+
+              <motion.div 
+                whileHover={{ y: -3 }}
+                className="bg-white/70 backdrop-blur-md p-4 rounded-2xl border border-white/80 shadow-[0_8px_20px_-6px_rgba(59,35,26,0.08)] relative overflow-hidden group"
+              >
+                <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-[#198C52]/20 to-transparent rounded-bl-2xl pointer-events-none" />
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-serif font-extrabold text-2xl md:text-3xl text-[#198C52]">2,000+</span>
+                  <div className="p-1.5 rounded-xl bg-[#198C52]/10 text-[#198C52]">
+                    <PartyPopper className="w-4 h-4" />
+                  </div>
+                </div>
+                <div className="text-[11px] font-bold uppercase tracking-wider text-[#3B231A]/80 font-mono">
+                  Audience Attendance
+                </div>
+                <div className="text-[10px] text-[#3B231A]/50 font-sans mt-0.5">Parents, alumni & patrons</div>
+              </motion.div>
+
+              <motion.div 
+                whileHover={{ y: -3 }}
+                className="bg-white/70 backdrop-blur-md p-4 rounded-2xl border border-white/80 shadow-[0_8px_20px_-6px_rgba(59,35,26,0.08)] relative overflow-hidden group"
+              >
+                <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-[#D4AF37]/20 to-transparent rounded-bl-2xl pointer-events-none" />
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-serif font-extrabold text-2xl md:text-3xl text-[#B8860B]">15+</span>
+                  <div className="p-1.5 rounded-xl bg-[#D4AF37]/15 text-[#B8860B]">
+                    <Trophy className="w-4 h-4" />
+                  </div>
+                </div>
+                <div className="text-[11px] font-bold uppercase tracking-wider text-[#3B231A]/80 font-mono">
+                  Stage Performances
+                </div>
+                <div className="text-[10px] text-[#3B231A]/50 font-sans mt-0.5">Dances, plays & music</div>
+              </motion.div>
+
+              <motion.div 
+                whileHover={{ y: -3 }}
+                className="bg-white/70 backdrop-blur-md p-4 rounded-2xl border border-white/80 shadow-[0_8px_20px_-6px_rgba(59,35,26,0.08)] relative overflow-hidden group"
+              >
+                <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-[#3B231A]/15 to-transparent rounded-bl-2xl pointer-events-none" />
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-serif font-extrabold text-2xl md:text-3xl text-[#3B231A]">25 Yrs</span>
+                  <div className="p-1.5 rounded-xl bg-[#3B231A]/10 text-[#3B231A]">
+                    <Crown className="w-4 h-4" />
+                  </div>
+                </div>
+                <div className="text-[11px] font-bold uppercase tracking-wider text-[#3B231A]/80 font-mono">
+                  Years of Legacy
+                </div>
+                <div className="text-[10px] text-[#3B231A]/50 font-sans mt-0.5">Celebrating rich culture</div>
+              </motion.div>
             </div>
           </div>
 
-          <div className="relative flex justify-center">
-            <div className="w-full max-w-[420px] aspect-[4/3] bg-white rounded-3xl border-[5px] border-[#E5DEC9] p-6 flex flex-col justify-between shadow-sm relative overflow-hidden">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold bg-[#E78F68]/15 text-[#E78F68] px-3 py-1 rounded-full">ANNUAL DAY GALA</span>
-                <Sparkles className="w-5 h-5 text-[#E78F68] animate-pulse" />
-              </div>
-              
-              <div className="space-y-2 text-center my-auto">
-                <p className="text-[10px] font-mono tracking-widest text-[#E78F68] uppercase">Next Scheduled Event</p>
-                <h4 className="text-2xl font-serif font-bold text-[#3B231A]">"Nirmala Vazhvu" Ensembles</h4>
-                <p className="text-xs text-[#3B231A]/60 font-sans">A celebration of pure nature, rain conservation, and peaceful rural living through plays and songs.</p>
+          {/* Right Side (7 cols): SPECTRA Visual Container Canvas & Spectra Journey */}
+          <div className="lg:col-span-7 space-y-6 relative">
+            
+            {/* Main SPECTRA Visual Container Canvas */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 15 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="relative bg-gradient-to-b from-[#2B1209]/10 via-[#1A0A05]/10 to-[#0D0402]/10 p-3 sm:p-5 rounded-[32px] sm:rounded-[40px] border-2 border-[#D4AF37]/40 shadow-sm overflow-hidden min-h-[480px] sm:min-h-[520px]"
+            >
+              {/* Clean Empty Canvas */}
+            </motion.div>
+
+            {/* SPECTRA JOURNEY TIMELINE COMPONENT */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="bg-gradient-to-r from-[#FFFBF7] via-white to-[#FFFBF7] rounded-3xl p-5 border-2 border-[#D4AF37]/50 shadow-xl relative overflow-hidden text-[#3B231A]"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#3B231A]/10 pb-3 gap-2">
+                <div className="flex items-center space-x-2.5">
+                  <div className="p-2 rounded-xl bg-[#D4AF37]/20 text-[#B8860B]">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#E78F68]">
+                      FESTIVAL HIGHLIGHTS
+                    </span>
+                    <h4 className="text-base font-serif font-bold text-[#3B231A]">
+                      Spectra Journey
+                    </h4>
+                  </div>
+                </div>
+
+                <span className="inline-flex items-center text-xs font-bold text-[#198C52] bg-[#198C52]/10 border border-[#198C52]/20 px-3 py-1 rounded-full w-fit">
+                  <Zap className="w-3.5 h-3.5 mr-1" /> Live Schedule
+                </span>
               </div>
 
-              <div className="border-t border-[#3B231A]/5 pt-4 text-center">
-                <span className="text-xs font-semibold text-[#198C52]">Coming This December 2027</span>
+              {/* 6 Milestone Nodes connected by golden lines */}
+              <div className="relative pt-6 pb-2">
+                {/* Connecting Golden Line */}
+                <div className="absolute top-10 left-6 right-6 h-0.5 bg-gradient-to-r from-[#D4AF37]/30 via-[#E78F68]/50 to-[#D4AF37]/30 z-0 hidden sm:block" />
+
+                <div className="grid grid-cols-2 sm:grid-cols-6 gap-3 relative z-10">
+                  
+                  {/* Step 1 */}
+                  <div className="flex flex-col items-center text-center space-y-1.5">
+                    <div className="w-9 h-9 rounded-full bg-[#E78F68] text-white font-bold text-xs flex items-center justify-center shadow-md border-2 border-white">
+                      01
+                    </div>
+                    <span className="text-[10px] font-mono font-bold text-[#E78F68]">5:00 PM</span>
+                    <h5 className="text-xs font-serif font-bold text-[#3B231A] leading-tight">Opening Ceremony</h5>
+                    <p className="text-[9px] text-[#3B231A]/60 font-sans">Lamp Lighting & Welcome</p>
+                  </div>
+
+                  {/* Step 2 */}
+                  <div className="flex flex-col items-center text-center space-y-1.5">
+                    <div className="w-9 h-9 rounded-full bg-[#3B82F6] text-white font-bold text-xs flex items-center justify-center shadow-md border-2 border-white">
+                      02
+                    </div>
+                    <span className="text-[10px] font-mono font-bold text-[#3B82F6]">5:30 PM</span>
+                    <h5 className="text-xs font-serif font-bold text-[#3B231A] leading-tight">Innovation Showcase</h5>
+                    <p className="text-[9px] text-[#3B231A]/60 font-sans">Robotics & STEM Exhibits</p>
+                  </div>
+
+                  {/* Step 3 */}
+                  <div className="flex flex-col items-center text-center space-y-1.5">
+                    <div className="w-9 h-9 rounded-full bg-[#D4AF37] text-[#3B231A] font-bold text-xs flex items-center justify-center shadow-md border-2 border-white">
+                      03
+                    </div>
+                    <span className="text-[10px] font-mono font-bold text-[#B8860B]">6:15 PM</span>
+                    <h5 className="text-xs font-serif font-bold text-[#3B231A] leading-tight">Cultural Performances</h5>
+                    <p className="text-[9px] text-[#3B231A]/60 font-sans">Bharatanatyam & Choirs</p>
+                  </div>
+
+                  {/* Step 4 */}
+                  <div className="flex flex-col items-center text-center space-y-1.5">
+                    <div className="w-9 h-9 rounded-full bg-[#9B2222] text-white font-bold text-xs flex items-center justify-center shadow-md border-2 border-white">
+                      04
+                    </div>
+                    <span className="text-[10px] font-mono font-bold text-[#9B2222]">7:00 PM</span>
+                    <h5 className="text-xs font-serif font-bold text-[#3B231A] leading-tight">Competitions</h5>
+                    <p className="text-[9px] text-[#3B231A]/60 font-sans">Tamil Drama & Recitals</p>
+                  </div>
+
+                  {/* Step 5 */}
+                  <div className="flex flex-col items-center text-center space-y-1.5">
+                    <div className="w-9 h-9 rounded-full bg-[#198C52] text-white font-bold text-xs flex items-center justify-center shadow-md border-2 border-white">
+                      05
+                    </div>
+                    <span className="text-[10px] font-mono font-bold text-[#198C52]">7:45 PM</span>
+                    <h5 className="text-xs font-serif font-bold text-[#3B231A] leading-tight">Awards Ceremony</h5>
+                    <p className="text-[9px] text-[#3B231A]/60 font-sans">Shields & Merit Medals</p>
+                  </div>
+
+                  {/* Step 6 */}
+                  <div className="flex flex-col items-center text-center space-y-1.5">
+                    <div className="w-9 h-9 rounded-full bg-[#EC4899] text-white font-bold text-xs flex items-center justify-center shadow-md border-2 border-white">
+                      06
+                    </div>
+                    <span className="text-[10px] font-mono font-bold text-[#EC4899]">8:30 PM</span>
+                    <h5 className="text-xs font-serif font-bold text-[#3B231A] leading-tight">Grand Finale</h5>
+                    <p className="text-[9px] text-[#3B231A]/60 font-sans">Mass Choir & Confetti</p>
+                  </div>
+
+                </div>
               </div>
-            </div>
+            </motion.div>
+
           </div>
+
         </div>
       </div>
 

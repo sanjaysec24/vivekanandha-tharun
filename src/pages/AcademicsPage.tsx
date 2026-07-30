@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
-import { Monitor, Cpu, Compass, Laptop, Award, Layers, Sparkles, BookOpen, CircleDot, PlayCircle, Globe, Activity, Wifi, Volume2, Maximize2, Play, PenTool, RotateCcw } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Monitor, Cpu, Compass, Laptop, Award, Layers, Sparkles, BookOpen, CircleDot, PlayCircle, Globe, Activity, Wifi, Volume2, Maximize2, Play, PenTool, RotateCcw, Pencil, Book, Star, Puzzle, GraduationCap } from 'lucide-react';
 
 const CLASS_DETAILS = [
   {
@@ -152,88 +152,287 @@ export default function AcademicsPage() {
       </div>
 
       {/* Interactive Class Explorer Section */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-12">
-        <div className="text-center space-y-3">
-          <span className="text-xs font-semibold uppercase tracking-wider text-[#E78F68]">Pre KG to Grade 5</span>
-          <h2 className="text-3xl md:text-4xl font-serif font-bold">Explore Our Classes</h2>
-          <p className="text-sm text-[#3B231A]/70 max-w-lg mx-auto font-sans font-light">
-            Each grade is custom-crafted to align with childhood developmental stages, ensuring appropriate cognitive expansion.
-          </p>
+      <motion.div 
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, ease: [0.22, 0.61, 0.36, 1] }}
+        className="relative max-w-7xl mx-auto px-6 md:px-12 py-16 sm:py-20 space-y-10 sm:space-y-12 overflow-hidden"
+      >
+        {/* Background Details - Subtle Floating Educational Symbols (< 4% opacity) */}
+        <div className="absolute inset-0 pointer-events-none select-none overflow-hidden opacity-[0.035]">
+          <div className="absolute top-10 left-8 transform -rotate-12">
+            <Pencil className="w-16 h-16 text-[#3B231A]" />
+          </div>
+          <div className="absolute top-1/4 right-12 transform rotate-12">
+            <Book className="w-20 h-20 text-[#3B231A]" />
+          </div>
+          <div className="absolute bottom-20 left-16 transform rotate-45">
+            <Star className="w-16 h-16 text-[#3B231A]" />
+          </div>
+          <div className="absolute bottom-10 right-20 transform -rotate-15">
+            <Puzzle className="w-20 h-20 text-[#3B231A]" />
+          </div>
+          <div className="absolute top-1/2 left-1/3 transform -rotate-6">
+            <GraduationCap className="w-24 h-24 text-[#3B231A]" />
+          </div>
+          <div className="absolute top-16 left-1/2 transform -translate-x-1/2 flex space-x-12 text-3xl font-serif font-black text-[#3B231A]">
+            <span>A</span><span>B</span><span>C</span>
+          </div>
+          <div className="absolute inset-0 bg-[radial-gradient(#3B231A_1.5px,transparent_1.5px)] [background-size:32px_32px]" />
         </div>
 
-        {/* Grade tabs */}
-        <div className="flex flex-wrap justify-center gap-2 max-w-5xl mx-auto">
-          {CLASS_DETAILS.map((c) => (
-            <button
-              key={c.grade}
-              onClick={() => setSelectedClass(c)}
-              className={`px-5 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 border ${
-                selectedClass.grade === c.grade
-                  ? 'bg-[#3B231A] text-[#F5F1EB] border-[#3B231A] shadow-md scale-105'
-                  : 'bg-white text-[#3B231A] hover:bg-[#3B231A]/5 border-[#3B231A]/10'
-              }`}
-            >
-              {c.grade}
-            </button>
-          ))}
-        </div>
-
-        {/* Selected Grade Detail Card (Duo-Tone Premium Layout) */}
-        <motion.div
-          key={selectedClass.grade}
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="bg-white rounded-[32px] border border-[#3B231A]/10 shadow-sm max-w-4xl mx-auto overflow-hidden grid grid-cols-1 md:grid-cols-12"
-        >
-          {/* Side Color Accent Strip with Big Text */}
-          <div 
-            className="md:col-span-4 p-8 md:p-12 flex flex-col justify-between text-[#3B231A]"
-            style={{ backgroundColor: selectedClass.color }}
+        {/* Section Header */}
+        <div className="relative z-10 text-center space-y-3">
+          <motion.span 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="inline-flex items-center space-x-1.5 text-xs font-semibold uppercase tracking-widest text-[#E78F68] font-mono"
           >
-            <div>
-              <span className="inline-block bg-white/40 border border-white/50 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4">
-                {selectedClass.ageGroup}
-              </span>
-              <h3 className="text-5xl md:text-6xl font-serif font-extrabold tracking-tighter leading-none mt-2">
-                {selectedClass.grade}
-              </h3>
-            </div>
-            
-            <div className="mt-12">
-              <span className="text-xs uppercase font-mono tracking-widest block opacity-75">Curriculum Focus</span>
-              <p className="font-serif font-bold text-lg mt-1">{selectedClass.title}</p>
-            </div>
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Pre KG to Grade 5</span>
+          </motion.span>
+          
+          <motion.h2 
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold tracking-tight text-[#3B231A]"
+          >
+            Explore Our Classes
+          </motion.h2>
+          
+          <motion.p 
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-sm md:text-base text-[#3B231A]/70 max-w-lg mx-auto font-sans font-light leading-relaxed"
+          >
+            Each grade is custom-crafted to align with childhood developmental stages, ensuring appropriate cognitive expansion.
+          </motion.p>
+        </div>
+
+        {/* Grade Navigation - Segmented Control */}
+        <div className="relative z-10 flex justify-center max-w-5xl mx-auto px-2">
+          <div className="inline-flex flex-wrap sm:flex-nowrap justify-center p-1.5 bg-[#3B231A]/[0.06] border border-[#3B231A]/10 rounded-2xl sm:rounded-full shadow-inner relative max-w-full gap-1">
+            {CLASS_DETAILS.map((c) => {
+              const isSelected = selectedClass.grade === c.grade;
+              return (
+                <motion.button
+                  key={c.grade}
+                  onClick={() => setSelectedClass(c)}
+                  whileHover={{ y: -4 }}
+                  whileTap={{ scale: 0.96 }}
+                  transition={{ duration: 0.25, ease: [0.22, 0.61, 0.36, 1] }}
+                  className={`relative px-4 sm:px-5 py-2.5 rounded-xl sm:rounded-full text-xs sm:text-sm font-semibold transition-colors duration-300 cursor-pointer select-none flex items-center justify-center ${
+                    isSelected
+                      ? 'text-[#F5F1EB] font-bold'
+                      : 'text-[#3B231A]/80 hover:text-[#3B231A] hover:bg-white/40'
+                  }`}
+                >
+                  {/* Active Segmented Pill Background */}
+                  {isSelected && (
+                    <motion.div
+                      layoutId="activeGradePill"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      className="absolute inset-0 bg-[#3B231A] rounded-xl sm:rounded-full shadow-md shadow-[#3B231A]/25 scale-[1.02]"
+                    />
+                  )}
+
+                  {/* Button Text & Active Underline Indicator */}
+                  <span className="relative z-10 flex items-center space-x-1.5">
+                    <span>{c.grade}</span>
+                    {isSelected && (
+                      <motion.span 
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                        className="w-1.5 h-1.5 rounded-full bg-[#E78F68] inline-block ml-0.5"
+                      />
+                    )}
+                  </span>
+                </motion.button>
+              );
+            })}
           </div>
+        </div>
 
-          {/* Core Content Area */}
-          <div className="md:col-span-8 p-8 md:p-12 space-y-8 flex flex-col justify-between bg-white">
-            <div className="space-y-4">
-              <h4 className="text-sm font-semibold uppercase tracking-widest text-[#E78F68] font-mono">Overview</h4>
-              <p className="text-sm md:text-base text-[#3B231A]/85 leading-relaxed font-light">
-                {selectedClass.description}
-              </p>
+        {/* Selected Grade Detail Card (Apple Product Showcase Style) */}
+        <div className="relative z-10 max-w-4xl mx-auto">
+          <motion.div
+            whileHover={{ y: -6 }}
+            transition={{ duration: 0.35, ease: [0.22, 0.61, 0.36, 1] }}
+            className="bg-white rounded-[32px] sm:rounded-[36px] border border-[#3B231A]/10 shadow-[0_10px_35px_-10px_rgba(59,35,26,0.06)] hover:shadow-[0_25px_60px_-15px_rgba(59,35,26,0.12)] hover:border-[#3B231A]/20 transition-all duration-350 ease-[cubic-bezier(0.22,0.61,0.36,1)] overflow-hidden grid grid-cols-1 md:grid-cols-12"
+          >
+            {/* Left Panel: Soft Gradient, Subtle Texture, Shimmer & Corner Filigree */}
+            <div 
+              className="relative md:col-span-4 p-8 sm:p-10 md:p-12 flex flex-col justify-between text-[#3B231A] overflow-hidden transition-colors duration-500"
+              style={{ 
+                backgroundColor: selectedClass.color,
+                backgroundImage: `radial-gradient(circle at 10% 20%, rgba(255,255,255,0.45) 0%, transparent 60%), linear-gradient(135deg, ${selectedClass.color} 0%, ${selectedClass.color}DF 100%)` 
+              }}
+            >
+              {/* Subtle Dot Grid Texture Overlay */}
+              <div className="absolute inset-0 opacity-[0.08] pointer-events-none bg-[radial-gradient(#3B231A_1px,transparent_1px)] [background-size:12px_12px]" />
+
+              {/* Animated Vertical Shimmer Light Line */}
+              <motion.div
+                animate={{ y: ['-100%', '200%'] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                className="absolute top-0 left-6 w-0.5 h-32 bg-gradient-to-b from-transparent via-white/60 to-transparent pointer-events-none"
+              />
+
+              {/* Tiny Decorative Corner Accents */}
+              <div className="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-[#3B231A]/20 rounded-tr-lg pointer-events-none" />
+              <div className="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-[#3B231A]/20 rounded-bl-lg pointer-events-none" />
+
+              {/* Top Section: Age Badge & Animated Grade Title */}
+              <div className="relative z-10">
+                <motion.div
+                  animate={{ scale: [1, 1.02, 1] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="inline-flex items-center space-x-1.5 bg-white/50 backdrop-blur-md border border-white/60 text-[#3B231A] text-xs font-bold px-3.5 py-1.5 rounded-full shadow-sm mb-6"
+                >
+                  <Sparkles className="w-3 h-3 text-[#E78F68]" />
+                  <span>{selectedClass.ageGroup}</span>
+                </motion.div>
+
+                <AnimatePresence mode="wait">
+                  <motion.h3
+                    key={selectedClass.grade}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.35, ease: [0.22, 0.61, 0.36, 1] }}
+                    className="text-5xl sm:text-6xl font-serif font-extrabold tracking-tighter leading-none mt-1 text-[#3B231A]"
+                  >
+                    {selectedClass.grade}
+                  </motion.h3>
+                </AnimatePresence>
+              </div>
+
+              {/* Bottom Section: Curriculum Focus Title */}
+              <div className="relative z-10 mt-10 md:mt-12">
+                <span className="text-[11px] uppercase font-mono font-bold tracking-widest block opacity-70 text-[#3B231A]">
+                  Curriculum Focus
+                </span>
+                
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={selectedClass.title}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.35, ease: [0.22, 0.61, 0.36, 1] }}
+                    className="font-serif font-bold text-lg sm:text-xl mt-1.5 text-[#3B231A] leading-snug"
+                  >
+                    {selectedClass.title}
+                  </motion.p>
+                </AnimatePresence>
+              </div>
             </div>
 
-            <div className="space-y-4">
-              <h4 className="text-sm font-semibold uppercase tracking-widest text-[#198C52] font-mono">Learning Milestones</h4>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                {selectedClass.milestones.map((m, idx) => (
-                  <li key={idx} className="flex items-start text-xs sm:text-sm text-[#3B231A]/95">
-                    <CircleDot className="w-4 h-4 text-[#198C52] mr-2 shrink-0 mt-0.5" />
-                    <span>{m}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {/* Right Panel: Core Content Area */}
+            <div className="md:col-span-8 p-8 sm:p-10 md:p-12 space-y-8 flex flex-col justify-between bg-white relative">
+              {/* Overview Section */}
+              <div className="space-y-3">
+                <h4 className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-[#E78F68] font-mono flex items-center space-x-1.5">
+                  <BookOpen className="w-3.5 h-3.5" />
+                  <span>Overview</span>
+                </h4>
+                
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={selectedClass.description}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.35, ease: [0.22, 0.61, 0.36, 1] }}
+                    className="text-sm sm:text-base text-[#3B231A]/85 leading-relaxed font-light"
+                  >
+                    {selectedClass.description}
+                  </motion.p>
+                </AnimatePresence>
+              </div>
 
-            <div className="border-t border-[#3B231A]/5 pt-6 flex items-center justify-between text-xs font-mono text-[#3B231A]/60">
-              <span>Primary Division</span>
-              <span>Individual Assessment Framework Included</span>
+              {/* Learning Milestones Section */}
+              <div className="space-y-4">
+                <h4 className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-[#198C52] font-mono flex items-center space-x-1.5">
+                  <GraduationCap className="w-4 h-4 text-[#198C52]" />
+                  <span>Learning Milestones</span>
+                </h4>
+
+                <AnimatePresence mode="wait">
+                  <motion.ul
+                    key={selectedClass.grade}
+                    initial="hidden"
+                    animate="show"
+                    exit="hidden"
+                    variants={{
+                      hidden: { opacity: 0 },
+                      show: {
+                        opacity: 1,
+                        transition: {
+                          staggerChildren: 0.04,
+                        }
+                      }
+                    }}
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-3.5"
+                  >
+                    {selectedClass.milestones.map((m, idx) => (
+                      <motion.li
+                        key={idx}
+                        variants={{
+                          hidden: { opacity: 0, y: 10 },
+                          show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.22, 0.61, 0.36, 1] } }
+                        }}
+                        className="group/item flex items-start text-xs sm:text-sm text-[#3B231A]/90 bg-[#F5F1EB]/50 hover:bg-[#F5F1EB] p-2.5 rounded-xl border border-[#3B231A]/5 transition-colors duration-200"
+                      >
+                        <motion.div
+                          whileHover={{ scale: 1.15, rotate: 5 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                          className="mr-2.5 shrink-0 mt-0.5 p-0.5 rounded-full bg-[#198C52]/10 text-[#198C52]"
+                        >
+                          <CircleDot className="w-3.5 h-3.5" />
+                        </motion.div>
+                        <span className="font-sans leading-normal group-hover/item:text-[#3B231A] transition-colors">
+                          {m}
+                        </span>
+                      </motion.li>
+                    ))}
+                  </motion.ul>
+                </AnimatePresence>
+              </div>
+
+              {/* Bottom Information Bar */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={selectedClass.grade + "-footer"}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.35, ease: [0.22, 0.61, 0.36, 1] }}
+                  className="border-t border-[#3B231A]/10 pt-6 flex flex-wrap items-center justify-between text-xs font-mono text-[#3B231A]/70 gap-2"
+                >
+                  <div className="flex items-center space-x-2">
+                    <span className="w-2 h-2 rounded-full bg-[#E78F68]" />
+                    <span className="font-semibold text-[#3B231A]">Primary Division</span>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <span className="w-2 h-2 rounded-full bg-[#198C52]" />
+                    <span>Individual Assessment Framework Included</span>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
-          </div>
-        </motion.div>
-      </div>
+          </motion.div>
+        </div>
+      </motion.div>
 
       {/* Teaching Methodology Section */}
       <div className="bg-[#EAE4D9] py-20 border-y border-[#3B231A]/10">
