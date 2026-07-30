@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Monitor, Cpu, Compass, Laptop, Award, Layers, Sparkles, BookOpen, CircleDot, PlayCircle } from 'lucide-react';
+import { Monitor, Cpu, Compass, Laptop, Award, Layers, Sparkles, BookOpen, CircleDot, PlayCircle, Globe, Activity, Wifi, Volume2, Maximize2, Play, PenTool, RotateCcw } from 'lucide-react';
 
 const CLASS_DETAILS = [
   {
@@ -327,31 +327,133 @@ export default function AcademicsPage() {
       </div>
 
       {/* Smart Classroom Section */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div className="bg-white rounded-[32px] border border-[#3B231A]/10 p-8 flex flex-col justify-between shadow-sm relative overflow-hidden aspect-video max-w-[540px] mx-auto order-last lg:order-first">
-          {/* Mock Smart Screen graphic */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#1E1B18] to-[#3B231A] p-6 flex flex-col justify-between text-white z-10">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <span className="flex items-center text-xs font-mono text-[#E78F68] animate-pulse">
-                <span className="w-2 h-2 rounded-full bg-[#E78F68] mr-2"></span>
-                SMART BOARD CONSOLE ACTIVE
-              </span>
-              <span className="text-[10px] font-mono text-white/40">V_SCHOOL_SYSTEM_V2</span>
-            </div>
-            
-            <div className="space-y-2 text-center my-auto">
-              <span className="text-[10px] font-mono tracking-widest text-[#E78F68] uppercase">Grade 3 Space Module</span>
-              <h4 className="text-2xl font-serif font-bold text-[#F5F1EB]">Interactive Solar Orbit Simulator</h4>
-              <p className="text-xs text-white/60 max-w-sm mx-auto font-light">Touch elements to calculate dynamic planetary intervals and speeds.</p>
+      <div className="max-w-7xl mx-auto px-6 md:px-12 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        {/* Left Side: Premium 3D Interactive Smart Board Showcase */}
+        <div className="relative w-full max-w-[620px] mx-auto order-last lg:order-first">
+          {/* Ambient Background Radial Glows & Circuit Accents */}
+          <div className="absolute -inset-6 bg-gradient-to-tr from-[#E78F68]/25 via-[#4B8B77]/15 to-[#3B231A]/20 blur-3xl rounded-full opacity-80 pointer-events-none" />
+          <div className="absolute -inset-10 opacity-20 pointer-events-none flex items-center justify-center">
+            <svg width="100%" height="100%" viewBox="0 0 500 350" fill="none">
+              <circle cx="250" cy="175" r="160" stroke="#E78F68" strokeWidth="1" strokeDasharray="6 6" />
+              <circle cx="250" cy="175" r="220" stroke="#E78F68" strokeWidth="0.8" strokeDasharray="4 8" />
+              <path d="M 50 175 H 450 M 250 25 V 325" stroke="#E78F68" strokeWidth="0.5" strokeDasharray="3 3" />
+            </svg>
+          </div>
+
+          {/* Wall Mount Bracket Top Accent */}
+          <div className="w-36 h-2.5 bg-gradient-to-r from-[#1A1613] via-[#3D352F] to-[#1A1613] rounded-t-md mx-auto relative z-0 shadow-md border-t border-white/10" />
+
+          {/* 3D Smart Board Main Console Unit */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-10 bg-gradient-to-b from-[#2B2622] via-[#1A1613] to-[#0D0B0A] p-3 sm:p-4 rounded-[26px] sm:rounded-[34px] shadow-[0_25px_65px_-12px_rgba(0,0,0,0.6)] border border-white/20"
+          >
+            {/* Bezel Top Bar with Camera & Status LED */}
+            <div className="flex items-center justify-between px-3 pb-2 pt-0.5 text-[10px] font-mono text-white/50">
+              <div className="flex items-center space-x-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
+                <span className="text-[#E78F68] font-bold tracking-wider">SMART HUB 4K</span>
+              </div>
+              <div className="flex items-center space-x-1 bg-black/40 px-2 py-0.5 rounded-full border border-white/10">
+                <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                <span className="text-[9px] text-white/70">AI SENSOR ACTIVE</span>
+              </div>
             </div>
 
-            <div className="flex items-center justify-between text-[10px] font-mono text-white/30 pt-3 border-t border-white/10">
-              <span>Dual Audio Output</span>
-              <span>120Hz Ultra HD LED</span>
+            {/* Interactive Screen Container */}
+            <div className="relative rounded-[18px] sm:rounded-[24px] overflow-hidden bg-[#0A0D14] aspect-[16/10] text-white shadow-2xl border border-white/10 flex flex-col justify-between p-4 sm:p-5 select-none">
+              {/* Cosmic Learning Background Pattern */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_35%,_#1E293B_0%,_#0F172A_50%,_#020617_100%)] z-0" />
+              
+              {/* Subtle Coordinate Grid Lines */}
+              <div className="absolute inset-0 opacity-15 pointer-events-none bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+
+              {/* Screen Top Header */}
+              <div className="relative z-10 flex items-center justify-between border-b border-white/10 pb-2.5">
+                <div className="flex items-center space-x-2">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#E78F68]/20 border border-[#E78F68]/40 text-[#E78F68] text-[10px] sm:text-xs font-semibold tracking-wide">
+                    GRADE 4 ASTRONOMY
+                  </span>
+                  <span className="hidden sm:inline-block text-[11px] text-white/60 font-mono">
+                    LESSON #08 • ORBITAL DYNAMICS
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2 text-white/60">
+                  <Wifi className="w-3.5 h-3.5 text-emerald-400" />
+                  <Volume2 className="w-3.5 h-3.5" />
+                  <Maximize2 className="w-3.5 h-3.5" />
+                </div>
+              </div>
+
+              {/* Screen Center Interactive Solar Orbit Graphic */}
+              <div className="relative z-10 my-auto flex items-center justify-center py-2">
+                {/* Orbit Rings SVG */}
+                <svg className="absolute w-full h-full max-h-[180px] pointer-events-none overflow-visible" viewBox="0 0 300 160">
+                  <ellipse cx="150" cy="80" rx="60" ry="32" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1" strokeDasharray="3 3" />
+                  <ellipse cx="150" cy="80" rx="110" ry="56" fill="none" stroke="rgba(231,143,104,0.3)" strokeWidth="1.2" />
+                  <ellipse cx="150" cy="80" rx="140" ry="70" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+                </svg>
+
+                {/* Central Glowing Sun */}
+                <div className="relative z-10 w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-amber-400 via-orange-500 to-amber-300 shadow-[0_0_40px_rgba(245,158,11,0.85)] flex items-center justify-center animate-pulse">
+                  <span className="text-[9px] sm:text-[10px] font-bold text-amber-950 uppercase tracking-tighter">SUN</span>
+                </div>
+
+                {/* Orbiting Earth Node */}
+                <div className="absolute left-[72%] top-[25%] z-20 flex items-center space-x-1.5 bg-black/70 border border-[#5B92E5]/50 px-2.5 py-1 rounded-full backdrop-blur-md shadow-lg animate-bounce" style={{ animationDuration: '3s' }}>
+                  <span className="w-3 h-3 rounded-full bg-[#5B92E5] shadow-[0_0_8px_#5B92E5] inline-block" />
+                  <div className="text-[10px] leading-tight">
+                    <span className="font-bold text-white block">Earth</span>
+                    <span className="text-[8px] text-white/70">29.8 km/s</span>
+                  </div>
+                </div>
+
+                {/* Orbiting Mars Node */}
+                <div className="absolute left-[20%] top-[68%] z-20 flex items-center space-x-1 bg-black/60 border border-red-500/40 px-2 py-0.5 rounded-full backdrop-blur-sm">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
+                  <span className="text-[9px] text-white/80 font-medium">Mars</span>
+                </div>
+              </div>
+
+              {/* Screen Bottom Interactive Toolbar (Samsung Flip Style) */}
+              <div className="relative z-10 flex items-center justify-between pt-2 border-t border-white/10 text-[10px] sm:text-xs">
+                <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-md p-1 rounded-xl border border-white/10">
+                  <button className="p-1 rounded-lg bg-[#E78F68] text-white">
+                    <Play className="w-3 h-3 fill-current" />
+                  </button>
+                  <button className="p-1 rounded-lg hover:bg-white/10 text-white/80">
+                    <PenTool className="w-3 h-3" />
+                  </button>
+                  <button className="p-1 rounded-lg hover:bg-white/10 text-white/80">
+                    <RotateCcw className="w-3 h-3" />
+                  </button>
+                </div>
+
+                <div className="flex items-center space-x-2 text-white/70 font-mono text-[10px]">
+                  <span className="px-2 py-0.5 rounded-md bg-white/5 border border-white/10">120Hz 4K UHD</span>
+                  <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">10-TOUCH ACTIVE</span>
+                </div>
+              </div>
+
+              {/* Glass Reflection Highlight Layer */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.07] to-transparent pointer-events-none z-30" />
+              <div className="absolute inset-0 shadow-[inset_0_0_30px_rgba(0,0,0,0.6)] pointer-events-none z-30" />
             </div>
-          </div>
+
+            {/* Bottom Bezel Laser Etched Emblem */}
+            <div className="text-center pt-2 pb-0.5 text-[9px] font-mono tracking-[0.25em] text-white/30 uppercase">
+              VIVEKANANDHA SMART CLASSROOM HUB
+            </div>
+          </motion.div>
+
+          {/* Wall Mount Stand Shadow Underneath */}
+          <div className="w-4/5 h-5 mx-auto bg-black/45 blur-xl rounded-full mt-3" />
         </div>
 
+        {/* Right Side: Unchanged Content */}
         <div className="space-y-6">
           <div className="flex items-center space-x-2">
             <span className="h-0.5 w-8 bg-[#E78F68]"></span>
