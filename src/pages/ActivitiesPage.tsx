@@ -1,6 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Trophy, Palette, Atom, Flame, Sun, Sparkles, Award, Star, Compass, Music, Mic, Theater, Ticket, Calendar, MapPin, Users, PartyPopper, Crown, CheckCircle2, Bot, FlaskConical, Shirt, Clock, ChevronRight, Zap, Flower2, School, Building2, Lightbulb, BookOpen, Smile, Camera, Layers } from 'lucide-react';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../lib/firebase';
+
+interface EventShowcaseCMSData {
+  posterImage?: string;
+  poster_image?: string;
+  image?: string;
+  imageUrl?: string;
+  posterUrl?: string;
+
+  displayMode?: 'contain' | 'cover' | 'fill' | string;
+  display_mode?: string;
+
+  horizontalPosition?: string;
+  horizontal_position?: string;
+  verticalPosition?: string;
+  vertical_position?: string;
+
+  padding?: string | number;
+  cornerRadius?: string | number;
+  corner_radius?: string | number;
+  borderRadius?: string | number;
+
+  shadow?: string;
+  boxShadow?: string;
+
+  border?: string;
+
+  backgroundColor?: string;
+  background_color?: string;
+  bgColor?: string;
+}
 
 const ACTIVITIES = [
   {
@@ -46,6 +78,52 @@ const ACTIVITIES = [
 ];
 
 export default function ActivitiesPage() {
+  const [eventPoster, setEventPoster] = useState<EventShowcaseCMSData | null>(null);
+  const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    if (!db) return;
+    const docRef = doc(db, 'website_cms', 'event_showcase');
+    const unsubscribe = onSnapshot(docRef, (snapshot) => {
+      if (snapshot.exists()) {
+        setEventPoster(snapshot.data() as EventShowcaseCMSData);
+        setImgError(false);
+      } else {
+        setEventPoster(null);
+      }
+    }, (error) => {
+      console.error("Firestore Error in event_showcase onSnapshot:", error);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const posterImageSrc = eventPoster?.posterImage || eventPoster?.poster_image || eventPoster?.image || eventPoster?.imageUrl || eventPoster?.posterUrl || '';
+
+  const rawDisplayMode = (eventPoster?.displayMode || eventPoster?.display_mode || 'cover').toLowerCase();
+  let objectFitStyle: React.CSSProperties['objectFit'] = 'cover';
+  if (rawDisplayMode === 'contain') objectFitStyle = 'contain';
+  else if (rawDisplayMode === 'fill') objectFitStyle = 'fill';
+  else if (rawDisplayMode === 'cover') objectFitStyle = 'cover';
+
+  const hPos = eventPoster?.horizontalPosition || eventPoster?.horizontal_position || 'center';
+  const vPos = eventPoster?.verticalPosition || eventPoster?.vertical_position || 'center';
+  const objectPositionStyle = `${hPos} ${vPos}`;
+
+  const paddingVal = eventPoster?.padding !== undefined
+    ? (typeof eventPoster.padding === 'number' ? `${eventPoster.padding}px` : eventPoster.padding)
+    : '12px';
+
+  const rawCornerRadius = eventPoster?.cornerRadius ?? eventPoster?.corner_radius ?? eventPoster?.borderRadius;
+  const cornerRadiusVal = rawCornerRadius !== undefined
+    ? (typeof rawCornerRadius === 'number' ? `${rawCornerRadius}px` : String(rawCornerRadius))
+    : '32px';
+
+  const shadowVal = eventPoster?.shadow || eventPoster?.boxShadow || '0 20px 50px -10px rgba(0,0,0,0.5)';
+  const borderVal = eventPoster?.border || '2px solid rgba(212, 175, 55, 0.4)';
+  const bgVal = eventPoster?.backgroundColor || eventPoster?.background_color || eventPoster?.bgColor || '#0D0402';
+
+  const showPosterImage = Boolean(posterImageSrc && !imgError);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -232,15 +310,77 @@ export default function ActivitiesPage() {
           {/* Right Side (7 cols): SPECTRA Visual Container Canvas & Spectra Journey */}
           <div className="lg:col-span-7 space-y-6 relative">
             
-            {/* Main SPECTRA Visual Container Canvas */}
+            {/* Main SPECTRA Visual Container Canvas / Event Poster */}
             <motion.div
               initial={{ opacity: 0, scale: 0.96, y: 15 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="relative bg-gradient-to-b from-[#2B1209]/10 via-[#1A0A05]/10 to-[#0D0402]/10 p-3 sm:p-5 rounded-[32px] sm:rounded-[40px] border-2 border-[#D4AF37]/40 shadow-sm overflow-hidden min-h-[480px] sm:min-h-[520px]"
+              className="relative w-full"
             >
-              {/* Clean Empty Canvas */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.25 }}
+                whileHover={{ scale: 1.02 }}
+                className="relative w-full min-h-[480px] sm:min-h-[520px] flex items-center justify-center overflow-hidden cursor-pointer transition-shadow duration-300 group"
+                style={{
+                  padding: paddingVal,
+                  borderRadius: cornerRadiusVal,
+                  boxShadow: shadowVal,
+                  border: borderVal,
+                  backgroundColor: bgVal,
+                }}
+              >
+                {showPosterImage ? (
+                  <motion.img
+                    src={posterImageSrc}
+                    alt="SPECTRA Annual Day Event Poster"
+                    loading="lazy"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.25 }}
+                    onError={() => setImgError(true)}
+                    className="w-full h-full min-h-[480px] sm:min-h-[520px] transition-all duration-300 ease-out"
+                    style={{
+                      objectFit: objectFitStyle,
+                      objectPosition: objectPositionStyle,
+                      borderRadius: `calc(${cornerRadiusVal} - 4px)`,
+                    }}
+                  />
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.25 }}
+                    className="w-full h-full min-h-[480px] sm:min-h-[520px] flex flex-col items-center justify-center text-center p-8 relative overflow-hidden select-none"
+                  >
+                    {/* Subtle Ambient Radial Highlight */}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(212,175,55,0.12)_0%,_transparent_70%)] pointer-events-none" />
+
+                    <div className="relative z-10 space-y-4 max-w-sm mx-auto">
+                      {/* 📢 Megaphone Icon Badge */}
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-3xl bg-[#D4AF37]/10 border border-[#D4AF37]/30 flex items-center justify-center shadow-lg text-3xl sm:text-4xl text-[#D4AF37]">
+                        📢
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#F5F1EB] tracking-wide">
+                          No Event Poster Available
+                        </h3>
+                        <p className="text-xs sm:text-sm text-[#F5F1EB]/60 font-sans font-light max-w-xs mx-auto leading-relaxed">
+                          Stay tuned! The official celebration poster and event schedule will be updated here.
+                        </p>
+                      </div>
+
+                      <div className="pt-2 inline-flex items-center space-x-2 text-[10px] font-mono tracking-widest text-[#D4AF37] uppercase bg-[#D4AF37]/10 px-3 py-1.5 rounded-full border border-[#D4AF37]/20">
+                        <Sparkles className="w-3 h-3 text-[#FFD700]" />
+                        <span>SPECTRA ANNUAL DAY GALA</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </motion.div>
             </motion.div>
 
             {/* SPECTRA JOURNEY TIMELINE COMPONENT */}

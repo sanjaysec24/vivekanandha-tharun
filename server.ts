@@ -186,13 +186,37 @@ function getFallbackResponse(message: string, isTamil: boolean): { text: string;
 // API Chat Endpoint
 app.post("/api/chat", async (req, res) => {
   try {
-    const { message, history, language } = req.body;
+    const { message, history, language, currentPage, cmsContext, systemPrompt: cmsSystemPrompt, knowledgeBase: cmsKnowledgeBase } = req.body;
     if (!message) {
       return res.status(400).json({ error: "Message is required" });
     }
 
     const isTamil = language === "ta";
     const ai = getAI();
+
+    // Build dynamic knowledge string from CMS context
+    let liveCmsKnowledge = "";
+    if (cmsContext && typeof cmsContext === "object") {
+      try {
+        const entries = Object.entries(cmsContext)
+          .map(([key, val]) => {
+            if (!val) return null;
+            return `--- CMS Section: ${key} ---\n${typeof val === "string" ? val : JSON.stringify(val, null, 2)}`;
+          })
+          .filter(Boolean);
+        if (entries.length > 0) {
+          liveCmsKnowledge = `\nLIVE WEBSITE CMS DATA:\n` + entries.join("\n\n");
+        }
+      } catch (e) {
+        console.warn("Error stringifying cmsContext:", e);
+      }
+    }
+
+    const currentPageContext = currentPage ? `\nCURRENT PAGE VISITED BY USER: ${currentPage}` : "";
+    const customPrompt = cmsSystemPrompt ? `\nCUSTOM CMS SYSTEM PROMPT:\n${cmsSystemPrompt}` : "";
+    const customKb = cmsKnowledgeBase ? `\nCUSTOM KNOWLEDGE BASE:\n${cmsKnowledgeBase}` : "";
+
+    const FULL_SYSTEM_INSTRUCTION = `${SCHOOL_KNOWLEDGE_BASE}${customPrompt}${customKb}${liveCmsKnowledge}${currentPageContext}`;
 
     // If AI Client is not available, run fallback rule system instantly
     if (!ai) {
@@ -204,10 +228,12 @@ app.post("/api/chat", async (req, res) => {
     const contents = [];
     if (history && Array.isArray(history)) {
       for (const turn of history) {
-        contents.push({
-          role: turn.role === "user" ? "user" : "model",
-          parts: [{ text: turn.text }],
-        });
+        if (turn.text) {
+          contents.push({
+            role: turn.role === "user" || turn.role === "human" ? "user" : "model",
+            parts: [{ text: turn.text }],
+          });
+        }
       }
     }
     // Add current user prompt
@@ -217,26 +243,26 @@ app.post("/api/chat", async (req, res) => {
     });
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-2.5-flash",
       contents: contents,
       config: {
-        systemInstruction: SCHOOL_KNOWLEDGE_BASE,
+        systemInstruction: FULL_SYSTEM_INSTRUCTION,
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
           properties: {
             text: {
               type: Type.STRING,
-              description: "The response to the user. Must be helpful, concise, extremely friendly, and in the language requested (English or Tamil).",
+              description: "The response to the user formatted in clean Markdown (supporting lists, bold text, links, and tables). Must be helpful, concise, extremely friendly, and in the language requested (English or Tamil).",
             },
             shouldEscalate: {
               type: Type.BOOLEAN,
-              description: "True if the bot cannot answer, if the user asks for email/phone/direct human help, or if the user wants to contact administration.",
+              description: "True if the bot cannot answer with high confidence, if the user asks for email/phone/direct human help, or if the user wants to contact administration.",
             },
             suggestedQuestions: {
               type: Type.ARRAY,
               items: { type: Type.STRING },
-              description: "2 to 3 short suggested questions that make sense as next steps.",
+              description: "2 to 3 short suggested follow-up questions that guide the conversation logically.",
             },
           },
           required: ["text", "shouldEscalate", "suggestedQuestions"],

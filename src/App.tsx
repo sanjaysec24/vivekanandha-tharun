@@ -11,6 +11,7 @@ import EventSection from './components/EventSection';
 import Footer from './components/Footer';
 import { CurriculumWidget, AdmissionsDrawer } from './components/InteractiveWidget';
 import VLeoChatbot from './components/VLeoChatbot';
+import SEOManager from './components/SEOManager';
 
 // Custom router integration
 import { RouterProvider, Route, useRouter } from './lib/router';
@@ -49,6 +50,9 @@ function AppContent() {
 
   return (
     <div id="school-landing-app" className="min-h-screen bg-[#F4F0EA] text-[#3A2318] selection:bg-[#E78F68]/35 overflow-x-hidden font-sans">
+        {/* Real-time CMS-driven SEO Engine */}
+        <SEOManager />
+
         {/* 1. Header Navigation Bar (Global) */}
         <Navbar onOpenAdmissions={openAdmissions} />
 
