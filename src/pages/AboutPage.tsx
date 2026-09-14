@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { BookOpen, Award, Shield, Users, Heart, Sparkles, ArrowRight, GraduationCap, CheckCircle2 } from 'lucide-react';
+import { BookOpen, Award, Shield, Users, Heart, Sparkles, ArrowRight, GraduationCap, CheckCircle2, Calendar, Compass, Lightbulb, Rocket } from 'lucide-react';
 
 export default function AboutPage() {
   return (
@@ -103,7 +103,7 @@ export default function AboutPage() {
                 </div>
                 <div>
                   <p className="text-xs sm:text-sm font-semibold text-[#F5F1EB]">Academic Excellence</p>
-                  <p className="text-[10px] sm:text-xs text-[#F5F1EB]/60">25+ Years Legacy</p>
+                  <p className="text-[10px] sm:text-xs text-[#F5F1EB]/60">15+ Years of Experience</p>
                 </div>
               </div>
 
@@ -141,33 +141,276 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* School History Section */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-16">
-        <div className="max-w-4xl mx-auto space-y-10">
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2">
-              <span className="h-0.5 w-8 bg-[#E78F68]"></span>
-              <span className="text-sm font-semibold uppercase tracking-wider text-[#E78F68]">Rooted in Tradition</span>
+      {/* School History / Timeline Section */}
+      <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-16">
+        <div className="max-w-5xl mx-auto space-y-12">
+          
+          {/* Section Header */}
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <div className="inline-flex items-center justify-center space-x-2">
+              <span className="h-0.5 w-6 bg-[#E78F68]" />
+              <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-[#E78F68]">
+                OUR JOURNEY
+              </span>
+              <span className="h-0.5 w-6 bg-[#E78F68]" />
             </div>
-            <h2 className="text-3xl md:text-[52px] font-serif font-bold tracking-tight leading-tight">
-              Our Glorious Journey Since 1998
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-[#3B231A] tracking-tight leading-snug">
+              From a small beginning to a future-ready learning community.
             </h2>
-            <p className="text-base md:text-[18px] text-[#3B231A]/80 leading-relaxed font-sans font-light">
-              Vivekanandha School was established in the year 1998 in Tamil Nadu with a humble count of just 45 pupils. Inspired by the profound teachings of Swami Vivekananda, our founders envisioned an institution where education goes beyond rote learning to foster "life-building, man-making, and character-making assimilation of ideas."
-            </p>
-            <p className="text-base md:text-[18px] text-[#3B231A]/80 leading-relaxed font-sans font-light">
-              Over nearly three decades, we have evolved into a premiere private academy, serving over 2,500 thriving alumni. By seamlessly introducing modern smart classrooms, comprehensive STEM curricula, and international-standard physical play, we prepare children for the complex global stage while grounding them deeply in Tamil culture, mutual respect, and discipline.
-            </p>
+            <div className="flex items-center justify-center space-x-2 pt-1 opacity-60">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#E78F68]" />
+              <span className="w-12 h-px bg-gradient-to-r from-[#E78F68] to-transparent" />
+              <Sparkles className="w-3.5 h-3.5 text-[#E78F68]" />
+              <span className="w-12 h-px bg-gradient-to-l from-[#E78F68] to-transparent" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#E78F68]" />
+            </div>
+          </div>
+
+          {/* Editorial Timeline: Desktop Horizontal (md+), Mobile Vertical (<md) */}
+          <div className="relative py-4">
             
-            <div className="grid grid-cols-2 gap-6 pt-4">
-              <div className="bg-[#E78F68]/10 p-5 rounded-2xl border border-[#E78F68]/20">
-                <div className="text-3xl font-serif font-bold text-[#E78F68]">25+</div>
-                <div className="text-xs font-medium text-[#3B231A]/70 uppercase tracking-wider mt-1">Years of Academic Glory</div>
+            {/* DESKTOP / TABLET HORIZONTAL TIMELINE (Hidden on mobile) */}
+            <div className="hidden md:block relative">
+              {/* Continuous Connecting Track Line */}
+              <div 
+                className="absolute top-6 left-[6%] right-[6%] h-[2px] bg-gradient-to-r from-[#E78F68] via-[#E78F68]/50 to-[#198C52]/50 z-0"
+                aria-hidden="true"
+              />
+              
+              {/* Milestone Grid */}
+              <div className="grid grid-cols-4 gap-6 relative z-10">
+                
+                {/* 1. FOUNDATION - 2009 (Stronger visual emphasis) */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.05 }}
+                  className="group flex flex-col items-center text-center px-2"
+                >
+                  {/* Marker Pin */}
+                  <div className="relative mb-5 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-[#E78F68] text-white flex items-center justify-center shadow-md ring-4 ring-[#FAF7F2] ring-offset-2 ring-offset-[#E78F68]/20 transition-transform duration-300 group-hover:scale-110">
+                      <Calendar className="w-5 h-5" />
+                    </div>
+                    {/* Subtle Ping Ring */}
+                    <span className="absolute -inset-1 rounded-full border border-[#E78F68]/30 animate-pulse pointer-events-none" />
+                  </div>
+
+                  {/* Year & Badge */}
+                  <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#E78F68]/15 text-[#E78F68] text-xs font-bold font-mono tracking-wider mb-1.5">
+                    June 4, 2009
+                  </span>
+                  <h3 className="text-base font-serif font-bold text-[#3B231A] tracking-tight group-hover:text-[#E78F68] transition-colors duration-200">
+                    FOUNDATION
+                  </h3>
+                  <p className="mt-2 text-xs text-[#3B231A]/75 leading-relaxed font-sans font-normal max-w-[220px]">
+                    Vivekanandha School was established in June 2009 with a vision to provide strong academic foundations and value-based education for young learners.
+                  </p>
+                </motion.div>
+
+                {/* 2. GROWTH */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.15 }}
+                  className="group flex flex-col items-center text-center px-2"
+                >
+                  {/* Marker Pin */}
+                  <div className="relative mb-5 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-[#FAF7F2] border-2 border-[#E78F68] text-[#E78F68] flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:bg-[#E78F68] group-hover:text-white">
+                      <Compass className="w-5 h-5 transition-transform duration-300 group-hover:rotate-45" />
+                    </div>
+                  </div>
+
+                  <span className="inline-block text-[11px] font-bold uppercase tracking-widest text-[#3B231A]/40 mb-1.5">
+                    Milestone II
+                  </span>
+                  <h3 className="text-base font-serif font-bold text-[#3B231A] tracking-tight group-hover:text-[#E78F68] transition-colors duration-200">
+                    GROWTH
+                  </h3>
+                  <p className="mt-2 text-xs text-[#3B231A]/75 leading-relaxed font-sans font-normal max-w-[220px]">
+                    The school expanded its learning environment with a stronger focus on holistic development, activities, and individual student attention.
+                  </p>
+                </motion.div>
+
+                {/* 3. INNOVATION */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.25 }}
+                  className="group flex flex-col items-center text-center px-2"
+                >
+                  {/* Marker Pin */}
+                  <div className="relative mb-5 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-[#FAF7F2] border-2 border-[#198C52] text-[#198C52] flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:bg-[#198C52] group-hover:text-white">
+                      <Lightbulb className="w-5 h-5 transition-transform duration-300 group-hover:-rotate-12" />
+                    </div>
+                  </div>
+
+                  <span className="inline-block text-[11px] font-bold uppercase tracking-widest text-[#3B231A]/40 mb-1.5">
+                    Milestone III
+                  </span>
+                  <h3 className="text-base font-serif font-bold text-[#3B231A] tracking-tight group-hover:text-[#198C52] transition-colors duration-200">
+                    INNOVATION
+                  </h3>
+                  <p className="mt-2 text-xs text-[#3B231A]/75 leading-relaxed font-sans font-normal max-w-[220px]">
+                    Technology-enabled classrooms, activity-based learning, and modern teaching approaches became an important part of the learning experience.
+                  </p>
+                </motion.div>
+
+                {/* 4. TODAY */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.35 }}
+                  className="group flex flex-col items-center text-center px-2"
+                >
+                  {/* Marker Pin */}
+                  <div className="relative mb-5 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-[#198C52] text-white flex items-center justify-center shadow-md ring-4 ring-[#FAF7F2] ring-offset-2 ring-offset-[#198C52]/20 transition-transform duration-300 group-hover:scale-110">
+                      <Rocket className="w-5 h-5" />
+                    </div>
+                  </div>
+
+                  <span className="inline-block px-2 py-0.5 rounded-full bg-[#198C52]/10 text-[#198C52] text-xs font-bold tracking-wider mb-1.5">
+                    Future Ready
+                  </span>
+                  <h3 className="text-base font-serif font-bold text-[#3B231A] tracking-tight group-hover:text-[#198C52] transition-colors duration-200">
+                    TODAY
+                  </h3>
+                  <p className="mt-2 text-xs text-[#3B231A]/75 leading-relaxed font-sans font-normal max-w-[220px]">
+                    Vivekanandha School continues to nurture confident, capable, and compassionate learners while preparing children for the future.
+                  </p>
+                </motion.div>
+
               </div>
-              <div className="bg-[#198C52]/10 p-5 rounded-2xl border border-[#198C52]/20">
-                <div className="text-3xl font-serif font-bold text-[#198C52]">100%</div>
-                <div className="text-xs font-medium text-[#3B231A]/70 uppercase tracking-wider mt-1">Holistic Development</div>
-              </div>
+            </div>
+
+            {/* MOBILE VERTICAL TIMELINE (Visible on <md) */}
+            <div className="md:hidden relative pl-8 sm:pl-10 space-y-8">
+              {/* Vertical Connecting Line */}
+              <div 
+                className="absolute left-4 sm:left-5 top-3 bottom-3 w-[2px] bg-gradient-to-b from-[#E78F68] via-[#E78F68]/60 to-[#198C52]" 
+                aria-hidden="true" 
+              />
+
+              {/* 1. FOUNDATION */}
+              <motion.div 
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4 }}
+                className="relative"
+              >
+                {/* Marker Dot */}
+                <div className="absolute -left-8 sm:-left-10 top-0.5 w-8 h-8 rounded-full bg-[#E78F68] text-white flex items-center justify-center shadow-sm ring-2 ring-[#FAF7F2]">
+                  <Calendar className="w-4 h-4" />
+                </div>
+                <div className="space-y-1">
+                  <span className="inline-block px-2 py-0.5 rounded-full bg-[#E78F68]/15 text-[#E78F68] text-[11px] font-bold font-mono">
+                    June 4, 2009
+                  </span>
+                  <h3 className="text-base font-serif font-bold text-[#3B231A]">
+                    FOUNDATION
+                  </h3>
+                  <p className="text-xs text-[#3B231A]/75 leading-relaxed font-sans">
+                    Vivekanandha School was established in June 2009 with a vision to provide strong academic foundations and value-based education for young learners.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* 2. GROWTH */}
+              <motion.div 
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+                className="relative"
+              >
+                {/* Marker Dot */}
+                <div className="absolute -left-8 sm:-left-10 top-0.5 w-8 h-8 rounded-full bg-[#FAF7F2] border-2 border-[#E78F68] text-[#E78F68] flex items-center justify-center shadow-sm ring-2 ring-[#FAF7F2]">
+                  <Compass className="w-4 h-4" />
+                </div>
+                <div className="space-y-1">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#3B231A]/40 block">
+                    Milestone II
+                  </span>
+                  <h3 className="text-base font-serif font-bold text-[#3B231A]">
+                    GROWTH
+                  </h3>
+                  <p className="text-xs text-[#3B231A]/75 leading-relaxed font-sans">
+                    The school expanded its learning environment with a stronger focus on holistic development, activities, and individual student attention.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* 3. INNOVATION */}
+              <motion.div 
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.15 }}
+                className="relative"
+              >
+                {/* Marker Dot */}
+                <div className="absolute -left-8 sm:-left-10 top-0.5 w-8 h-8 rounded-full bg-[#FAF7F2] border-2 border-[#198C52] text-[#198C52] flex items-center justify-center shadow-sm ring-2 ring-[#FAF7F2]">
+                  <Lightbulb className="w-4 h-4" />
+                </div>
+                <div className="space-y-1">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#3B231A]/40 block">
+                    Milestone III
+                  </span>
+                  <h3 className="text-base font-serif font-bold text-[#3B231A]">
+                    INNOVATION
+                  </h3>
+                  <p className="text-xs text-[#3B231A]/75 leading-relaxed font-sans">
+                    Technology-enabled classrooms, activity-based learning, and modern teaching approaches became an important part of the learning experience.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* 4. TODAY */}
+              <motion.div 
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+                className="relative"
+              >
+                {/* Marker Dot */}
+                <div className="absolute -left-8 sm:-left-10 top-0.5 w-8 h-8 rounded-full bg-[#198C52] text-white flex items-center justify-center shadow-sm ring-2 ring-[#FAF7F2]">
+                  <Rocket className="w-4 h-4" />
+                </div>
+                <div className="space-y-1">
+                  <span className="inline-block px-2 py-0.5 rounded-full bg-[#198C52]/10 text-[#198C52] text-[11px] font-bold">
+                    Future Ready
+                  </span>
+                  <h3 className="text-base font-serif font-bold text-[#3B231A]">
+                    TODAY
+                  </h3>
+                  <p className="text-xs text-[#3B231A]/75 leading-relaxed font-sans">
+                    Vivekanandha School continues to nurture confident, capable, and compassionate learners while preparing children for the future.
+                  </p>
+                </div>
+              </motion.div>
+
+            </div>
+
+          </div>
+
+          {/* Achievement Statistics Cards */}
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 pt-2">
+            <div className="bg-[#E78F68]/10 p-5 rounded-2xl border border-[#E78F68]/20">
+              <div className="text-3xl font-serif font-bold text-[#E78F68]">15+</div>
+              <div className="text-xs font-medium text-[#3B231A]/70 uppercase tracking-wider mt-1">YEARS OF EXPERIENCE</div>
+            </div>
+            <div className="bg-[#198C52]/10 p-5 rounded-2xl border border-[#198C52]/20">
+              <div className="text-3xl font-serif font-bold text-[#198C52]">100%</div>
+              <div className="text-xs font-medium text-[#3B231A]/70 uppercase tracking-wider mt-1">Holistic Development</div>
             </div>
           </div>
 

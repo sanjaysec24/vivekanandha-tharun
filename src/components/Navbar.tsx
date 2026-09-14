@@ -163,156 +163,121 @@ export default function Navbar({ onOpenAdmissions }: NavbarProps) {
     }
   }
 
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <nav id="navbar-container" className="sticky top-0 z-50 bg-[#F4F0EA]/95 backdrop-blur-md border-b border-[#3A2318]/10 px-6 py-4 md:px-12">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Brand Logo */}
-        <Link 
-          id="brand-logo" 
-          to="/" 
-          className="flex items-center space-x-3 group text-left transition-all duration-200"
-        >
-          {/* Circular School Logo Container */}
-          <div 
-            style={containerStyle}
-            className={`w-11 h-11 md:w-12 md:h-12 ${containerShapeClass} bg-white border border-[#EAB308]/40 shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0 group-hover:scale-105 transition-transform duration-300 ${rawAppearance || ''}`}
+    <header 
+      id="navbar-wrapper" 
+      className="sticky top-0 z-50 w-full transition-all duration-300 pt-6 pb-2.5 sm:pt-7 sm:pb-3 md:pt-8 md:pb-3.5 px-3.5 sm:px-6 md:px-8 pointer-events-none"
+    >
+      {/* Floating Capsule Container */}
+      <nav 
+        id="navbar-container" 
+        className={`pointer-events-auto max-w-7xl mx-auto bg-[#FFFDF8] border border-[#E6DCCF]/80 rounded-[26px] sm:rounded-[28px] md:rounded-[32px] transition-all duration-300 ${
+          scrolled 
+            ? 'shadow-[0_12px_32px_-6px_rgba(67,40,31,0.12),0_4px_12px_rgba(67,40,31,0.06)] py-1.5 md:py-2 px-3.5 sm:px-5 md:px-6' 
+            : 'shadow-[0_8px_24px_-4px_rgba(67,40,31,0.07),0_2px_6px_rgba(67,40,31,0.03)] py-2 md:py-2.5 px-3.5 sm:px-5 md:px-6'
+        }`}
+      >
+        <div className="flex items-center justify-between">
+          {/* Brand Logo & School Identity (Shown on both Mobile and Desktop) */}
+          <Link 
+            id="brand-logo" 
+            to="/" 
+            className="flex items-center space-x-2 sm:space-x-3 group text-left transition-all duration-200 min-w-0 pr-2"
           >
-            <img 
-              src={logo} 
-              alt={`${schoolName} Logo`} 
-              loading="lazy"
-              decoding="async"
-              style={logoSizeStyle}
-              className={`${logoSizeClasses} object-contain p-0.5`} 
-            />
-          </div>
-
-          {/* School Name & Campus Subtitle */}
-          <div className="flex flex-col justify-center">
-            <div className="flex items-center space-x-1.5">
-              <span className="text-base sm:text-lg md:text-xl font-black text-[#3A2318] tracking-tight leading-none group-hover:text-[#E78F68] transition-colors duration-200">
-                {schoolName}
-              </span>
-              <span 
-                className="w-1.5 h-1.5 rounded-full" 
-                style={{ backgroundColor: accentDotColor }}
+            {/* Circular School Logo Container (Preserves existing uploaded logo) */}
+            <div 
+              style={containerStyle}
+              className={`w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 ${containerShapeClass} bg-white border border-[#EAB308]/40 shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0 group-hover:scale-105 transition-transform duration-300 ${rawAppearance || ''}`}
+            >
+              <img 
+                src={logo} 
+                alt={`${schoolName} Logo`} 
+                loading="lazy"
+                decoding="async"
+                style={logoSizeStyle}
+                className={`${logoSizeClasses} object-contain p-0.5`} 
               />
             </div>
-            {schoolSubtitle && (
-              <span className="text-xs md:text-sm font-extrabold text-[#3A231A]/85 tracking-normal leading-tight">
-                {schoolSubtitle}
-              </span>
-            )}
-          </div>
-        </Link>
 
-        {/* Desktop Navigation Items */}
-        <div id="desktop-menu" className="hidden md:flex items-center space-x-8">
-          {navigationItems.map((item) => {
-            const isItemActive = path === item.href;
-            return (
-              <div
-                key={item.label}
-                className="relative"
-                onMouseEnter={() => item.hasDropdown && setActiveDropdown(item.label)}
-                onMouseLeave={() => item.hasDropdown && setActiveDropdown(null)}
-              >
-                <Link
-                  to={item.href}
-                  className={`flex items-center text-sm font-medium transition-colors duration-200 py-2 relative ${
-                    isItemActive
-                      ? 'text-[#E78F68] font-semibold'
-                      : 'text-[#3A2318] hover:text-[#E78F68]'
-                  }`}
-                >
-                  {item.label}
-                  {item.hasDropdown && (
-                    <ChevronDown className="ml-1 w-4 h-4 transition-transform duration-200" />
-                  )}
-                  {isItemActive && (
-                    <motion.span
-                      layoutId="activeNavIndicator"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#E78F68] rounded-full"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                </Link>
-
-                {/* Programs Dropdown */}
-                {item.hasDropdown && activeDropdown === item.label && (
-                  <div className="absolute top-full left-0 mt-1 w-64 bg-[#F4F0EA] border border-[#3A2318]/15 rounded-2xl shadow-xl p-4 space-y-2 z-50">
-                    {item.dropdownItems?.map((dropItem) => (
-                      <Link
-                        key={dropItem}
-                        to="/academics"
-                        className="block text-sm text-[#3A2318]/85 hover:text-[#3A2318] hover:bg-[#E78F68]/10 rounded-xl px-3 py-2 transition-colors duration-150 font-medium"
-                      >
-                        {dropItem}
-                      </Link>
-                    ))}
-                  </div>
-                )}
+            {/* School Name & Campus Subtitle */}
+            <div className="flex flex-col justify-center min-w-0">
+              <div className="flex items-center space-x-1 sm:space-x-1.5">
+                <span className="text-[17px] sm:text-[18px] md:text-[19px] font-extrabold text-[#43281F] tracking-tight leading-none group-hover:text-[#F58A3C] transition-colors duration-200 truncate">
+                  {schoolName}
+                </span>
+                <span 
+                  className="w-1.5 h-1.5 rounded-full flex-shrink-0" 
+                  style={{ backgroundColor: accentDotColor || '#F58A3C' }}
+                />
               </div>
-            );
-          })}
-        </div>
+              {schoolSubtitle && (
+                <span className="text-[11px] sm:text-[11.5px] md:text-[12px] font-medium text-[#43281F]/80 tracking-normal leading-tight mt-0.5 truncate">
+                  {schoolSubtitle}
+                </span>
+              )}
+            </div>
+          </Link>
 
-        {/* Desktop CTA */}
-        <div className="hidden md:flex items-center space-x-4">
-          <button
-            id="navbar-cta-admissions"
-            onClick={onOpenAdmissions}
-            className="flex items-center space-x-1 border border-[#3A2318]/30 text-sm font-semibold text-[#3A2318] px-5 py-2.5 rounded-full hover:bg-[#3A2318] hover:text-[#F4F0EA] transition-all duration-200 shadow-sm animate-pulse"
-          >
-            <span>Admissions Open 2027-2028</span>
-            <Sparkles className="w-4 h-4 text-[#E78F68]" />
-          </button>
-        </div>
-
-        {/* Mobile menu toggle */}
-        <button
-          id="mobile-menu-toggle"
-          onClick={toggleMenu}
-          className="md:hidden p-1 text-[#3A2318] hover:text-[#E78F68] transition-colors duration-200"
-          aria-label="Toggle Menu"
-        >
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
-      </div>
-
-      {/* Mobile Drawer */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            id="mobile-drawer"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="md:hidden mt-4 overflow-hidden border-t border-[#3A2318]/10 bg-[#F4F0EA]"
-          >
-            <div className="py-4 space-y-4">
-              {navigationItems.map((item) => (
-                <div key={item.label} className="space-y-2">
+          {/* Desktop Navigation Items - Balanced spacing with single-line whitespace-nowrap and common baseline */}
+          <div id="desktop-menu" className="hidden lg:flex items-center space-x-4 xl:space-x-6 mx-4 xl:mx-6 flex-shrink-0">
+            {navigationItems.map((item) => {
+              const isItemActive = path === item.href;
+              return (
+                <div
+                  key={item.label}
+                  className="relative flex items-center"
+                  onMouseEnter={() => item.hasDropdown && setActiveDropdown(item.label)}
+                  onMouseLeave={() => item.hasDropdown && setActiveDropdown(null)}
+                >
                   <Link
                     to={item.href}
-                    onClick={() => !item.hasDropdown && setIsOpen(false)}
-                    className={`block text-base font-semibold px-2 py-1 ${
-                      path === item.href ? 'text-[#E78F68]' : 'text-[#3A2318] hover:text-[#E78F68]'
+                    className={`flex items-center whitespace-nowrap text-[13px] xl:text-[14px] font-medium transition-all duration-200 py-2 px-1 relative group leading-none ${
+                      isItemActive
+                        ? 'text-[#F58A3C] font-semibold'
+                        : 'text-[#43281F] hover:text-[#F58A3C]'
                     }`}
                   >
-                    {item.label}
+                    <span className="relative z-10 transition-transform duration-200 group-hover:-translate-y-0.5 inline-block whitespace-nowrap">
+                      {item.label}
+                    </span>
+                    {item.hasDropdown && (
+                      <ChevronDown className="ml-1 w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180 flex-shrink-0" />
+                    )}
+                    
+                    {/* Active Minimal Underline Indicator in #F58A3C */}
+                    {isItemActive && (
+                      <motion.span
+                        layoutId="activeNavIndicator"
+                        className="absolute bottom-0.5 left-1 right-1 h-[2px] bg-[#F58A3C] rounded-full"
+                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      />
+                    )}
                   </Link>
-                  {item.hasDropdown && (
-                    <div className="pl-4 space-y-1.5 border-l border-[#3A2318]/10 ml-2">
+
+                  {/* Programs Dropdown */}
+                  {item.hasDropdown && activeDropdown === item.label && (
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 w-60 bg-[#FFFDF8] border border-[#E6DCCF] rounded-2xl shadow-[0_16px_36px_-6px_rgba(67,40,31,0.12)] p-2.5 space-y-1 z-50">
                       {item.dropdownItems?.map((dropItem) => (
                         <Link
                           key={dropItem}
                           to="/academics"
-                          onClick={() => setIsOpen(false)}
-                          className="block text-sm text-[#3A2318]/70 hover:text-[#3A2318] py-1"
+                          className="block text-xs sm:text-sm text-[#43281F]/85 hover:text-[#43281F] hover:bg-[#F58A3C]/10 rounded-xl px-3 py-2 transition-colors duration-150 font-medium whitespace-nowrap"
                         >
                           {dropItem}
                         </Link>
@@ -320,23 +285,94 @@ export default function Navbar({ onOpenAdmissions }: NavbarProps) {
                     </div>
                   )}
                 </div>
-              ))}
-              <div className="pt-4 border-t border-[#3A2318]/10">
-                <button
-                  id="mobile-cta-admissions"
-                  onClick={() => {
-                    setIsOpen(false);
-                    onOpenAdmissions();
-                  }}
-                  className="w-full text-center block bg-[#E78F68] hover:bg-[#d07b53] text-white font-semibold py-3 px-5 rounded-full transition-all duration-200"
-                >
-                  Admissions Open 2027-2028
-                </button>
+              );
+            })}
+          </div>
+
+          {/* Desktop / Tablet CTA - Rounded pill with cream interior, warm border, deep chocolate text, orange icon */}
+          <div className="hidden lg:flex items-center flex-shrink-0">
+            <button
+              id="navbar-cta-admissions"
+              onClick={onOpenAdmissions}
+              className="flex items-center space-x-1.5 bg-[#FFFDF8] border border-[#E6DCCF] text-xs xl:text-[13.5px] font-semibold text-[#43281F] px-4 xl:px-4.5 py-2 rounded-full hover:border-[#F58A3C]/60 hover:text-[#F58A3C] transition-all duration-200 shadow-sm whitespace-nowrap"
+            >
+              <span>Admissions Open 2027–2028</span>
+              <Sparkles className="w-3.5 h-3.5 text-[#F58A3C] flex-shrink-0" />
+            </button>
+          </div>
+
+          {/* Mobile & Tablet (<lg) Hamburger Menu Toggle Button - 44px min touch target */}
+          <button
+            id="mobile-menu-toggle"
+            onClick={toggleMenu}
+            className="lg:hidden w-11 h-11 flex items-center justify-center text-[#43281F] hover:text-[#F58A3C] bg-black/[0.02] hover:bg-[#F58A3C]/10 border border-[#E6DCCF]/60 rounded-full transition-all duration-200 focus:outline-none"
+            aria-label={isOpen ? "Close Menu" : "Open Menu"}
+          >
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+
+        {/* Mobile & Tablet Drawer Panel */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              id="mobile-drawer"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:hidden overflow-hidden border-t border-[#E6DCCF]/80 mt-2.5 pt-2.5"
+            >
+              <div className="py-2 space-y-1">
+                {navigationItems.map((item) => (
+                  <div key={item.label} className="space-y-1">
+                    <Link
+                      to={item.href}
+                      onClick={() => !item.hasDropdown && setIsOpen(false)}
+                      className={`block text-base font-semibold px-3.5 py-2.5 rounded-xl transition-colors ${
+                        path === item.href 
+                          ? 'text-[#F58A3C] bg-[#F58A3C]/10' 
+                          : 'text-[#43281F] hover:text-[#F58A3C] hover:bg-[#43281F]/05'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                    {item.hasDropdown && (
+                      <div className="pl-4 pr-2 py-1 space-y-1 border-l-2 border-[#F58A3C]/30 ml-4 my-1">
+                        {item.dropdownItems?.map((dropItem) => (
+                          <Link
+                            key={dropItem}
+                            to="/academics"
+                            onClick={() => setIsOpen(false)}
+                            className="block text-sm text-[#43281F]/80 hover:text-[#43281F] hover:bg-[#F58A3C]/10 px-3 py-1.5 rounded-lg transition-colors font-medium"
+                          >
+                            {dropItem}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+
+                {/* Mobile Admissions CTA Button */}
+                <div className="pt-3 pb-1">
+                  <button
+                    id="mobile-cta-admissions"
+                    onClick={() => {
+                      setIsOpen(false);
+                      onOpenAdmissions();
+                    }}
+                    className="w-full text-center flex items-center justify-center space-x-2 bg-[#F58A3C] hover:bg-[#e0772d] text-white font-semibold py-3 px-5 rounded-full shadow-sm transition-all duration-200"
+                  >
+                    <span>Admissions Open 2027–2028</span>
+                    <Sparkles className="w-4 h-4 text-white" />
+                  </button>
+                </div>
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
+    </header>
   );
 }

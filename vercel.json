@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/api/vleo/chat",
+      "destination": "/api/vleo/chat"
+    },
+    {
+      "source": "/api/chat",
+      "destination": "/api/vleo/chat"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

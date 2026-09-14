@@ -460,7 +460,7 @@ I can help you with:
     setIsThinking(true);
 
     const history = messages
-      .filter((m) => m.id !== "welcome")
+      .filter((m) => m.id !== "welcome" && !m.id.startsWith("bot-err-"))
       .slice(-historyLimit)
       .map((m) => ({
         role: m.sender,
@@ -468,24 +468,44 @@ I can help you with:
       }));
 
     try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: textToSend,
-          history: history,
-          language: language,
-          currentPage: path,
-          cmsContext: cmsContextData,
-          systemPrompt: cmsData?.systemPrompt || cmsData?.system_prompt,
-          knowledgeBase: cmsData?.knowledgeBase || cmsData?.knowledge_base,
-        }),
-      });
+      let response: Response;
+      try {
+        response = await fetch("/api/vleo/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: textToSend,
+            history: history,
+            language: language,
+            currentPage: path,
+            cmsContext: cmsContextData,
+            systemPrompt: cmsData?.systemPrompt || cmsData?.system_prompt,
+            knowledgeBase: cmsData?.knowledgeBase || cmsData?.knowledge_base,
+          }),
+        });
+      } catch (firstErr) {
+        // Fallback to /api/chat if /api/vleo/chat routing is redirected
+        response = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: textToSend,
+            history: history,
+            language: language,
+            currentPage: path,
+            cmsContext: cmsContextData,
+            systemPrompt: cmsData?.systemPrompt || cmsData?.system_prompt,
+            knowledgeBase: cmsData?.knowledgeBase || cmsData?.knowledge_base,
+          }),
+        });
+      }
 
       if (!response.ok) {
-        throw new Error("Chat server error");
+        throw new Error(`Chat server error: ${response.status}`);
       }
 
       const data = await response.json();
@@ -507,8 +527,8 @@ I can help you with:
         id: `bot-err-${Date.now()}`,
         sender: "bot",
         text: language === "en"
-          ? "I am currently processing requests. Please feel free to reach our admissions team directly at +91 94445 47474 for immediate guidance!"
-          : "தற்போது தகவல்களை புதுப்பிக்கிறது. உடனடி சேர்க்கை தகவலுக்கு +91 94445 47474 எண்ணில் எங்களை அழைக்கவும்!",
+          ? "I am temporarily unable to connect to the AI service. Please feel free to reach our admissions team directly at **+91 94445 47474** or tap Retry below."
+          : "சேவையகத்தை இணைப்பதில் தற்காலிக சிக்கல் ஏற்பட்டது. தயவுசெய்து எங்களை **+91 94445 47474** எண்ணில் நேரடியாக அழைக்கவும் அல்லது மீண்டும் முயற்சிக்கவும்.",
         timestamp: formatTime(),
         shouldEscalate: true,
         userPrompt: textToSend,
@@ -526,17 +546,93 @@ I can help you with:
     setTimeout(() => setCopiedMsgId(null), 2000);
   };
 
-  // Action: Regenerate Response
+  // Action: Regenerate / Retry Response without duplicating user messages
   const handleRegenerate = (userPrompt?: string) => {
-    if (userPrompt) {
-      handleSendMessage(userPrompt);
-    } else {
-      // Find last user message
-      const lastUserMsg = [...messages].reverse().find((m) => m.sender === "user");
-      if (lastUserMsg) {
-        handleSendMessage(lastUserMsg.text);
+    const promptToRetry = userPrompt || [...messages].reverse().find((m) => m.sender === "user")?.text;
+    if (!promptToRetry || isThinking) return;
+
+    // Remove any previous bot error message at the tail to keep conversation clean
+    setMessages((prev) => {
+      if (prev.length > 0 && prev[prev.length - 1].sender === "bot") {
+        return prev.slice(0, -1);
       }
-    }
+      return prev;
+    });
+
+    setIsThinking(true);
+
+    const history = messages
+      .filter((m) => m.id !== "welcome" && !m.id.startsWith("bot-err-"))
+      .slice(-historyLimit)
+      .map((m) => ({
+        role: m.sender,
+        text: m.text,
+      }));
+
+    (async () => {
+      try {
+        let response: Response;
+        try {
+          response = await fetch("/api/vleo/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              message: promptToRetry,
+              history: history,
+              language: language,
+              currentPage: path,
+              cmsContext: cmsContextData,
+              systemPrompt: cmsData?.systemPrompt || cmsData?.system_prompt,
+              knowledgeBase: cmsData?.knowledgeBase || cmsData?.knowledge_base,
+            }),
+          });
+        } catch {
+          response = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              message: promptToRetry,
+              history: history,
+              language: language,
+              currentPage: path,
+              cmsContext: cmsContextData,
+              systemPrompt: cmsData?.systemPrompt || cmsData?.system_prompt,
+              knowledgeBase: cmsData?.knowledgeBase || cmsData?.knowledge_base,
+            }),
+          });
+        }
+
+        if (!response.ok) throw new Error("Retry error");
+        const data = await response.json();
+
+        const botMessage: Message = {
+          id: `bot-${Date.now()}`,
+          sender: "bot",
+          text: data.text || "I am here to help you with anything regarding Vivekanandha School!",
+          timestamp: formatTime(),
+          suggestedQuestions: data.suggestedQuestions || [],
+          shouldEscalate: data.shouldEscalate || false,
+          userPrompt: promptToRetry,
+        };
+
+        setMessages((prev) => [...prev, botMessage]);
+      } catch (err) {
+        console.error("Retry failed:", err);
+        const botMessage: Message = {
+          id: `bot-err-${Date.now()}`,
+          sender: "bot",
+          text: language === "en"
+            ? "I am temporarily unable to connect to the AI service. Please feel free to reach our admissions team directly at **+91 94445 47474** or tap Retry below."
+            : "சேவையகத்தை இணைப்பதில் தற்காலிக சிக்கல் ஏற்பட்டது. தயவுசெய்து எங்களை **+91 94445 47474** எண்ணில் நேரடியாக அழைக்கவும் அல்லது மீண்டும் முயற்சிக்கவும்.",
+          timestamp: formatTime(),
+          shouldEscalate: true,
+          userPrompt: promptToRetry,
+        };
+        setMessages((prev) => [...prev, botMessage]);
+      } finally {
+        setIsThinking(false);
+      }
+    })();
   };
 
   // Action: Clear Chat

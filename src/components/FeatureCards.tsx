@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { 
   SpellCheck, 
@@ -10,9 +10,35 @@ import {
   Sparkles,
   ArrowRight
 } from 'lucide-react';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 interface FeatureCardsProps {
   onOpenAdmissions?: () => void;
+}
+
+interface StageCMSItem {
+  imageUrl?: string;
+  image?: string;
+  url?: string;
+  cloudinaryUrl?: string;
+  cloudinary_url?: string;
+  image_url?: string;
+  enabled?: boolean;
+  status?: string;
+  updatedAt?: any;
+  publishedAt?: any;
+}
+
+interface LearningJourneyCMSData {
+  stage01?: StageCMSItem;
+  stage02?: StageCMSItem;
+  stage03?: StageCMSItem;
+  stage04?: StageCMSItem;
+  stage05?: StageCMSItem;
+  stage06?: StageCMSItem;
+  stages?: Record<string, StageCMSItem>;
+  [key: string]: any;
 }
 
 interface LearningStage {
@@ -20,7 +46,7 @@ interface LearningStage {
   grade: string;
   title: string;
   description: string;
-  imageUrl: string;
+  defaultImageUrl: string;
   softBg: string;
   borderColor: string;
   accentColor: string;
@@ -35,7 +61,7 @@ const STAGES: LearningStage[] = [
     grade: 'Pre KG',
     title: 'Letter Identification',
     description: 'Tactile tracing, phonetic sounds & sensory letter play.',
-    imageUrl: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&q=80&w=400',
+    defaultImageUrl: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&q=80&w=400',
     softBg: '#F0FDF4',
     borderColor: '#86EFAC',
     accentColor: '#10B981',
@@ -48,7 +74,7 @@ const STAGES: LearningStage[] = [
     grade: 'LKG',
     title: 'Foundational Learning',
     description: 'Fine motor skills, counting & structured daily habits.',
-    imageUrl: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=400',
+    defaultImageUrl: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=400',
     softBg: '#FFF7ED',
     borderColor: '#FED7AA',
     accentColor: '#F97316',
@@ -61,7 +87,7 @@ const STAGES: LearningStage[] = [
     grade: 'UKG',
     title: 'General Knowledge',
     description: 'Nature discovery, environments & curiosity-driven learning.',
-    imageUrl: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=400',
+    defaultImageUrl: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=400',
     softBg: '#FEFCE8',
     borderColor: '#FDE047',
     accentColor: '#EAB308',
@@ -74,7 +100,7 @@ const STAGES: LearningStage[] = [
     grade: 'Grade 1–2',
     title: 'Creative Arts',
     description: 'Color harmony, musical rhythm & expressive storytelling.',
-    imageUrl: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=400',
+    defaultImageUrl: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=400',
     softBg: '#EFF6FF',
     borderColor: '#93C5FD',
     accentColor: '#3B82F6',
@@ -87,7 +113,7 @@ const STAGES: LearningStage[] = [
     grade: 'Grade 3–4',
     title: 'Science Explorer',
     description: 'Hands-on experiments, botany & logical reasoning.',
-    imageUrl: 'https://images.unsplash.com/photo-1530099486328-e021101a494a?auto=format&fit=crop&q=80&w=400',
+    defaultImageUrl: 'https://images.unsplash.com/photo-1530099486328-e021101a494a?auto=format&fit=crop&q=80&w=400',
     softBg: '#FAF5FF',
     borderColor: '#C084FC',
     accentColor: '#A855F7',
@@ -100,7 +126,7 @@ const STAGES: LearningStage[] = [
     grade: 'Grade 5',
     title: 'Future Innovators',
     description: 'Digital literacy, team problem-solving & young leadership.',
-    imageUrl: 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&q=80&w=400',
+    defaultImageUrl: 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&q=80&w=400',
     softBg: '#FDF2F8',
     borderColor: '#F472B6',
     accentColor: '#EC4899',
@@ -110,7 +136,105 @@ const STAGES: LearningStage[] = [
   },
 ];
 
+/**
+ * Optimizes Cloudinary image URLs with f_auto, q_auto, and appropriate dimensions
+ * without distorting or stretching.
+ */
+function optimizeCloudinaryUrl(url: string, width = 400): string {
+  if (!url || typeof url !== 'string') return '';
+  if (url.includes('cloudinary.com') && url.includes('/upload/')) {
+    if (url.includes('/upload/c_') || url.includes('/upload/f_auto') || url.includes('/upload/w_')) {
+      return url;
+    }
+    return url.replace('/upload/', `/upload/f_auto,q_auto,w_${width},c_fill,g_auto/`);
+  }
+  return url;
+}
+
 export default function FeatureCards({ onOpenAdmissions }: FeatureCardsProps) {
+  const [cmsData, setCmsData] = useState<LearningJourneyCMSData | null>(null);
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (!db) return;
+
+    // Listen to website_cms/learning_journey document
+    const unsub = onSnapshot(
+      doc(db, 'website_cms', 'learning_journey'),
+      (docSnap) => {
+        if (docSnap.exists()) {
+          setCmsData(docSnap.data() as LearningJourneyCMSData);
+        }
+      },
+      (err) => {
+        console.warn('Error reading website_cms/learning_journey from Firestore:', err);
+      }
+    );
+
+    return () => unsub();
+  }, []);
+
+  /**
+   * Resolves the stage image URL:
+   * 1. Checks CMS published data for slot (stage01, stage02... or stages.stage01, etc.)
+   * 2. Checks enabled status (defaults to true if unspecified in CMS item)
+   * 3. Handles Cloudinary optimization if applicable
+   * 4. Falls back to default approved image if disabled, empty, or failed to load
+   */
+  const getStageImage = (step: string, defaultUrl: string): string => {
+    // If this image already failed network loading, safely fallback to default
+    if (failedImages[step]) {
+      return defaultUrl;
+    }
+
+    if (!cmsData) return defaultUrl;
+
+    const key = `stage${step}`;
+    const altKey = `stage_${step}`;
+    const numericKey = `stage${parseInt(step, 10)}`;
+
+    const stageItem: StageCMSItem | undefined =
+      cmsData[key] ||
+      cmsData[altKey] ||
+      cmsData[numericKey] ||
+      cmsData.stages?.[key] ||
+      cmsData.stages?.[altKey] ||
+      cmsData.stages?.[numericKey] ||
+      cmsData.items?.[key] ||
+      cmsData.items?.[altKey];
+
+    if (!stageItem) {
+      // Also check direct string url property (e.g. cmsData.stage01ImageUrl)
+      const directUrl = cmsData[`${key}ImageUrl`] || cmsData[`${key}_image_url`] || cmsData[key];
+      if (typeof directUrl === 'string' && directUrl.trim() !== '') {
+        return optimizeCloudinaryUrl(directUrl.trim());
+      }
+      return defaultUrl;
+    }
+
+    // Check if explicitly disabled
+    if (stageItem.enabled === false || stageItem.status === 'draft') {
+      return defaultUrl;
+    }
+
+    const rawUrl =
+      stageItem.cloudinaryUrl ||
+      stageItem.cloudinary_url ||
+      stageItem.imageUrl ||
+      stageItem.image_url ||
+      stageItem.image ||
+      stageItem.url;
+
+    if (!rawUrl || typeof rawUrl !== 'string' || rawUrl.trim() === '' || rawUrl === 'none') {
+      return defaultUrl;
+    }
+
+    return optimizeCloudinaryUrl(rawUrl.trim());
+  };
+
+  const handleImageError = (step: string) => {
+    setFailedImages((prev) => ({ ...prev, [step]: true }));
+  };
   return (
     <section id="features-section" className="bg-[#F5F1EB] py-16 px-4 sm:px-6 md:px-12 relative overflow-hidden">
       
@@ -315,9 +439,10 @@ export default function FeatureCards({ onOpenAdmissions }: FeatureCardsProps) {
                     {/* Main Circular Image */}
                     <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-white shadow-md z-10 bg-white">
                       <img
-                        src={stage.imageUrl}
+                        src={getStageImage(stage.step, stage.defaultImageUrl)}
                         alt={stage.title}
                         referrerPolicy="no-referrer"
+                        onError={() => handleImageError(stage.step)}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </div>
