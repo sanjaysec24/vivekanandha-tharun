@@ -95,70 +95,70 @@ export interface CMSSEOData {
 }
 
 const HARDCODED_DEFAULTS = {
-  siteTitle: 'Lindenwood Academy | Premium Montessori & Elementary School',
-  siteDescription: 'Lindenwood Academy provides a modern Montessori and holistic primary education nurturing curious minds, strong values, and future leaders.',
-  keywords: 'Lindenwood Academy, Montessori School, Primary Education, Kindergarten, Elementary School, Admissions, SPECTRA, School',
-  author: 'Lindenwood Academy',
+  siteTitle: 'Vivekanandha School–UTR',
+  siteDescription: 'Vivekanandha School–UTR provides a modern holistic nursery and primary education nurturing curious minds, strong values, and future leaders in Uthiramerur.',
+  keywords: 'Vivekanandha School–UTR, Vivekanandha School, Uthiramerur, Nursery and Primary School, Admissions, SPECTRA, School',
+  author: 'Vivekanandha School–UTR',
   robots: 'index, follow',
   themeColor: '#3B231A',
-  ogImage: '/school_boy.png',
+  ogImage: '/images/school_boy.png',
   ogType: 'website',
   twitterCard: 'summary_large_image',
-  orgName: 'Lindenwood Academy',
-  phone: '+91 98400 12345',
-  email: 'admissions@lindenwoodacademy.edu',
+  orgName: 'Vivekanandha School–UTR',
+  phone: '+91 94445 47474',
+  email: 'admissions@vivekanandhaschool.edu.in',
   address: {
-    streetAddress: '123 Education Lane, Academic Enclave',
-    addressLocality: 'Chennai',
+    streetAddress: 'Vedapalayam Road, Near Angalamman Kovil',
+    addressLocality: 'Uthiramerur',
     addressRegion: 'Tamil Nadu',
-    postalCode: '600001',
+    postalCode: '603406',
     addressCountry: 'IN',
   },
   geo: {
-    latitude: '13.0827',
-    longitude: '80.2707',
+    latitude: '12.6322',
+    longitude: '79.7567',
   },
   sameAs: [
-    'https://facebook.com/lindenwoodacademy',
-    'https://instagram.com/lindenwoodacademy',
-    'https://youtube.com/@lindenwoodacademy',
+    'https://facebook.com/vivekanandhaschoolutr',
+    'https://instagram.com/vivekanandhaschoolutr',
+    'https://youtube.com/@vivekanandhaschoolutr',
   ],
 };
 
 const PAGE_DEFAULTS: Record<string, { title: string; description: string; label: string }> = {
   home: {
-    title: 'Lindenwood Academy | Premium Montessori & Primary Education',
-    description: 'Welcome to Lindenwood Academy. Discover our joyful Montessori learning environment, holistic academic curriculum, and state-of-the-art campus.',
+    title: 'Vivekanandha School–UTR',
+    description: 'Welcome to Vivekanandha School–UTR. Discover our joyful learning environment, holistic academic curriculum, and state-of-the-art campus in Uthiramerur.',
     label: 'Home',
   },
   about: {
-    title: 'About Us & Educational Philosophy | Lindenwood Academy',
-    description: "Learn about Lindenwood Academy's rich heritage, educational philosophy, visionary leadership, and commitment to nurturing lifelong learners.",
+    title: 'About Us & Educational Philosophy | Vivekanandha School–UTR',
+    description: "Learn about Vivekanandha School–UTR's rich heritage, educational philosophy, visionary leadership, and commitment to nurturing lifelong learners.",
     label: 'About Us',
   },
   academics: {
-    title: 'Academics & Curriculum (Pre-KG to Grade 5) | Lindenwood Academy',
-    description: 'Explore our child-centric Montessori and primary academic curriculum designed for cognitive expansion, critical thinking, and character building.',
+    title: 'Academics & Curriculum (Pre-KG to Grade 5) | Vivekanandha School–UTR',
+    description: 'Explore our child-centric nursery and primary academic curriculum designed for cognitive expansion, critical thinking, and character building.',
     label: 'Academics',
   },
   admissions: {
-    title: 'Admissions 2027-2028 | Apply Online | Lindenwood Academy',
-    description: "Begin your child's educational journey at Lindenwood Academy. View admission requirements, fee structure, and submit an application online.",
+    title: 'Admissions 2027-2028 | Apply Online | Vivekanandha School–UTR',
+    description: "Begin your child's educational journey at Vivekanandha School–UTR. View admission requirements, fee structure, and submit an application online.",
     label: 'Admissions',
   },
   activities: {
-    title: 'Extracurricular Activities & Annual Day SPECTRA | Lindenwood Academy',
-    description: 'Discover vibrant extracurricular activities, sports, cultural arts, STEM clubs, and our grand annual day event SPECTRA at Lindenwood Academy.',
+    title: 'Extracurricular Activities & Annual Day SPECTRA | Vivekanandha School–UTR',
+    description: 'Discover vibrant extracurricular activities, sports, cultural arts, STEM clubs, and our grand annual day event SPECTRA at Vivekanandha School–UTR.',
     label: 'Activities',
   },
   gallery: {
-    title: 'Photo Gallery & Campus Memories | Lindenwood Academy',
-    description: 'Browse photos and event highlights from Lindenwood Academy campus life, celebrations, sports days, and student achievements.',
+    title: 'Photo Gallery & Campus Memories | Vivekanandha School–UTR',
+    description: 'Browse photos and event highlights from Vivekanandha School–UTR campus life, celebrations, sports days, and student achievements.',
     label: 'Gallery',
   },
   contact: {
-    title: 'Contact Us & Campus Location | Lindenwood Academy',
-    description: 'Get in touch with Lindenwood Academy. Find campus address, contact numbers, email, visiting hours, and Google Maps directions.',
+    title: 'Contact Us & Campus Location | Vivekanandha School–UTR',
+    description: 'Get in touch with Vivekanandha School–UTR. Find campus address, contact numbers, email, visiting hours, and Google Maps directions.',
     label: 'Contact Us',
   },
 };
@@ -270,7 +270,7 @@ export default function SEOManager() {
     const globalTwitterCard = cmsSeo?.twitterCard || cmsSeo?.twitter_card || HARDCODED_DEFAULTS.twitterCard;
 
     // Site Base URL
-    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://lindenwoodacademy.edu';
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://vivekanandhaschool.edu.in';
     const rawSiteUrl = cmsSeo?.siteUrl || cmsSeo?.baseUrl || cmsSeo?.canonicalUrl || origin;
     const siteBaseUrl = rawSiteUrl.endsWith('/') ? rawSiteUrl.slice(0, -1) : rawSiteUrl;
     const canonicalUrl = pageConfig?.canonicalUrl || pageConfig?.canonical || `${siteBaseUrl}${path === '/' ? '' : path}`;
