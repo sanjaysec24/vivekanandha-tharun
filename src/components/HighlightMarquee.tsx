@@ -222,7 +222,7 @@ export default function HighlightMarquee({ items }: HighlightMarqueeProps) {
         />
       </div>
     ) : (
-      <div className="flex items-center gap-3.5 sm:gap-4 shrink-0 select-none py-2">
+      <div className="flex items-center gap-3.5 sm:gap-4 shrink-0 select-none py-0.5">
         <div className="w-11 h-11 sm:w-14 sm:h-14 flex items-center justify-center text-[#E78F68] shrink-0">
           {renderIcon(item.badgeType)}
         </div>
@@ -264,7 +264,7 @@ export default function HighlightMarquee({ items }: HighlightMarqueeProps) {
   return (
     <section 
       id="home-highlights-marquee"
-      className="w-full bg-[#F5F1EB] border-y border-[#3B231A]/08 py-6 sm:py-7 md:py-9 overflow-hidden box-border relative select-none"
+      className="w-full bg-[#F5F1EB] py-0.5 sm:py-1 md:py-1.5 overflow-hidden box-border relative select-none"
       aria-label="Accreditations and Institutional Highlights"
     >
       {/* Component-Specific Keyframes for Hardware-Accelerated Smooth Continuous Marquee */}
