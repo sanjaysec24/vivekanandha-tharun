@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { BookOpen, Award, Shield, Users, Heart, Sparkles, ArrowRight, GraduationCap, CheckCircle2, Calendar, Compass, Lightbulb, Rocket } from 'lucide-react';
+import { BookOpen, Heart, Sparkles, ArrowRight, GraduationCap, CheckCircle2, Calendar, Compass, Lightbulb, Rocket } from 'lucide-react';
 
 export default function AboutPage() {
   return (
@@ -11,132 +11,101 @@ export default function AboutPage() {
       transition={{ duration: 0.5 }}
       className="bg-[#F5F1EB] min-h-screen text-[#3B231A]"
     >
-      {/* Hero Header / About Us Introduction */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-[#2B1710] via-[#3B231A] to-[#2E1A12] text-[#F5F1EB] py-16 sm:py-20 md:py-28 px-4 sm:px-6 md:px-12 text-center border-b border-[#E78F68]/15">
-        {/* Soft Ambient Radial Lights & Glow Filters */}
-        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[320px] sm:w-[600px] md:w-[800px] h-[280px] sm:h-[400px] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#E78F68]/20 via-[#E78F68]/05 to-transparent blur-3xl pointer-events-none z-0" />
-        <div className="absolute bottom-0 right-10 w-72 h-72 bg-[#198C52]/10 blur-3xl rounded-full pointer-events-none z-0" />
-        <div className="absolute top-1/3 left-10 w-64 h-64 bg-[#E78F68]/10 blur-3xl rounded-full pointer-events-none z-0" />
+      {/* Hero Header / About Us Introduction — Editorial Minimalist Layout */}
+      <div className="relative overflow-hidden bg-gradient-to-b from-[#2B1710] via-[#3B231A] to-[#2E1A12] text-[#F5F1EB] py-20 sm:py-24 md:py-32 px-4 sm:px-6 md:px-8 text-center border-b border-[#E78F68]/15">
+        
+        {/* Soft Ambient Warm Lighting */}
+        <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[340px] sm:w-[600px] md:w-[850px] h-[260px] sm:h-[380px] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#E78F68]/18 via-[#E78F68]/05 to-transparent blur-3xl pointer-events-none z-0" />
+        <div className="absolute bottom-0 right-10 w-64 h-64 bg-[#E78F68]/08 blur-3xl rounded-full pointer-events-none z-0" />
+        <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#E78F68]/08 blur-3xl rounded-full pointer-events-none z-0" />
 
-        {/* Minimal Premium Kolam / Abstract Tamil Geometric Accents */}
-        <div className="absolute inset-0 opacity-[0.07] pointer-events-none z-0 flex items-center justify-center">
+        {/* Minimal Subtle Abstract Geometric Kolam Circles */}
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none z-0 flex items-center justify-center">
           <svg width="100%" height="100%" viewBox="0 0 1000 600" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-            <circle cx="500" cy="300" r="280" stroke="url(#kolamGrad)" strokeWidth="1.2" strokeDasharray="6 6" />
-            <circle cx="500" cy="300" r="200" stroke="url(#kolamGrad)" strokeWidth="1" />
-            <circle cx="500" cy="300" r="120" stroke="url(#kolamGrad)" strokeWidth="1" strokeDasharray="4 4" />
-            <path d="M 500 20 L 500 580 M 200 300 L 800 300" stroke="url(#kolamGrad)" strokeWidth="0.8" strokeDasharray="3 3" />
-            <defs>
-              <linearGradient id="kolamGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#E78F68" />
-                <stop offset="100%" stopColor="#FFFFFF" />
-              </linearGradient>
-            </defs>
+            <circle cx="500" cy="300" r="260" stroke="#E78F68" strokeWidth="1" strokeDasharray="6 6" />
+            <circle cx="500" cy="300" r="180" stroke="#FFFFFF" strokeWidth="1" />
+            <circle cx="500" cy="300" r="100" stroke="#E78F68" strokeWidth="0.8" strokeDasharray="4 4" />
           </svg>
         </div>
 
-        {/* Floating Ambient Particles / Geometry Dots */}
-        <div className="absolute inset-0 pointer-events-none z-0">
-          <div className="absolute top-12 left-[15%] w-1.5 h-1.5 rounded-full bg-[#E78F68]/40 animate-pulse" />
-          <div className="absolute top-28 right-[18%] w-2 h-2 rounded-full bg-[#F5F1EB]/30 animate-pulse" style={{ animationDelay: '1s' }} />
-          <div className="absolute bottom-16 left-[22%] w-2 h-2 rounded-full bg-[#E78F68]/30 animate-pulse" style={{ animationDelay: '2s' }} />
-          <div className="absolute bottom-20 right-[15%] w-1.5 h-1.5 rounded-full bg-[#F5F1EB]/40 animate-pulse" style={{ animationDelay: '1.5s' }} />
+        {/* Large Editorial Watermark Number "2009" in Background */}
+        <div 
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[140px] xs:text-[180px] sm:text-[240px] md:text-[300px] lg:text-[360px] font-serif font-black text-[#F5F1EB]/[0.032] tracking-tighter select-none pointer-events-none leading-none z-0"
+          aria-hidden="true"
+        >
+          2009
         </div>
 
-        {/* Central Glassmorphism Card Container */}
-        <div className="max-w-4xl mx-auto relative z-10">
+        {/* Subtle Hand-Drawn Educational Line-Art Decorations in Outer Margins */}
+        <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden" aria-hidden="true">
+          {/* 1. Paper Plane (Upper Left) */}
+          <div className="absolute top-8 sm:top-12 left-4 sm:left-8 lg:left-16 opacity-25 text-[#E78F68]">
+            <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 sm:w-8 sm:h-8">
+              <path d="M6 22L42 6L26 42L20 28L6 22Z" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M20 28L42 6" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M4 36C8 38 12 36 14 32" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="3 3" />
+            </svg>
+          </div>
+
+          {/* 2. Small Radiant Sun (Upper Right) */}
+          <div className="absolute top-10 sm:top-14 right-4 sm:right-8 lg:right-16 opacity-25 text-[#E78F68]">
+            <svg width="40" height="40" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 sm:w-8 sm:h-8">
+              <circle cx="22" cy="22" r="7" stroke="currentColor" strokeWidth="1.75" />
+              <path d="M22 6V9M22 35V38M6 22H9M35 22H38M10.5 10.5L13 13M31 31L33.5 33.5M10.5 33.5L13 31M31 13L33.5 10.5" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+            </svg>
+          </div>
+
+          {/* 3. Pencil / Notebook Icon (Lower Left Outer Edge) */}
+          <div className="absolute bottom-8 sm:bottom-12 left-5 sm:left-10 lg:left-20 opacity-20 text-[#F5F1EB] hidden xs:block">
+            <svg width="36" height="36" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 sm:w-7 sm:h-7">
+              <path d="M30 6L38 14L14 38H6V30L30 6Z" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M24 12L32 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              <path d="M6 38L12 32" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </div>
+        </div>
+
+        {/* Central Editorial Content — Open, Spacious & Refined */}
+        <div className="max-w-3xl mx-auto relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="backdrop-blur-md bg-white/[0.035] border border-white/10 rounded-3xl p-6 sm:p-10 md:p-14 shadow-[0_20px_50px_rgba(0,0,0,0.35)] space-y-6 sm:space-y-8 relative overflow-hidden"
+            className="flex flex-col items-center space-y-4 sm:space-y-5"
           >
-            {/* Top Subtle Highlight Line */}
-            <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-[#E78F68]/50 to-transparent" />
+            {/* Small Uppercase Orange Eyebrow */}
+            <div className="inline-flex items-center gap-2 text-[#E78F68] text-[11px] sm:text-xs font-mono font-bold uppercase tracking-[0.25em]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#E78F68]" />
+              <span>OUR LEGACY</span>
+            </div>
 
-            {/* Small Eyebrow Label */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="inline-flex items-center space-x-2 bg-[#E78F68]/15 border border-[#E78F68]/30 text-[#E78F68] text-[11px] sm:text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-[0.2em] shadow-sm backdrop-blur-sm"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#E78F68] animate-ping" />
-              <span>Our Legacy</span>
-            </motion.div>
-
-            {/* Large Premium Heading */}
-            <motion.h1
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] font-serif font-bold tracking-tight leading-[1.15] text-[#F5F1EB]"
-            >
+            {/* Refined Main Heading */}
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] font-serif font-bold tracking-tight leading-[1.2] text-[#F5F1EB] max-w-2xl mx-auto">
               Nurturing Hearts &{' '}
-              <span className="relative inline-block font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-[#E78F68] via-[#F8B393] to-[#E78F68] drop-shadow-sm">
+              <span className="relative inline-block font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-[#E78F68] via-[#F8B393] to-[#E78F68]">
                 Empowering Minds
-                <svg className="absolute -bottom-1 left-0 w-full h-2 text-[#E78F68]/60 overflow-visible" viewBox="0 0 100 20" preserveAspectRatio="none">
-                  <path d="M 0 10 Q 50 18 100 10" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-                </svg>
               </span>
-            </motion.h1>
+            </h1>
 
-            {/* Supporting Description */}
-            <motion.p
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-base sm:text-lg md:text-[19px] text-[#F5F1EB]/85 max-w-2xl mx-auto font-light leading-relaxed font-sans"
-            >
+            {/* Thin Subtle Orange Editorial Divider Line */}
+            <div className="w-12 sm:w-16 h-px bg-gradient-to-r from-transparent via-[#E78F68]/70 to-transparent mx-auto my-1 sm:my-2" />
+
+            {/* Centered, Narrow Supporting Description for High Readability */}
+            <p className="text-sm sm:text-base md:text-[17px] text-[#F5F1EB]/80 max-w-xl mx-auto font-light leading-relaxed font-sans px-2">
               Founded with a vision to blend ancient Tamil cultural wisdom with modern future-ready education, Vivekanandha School stands as a beacon of academic excellence and character.
-            </motion.p>
+            </p>
 
-            {/* Premium Trust Strip / Indicators */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="pt-6 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-left"
-            >
-              <div className="flex items-center space-x-2.5 bg-white/[0.04] border border-white/08 hover:border-[#E78F68]/40 p-3 sm:p-3.5 rounded-2xl transition-all duration-300">
-                <div className="p-2 rounded-xl bg-[#E78F68]/15 text-[#E78F68] shrink-0">
-                  <Award className="w-4 h-4 sm:w-5 sm:h-5" />
-                </div>
-                <div>
-                  <p className="text-xs sm:text-sm font-semibold text-[#F5F1EB]">Academic Excellence</p>
-                  <p className="text-[10px] sm:text-xs text-[#F5F1EB]/60">15+ Years of Experience</p>
-                </div>
+            {/* Small & Refined Established Lockup */}
+            <div className="pt-5 sm:pt-7 flex flex-col items-center justify-center space-y-1">
+              <span className="text-base sm:text-lg font-serif font-bold text-[#E78F68] tracking-wider">
+                2009
+              </span>
+              <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono tracking-[0.25em] text-[#F5F1EB]/60 uppercase">
+                <span>ESTABLISHED</span>
+                <span className="text-[#E78F68]/70 text-[8px]">●</span>
+                <span>UTHIRAMERUR</span>
               </div>
-
-              <div className="flex items-center space-x-2.5 bg-white/[0.04] border border-white/08 hover:border-[#198C52]/40 p-3 sm:p-3.5 rounded-2xl transition-all duration-300">
-                <div className="p-2 rounded-xl bg-[#198C52]/15 text-[#198C52] shrink-0">
-                  <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />
-                </div>
-                <div>
-                  <p className="text-xs sm:text-sm font-semibold text-[#F5F1EB]">CBSE Curriculum</p>
-                  <p className="text-[10px] sm:text-xs text-[#F5F1EB]/60">Holistic Learning</p>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-2.5 bg-white/[0.04] border border-white/08 hover:border-[#E78F68]/40 p-3 sm:p-3.5 rounded-2xl transition-all duration-300">
-                <div className="p-2 rounded-xl bg-[#E78F68]/15 text-[#E78F68] shrink-0">
-                  <Users className="w-4 h-4 sm:w-5 sm:h-5" />
-                </div>
-                <div>
-                  <p className="text-xs sm:text-sm font-semibold text-[#F5F1EB]">Experienced Faculty</p>
-                  <p className="text-[10px] sm:text-xs text-[#F5F1EB]/60">Dedicated Mentors</p>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-2.5 bg-white/[0.04] border border-white/08 hover:border-[#5B92E5]/40 p-3 sm:p-3.5 rounded-2xl transition-all duration-300">
-                <div className="p-2 rounded-xl bg-[#5B92E5]/15 text-[#5B92E5] shrink-0">
-                  <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
-                </div>
-                <div>
-                  <p className="text-xs sm:text-sm font-semibold text-[#F5F1EB]">Future Ready</p>
-                  <p className="text-[10px] sm:text-xs text-[#F5F1EB]/60">STEM & Culture</p>
-                </div>
-              </div>
-            </motion.div>
+            </div>
           </motion.div>
         </div>
       </div>

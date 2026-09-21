@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import HighlightMarquee from './components/HighlightMarquee';
 import NoticesAnnouncements from './components/NoticesAnnouncements';
 import VijayadasamiSection from './components/VijayadasamiSection';
 import StatsBar from './components/StatsBar';
@@ -63,6 +64,9 @@ function AppContent() {
           <>
             {/* 2. Headline & Dynamic Arched Hero section */}
             <Hero onOpenAdmissions={openAdmissions} />
+
+            {/* Continuous Horizontal Partner & Accreditation Highlight Marquee */}
+            <HighlightMarquee />
 
             {/* Notices & Announcements Section */}
             <NoticesAnnouncements onOpenAdmissions={openAdmissions} />
