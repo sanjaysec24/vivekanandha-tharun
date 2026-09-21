@@ -1,8 +1,90 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence, Variants } from 'motion/react';
-import { ChevronLeft, ChevronRight, Calendar, ExternalLink, Play, Pause } from 'lucide-react';
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  Calendar, 
+  ArrowRight, 
+  ExternalLink, 
+  Play, 
+  Pause,
+  BellRing,
+  Sparkles,
+  Tag,
+  CheckCircle2
+} from 'lucide-react';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { useRouter } from '../lib/router';
+
+interface NoticeItem {
+  id: string;
+  title: string;
+  subtitle?: string;
+  description?: string;
+  category?: string;
+  publishDate?: any;
+  expiryDate?: any;
+  date?: string;
+  posterUrl?: string;
+  link?: string;
+  redirectUrl?: string;
+  linkLabel?: string;
+  actionText?: string;
+  priority?: number;
+  isActive?: boolean;
+  status?: string;
+  createdAt?: any;
+}
+
+interface NoticesAnnouncementsProps {
+  onOpenAdmissions?: () => void;
+}
+
+const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&q=80&w=1400';
+
+// Curated official Vivekanandha School notice items with individual links and labels
+const DEFAULT_NOTICES: NoticeItem[] = [
+  {
+    id: 'admissions-2027',
+    title: 'Admissions Open for Academic Year 2027-2028',
+    subtitle: 'Nursery (Pre-KG, LKG, UKG) & Primary (Grade 1 to 5)',
+    description: 'Begin your child’s educational journey with our nurturing, holistic learning curriculum in Uthiramerur. Applications are now open for foundational early childhood and primary classes with interactive smart classrooms, activity ateliers, and personalized guidance.',
+    category: 'Admissions',
+    date: 'Academic Year 2027-28',
+    posterUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=1400',
+    link: '/admissions',
+    linkLabel: 'Admissions Info',
+    priority: 1,
+    isActive: true,
+  },
+  {
+    id: 'spectra-annual-day',
+    title: 'SPECTRA: Grand Annual Cultural & Sports Gala',
+    subtitle: '100% Student Participation Across All Grades',
+    description: 'Our signature annual festival celebrating classical arts, rhythmic dance, drama, and sports achievements. Over 2,000 parents, alumni, and patrons gather to honor the blossoming creative talent of every young scholar.',
+    category: 'Events',
+    date: 'Grand Annual Day',
+    posterUrl: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=1400',
+    link: '/activities',
+    linkLabel: 'View Gala Details',
+    priority: 2,
+    isActive: true,
+  },
+  {
+    id: 'stem-science-atelier',
+    title: 'Hands-on Science & Innovation Exhibition',
+    subtitle: 'Young Minds Discovering Practical Science & Botany',
+    description: 'Students present working botanical science models, tactile physics experiments, and interactive computer presentations developed during their Smart Lesson ateliers under our joyful Montessori philosophy.',
+    category: 'Academic',
+    date: 'Academic Highlights',
+    posterUrl: 'https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?auto=format&fit=crop&q=80&w=1400',
+    link: '/academics',
+    linkLabel: 'Explore Exhibition',
+    priority: 3,
+    isActive: true,
+  },
+];
 
 function parseFirestoreDate(val: any): Date | null {
   if (!val) return null;
@@ -24,116 +106,151 @@ function parseFirestoreDate(val: any): Date | null {
   return null;
 }
 
-const getCategoryBadgeClass = (category: string) => {
+const getCategoryBadgeClass = (category?: string) => {
   const cat = (category || 'Announcement').toLowerCase().trim();
-  if (cat.includes('admission') || cat.includes('open')) {
-    return 'bg-emerald-50 border border-emerald-200 text-emerald-800';
+  if (cat.includes('admission') || cat.includes('open') || cat.includes('enroll')) {
+    return {
+      container: 'bg-emerald-50 border-emerald-200 text-emerald-800',
+      dot: 'bg-emerald-500',
+      label: 'Admissions Notice',
+    };
   }
-  if (cat.includes('cultural') || cat.includes('event') || cat.includes('annual')) {
-    return 'bg-pink-50 border border-pink-200 text-pink-800';
+  if (cat.includes('cultural') || cat.includes('event') || cat.includes('annual') || cat.includes('spectra') || cat.includes('sports')) {
+    return {
+      container: 'bg-pink-50 border-pink-200 text-pink-800',
+      dot: 'bg-pink-500',
+      label: 'Campus Event',
+    };
   }
-  if (cat.includes('stem') || cat.includes('innovation') || cat.includes('robotics') || cat.includes('science')) {
-    return 'bg-amber-50 border border-amber-200 text-amber-800';
+  if (cat.includes('stem') || cat.includes('innovation') || cat.includes('academic') || cat.includes('science') || cat.includes('robotics')) {
+    return {
+      container: 'bg-amber-50 border-amber-200 text-amber-800',
+      dot: 'bg-amber-500',
+      label: 'Academic Highlight',
+    };
   }
-  return 'bg-blue-50 border border-blue-200 text-blue-800';
+  return {
+    container: 'bg-[#E78F68]/10 border-[#E78F68]/25 text-[#E78F68]',
+    dot: 'bg-[#E78F68]',
+    label: category || 'Notice Board',
+  };
 };
 
-const isExternalUrl = (url: string) => {
+const isExternalUrl = (url?: string) => {
   if (!url) return false;
   return url.startsWith('http://') || url.startsWith('https://');
 };
 
-const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&q=80&w=1200';
-
-export default function NoticesAnnouncements() {
-  const [notices, setNotices] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function NoticesAnnouncements({ onOpenAdmissions }: NoticesAnnouncementsProps) {
+  const { navigate } = useRouter();
+  const [dbNotices, setDbNotices] = useState<NoticeItem[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [resetTrigger, setResetTrigger] = useState(0);
-  const [direction, setDirection] = useState(1); // 1 for next, -1 for prev
+  const [isHovered, setIsHovered] = useState(false);
+  const [direction, setDirection] = useState(1);
+  const [resetTimerKey, setResetTimerKey] = useState(0);
 
-  // Subscribe to hero_notices collection in real-time
+  // Subscribe to hero_notices collection in real-time from Firestore
   useEffect(() => {
-    if (!db) {
-      setLoading(false);
-      return;
+    if (!db) return;
+
+    try {
+      const q = query(collection(db, 'hero_notices'));
+      const unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          const list: NoticeItem[] = [];
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            // Include active notices
+            if (data.isActive !== false && data.status !== 'Archived') {
+              list.push({
+                id: doc.id,
+                title: data.title || '',
+                subtitle: data.subtitle || '',
+                description: data.description || '',
+                category: data.category || 'Announcement',
+                publishDate: data.publishDate,
+                expiryDate: data.expiryDate,
+                date: data.date,
+                posterUrl: data.posterUrl || data.imageUrl || data.image || '',
+                link: data.link || data.redirectUrl || data.url || '',
+                redirectUrl: data.redirectUrl || data.link || data.url || '',
+                linkLabel: data.linkLabel || data.actionText || data.buttonText || '',
+                actionText: data.actionText || data.linkLabel || data.buttonText || '',
+                priority: Number(data.priority ?? 99),
+                isActive: data.isActive,
+                status: data.status,
+                createdAt: data.createdAt,
+              });
+            }
+          });
+          setDbNotices(list);
+        },
+        (err) => {
+          console.warn('Hero notices fetch note:', err);
+        }
+      );
+
+      return () => unsubscribe();
+    } catch (e) {
+      console.warn('Firestore subscription exception:', e);
     }
-
-    const q = query(collection(db, 'hero_notices'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const list: any[] = [];
-      snapshot.forEach((doc) => {
-        list.push({ id: doc.id, ...doc.data() });
-      });
-      setNotices(list);
-      setLoading(false);
-    }, (err) => {
-      if ((import.meta as any).env?.DEV) {
-        console.error('Error fetching hero notices:', err);
-      }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
   }, []);
 
-  // Filter and sort notices client-side to avoid composite indexes requirement
+  // Merge and prioritize Firestore notices with robust fallback items
   const visibleNotices = useMemo(() => {
-    const now = new Date();
-    return notices
-      .filter((notice) => {
-        // 1. Check isActive
-        if (notice.isActive !== true) return false;
+    // Filter legitimate Firestore items that have at least a meaningful title or poster
+    const validDbItems = dbNotices.filter((n) => {
+      const hasTitle = Boolean(n.title && n.title.trim().length > 0);
+      const hasPoster = Boolean(n.posterUrl && n.posterUrl.trim().length > 10);
+      return hasTitle || hasPoster;
+    });
 
-        // 2. Check status
-        const status = (notice.status || '').toLowerCase().trim();
-        if (status !== 'active' && status !== 'published') return false;
-
-        // 3. Check publishDate
-        const pubDate = parseFirestoreDate(notice.publishDate);
-        if (pubDate && now < pubDate) return false;
-
-        // 4. Check expiryDate
-        const expDate = parseFirestoreDate(notice.expiryDate);
-        if (expDate && now > expDate) return false;
-
-        return true;
-      })
-      .sort((a, b) => {
-        // Sort using Admin Portal priority: lower number first
-        const prioA = Number(a.priority ?? 9999);
-        const prioB = Number(b.priority ?? 9999);
-        if (prioA !== prioB) {
-          return prioA - prioB;
-        }
-        // Stable secondary sort
-        const dateA = parseFirestoreDate(a.createdAt)?.getTime() ?? 0;
-        const dateB = parseFirestoreDate(b.createdAt)?.getTime() ?? 0;
-        return dateB - dateA;
+    if (validDbItems.length > 0) {
+      // Sort database notices by priority (lower number first), then by date
+      const sortedDb = [...validDbItems].sort((a, b) => {
+        const prioA = Number(a.priority ?? 999);
+        const prioB = Number(b.priority ?? 999);
+        if (prioA !== prioB) return prioA - prioB;
+        const timeA = parseFirestoreDate(a.createdAt)?.getTime() ?? 0;
+        const timeB = parseFirestoreDate(b.createdAt)?.getTime() ?? 0;
+        return timeB - timeA;
       });
-  }, [notices]);
 
-  // Adjust activeIndex if dynamic list updates or shrinks
+      // If fewer than 2 DB notices exist, supplement with curated school items for a rich slider
+      if (sortedDb.length === 1) {
+        return [...sortedDb, DEFAULT_NOTICES[0], DEFAULT_NOTICES[1]];
+      }
+      if (sortedDb.length === 2) {
+        return [...sortedDb, DEFAULT_NOTICES[0]];
+      }
+      return sortedDb;
+    }
+
+    return DEFAULT_NOTICES;
+  }, [dbNotices]);
+
+  // Adjust activeIndex if dynamic notice list changes length
   useEffect(() => {
     if (activeIndex >= visibleNotices.length && visibleNotices.length > 0) {
-      setActiveIndex(visibleNotices.length - 1);
+      setActiveIndex(0);
     }
   }, [visibleNotices.length, activeIndex]);
 
-  // Autoplay handler - Exact 5000ms loop
+  // Calm 6-second horizontal slide autoplay
   useEffect(() => {
-    if (!isPlaying || visibleNotices.length <= 1) return;
+    if (!isPlaying || isHovered || visibleNotices.length <= 1) return;
 
     const timer = setInterval(() => {
       setDirection(1);
       setActiveIndex((prev) => (prev + 1) % visibleNotices.length);
-    }, 5000);
+    }, 6000);
 
     return () => clearInterval(timer);
-  }, [isPlaying, visibleNotices.length, resetTrigger]);
+  }, [isPlaying, isHovered, visibleNotices.length, resetTimerKey]);
 
-  // Browser visibility tab detection to auto-pause slideshow
+  // Auto-pause when user switches browser tabs to save battery and state
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
@@ -147,276 +264,445 @@ export default function NoticesAnnouncements() {
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (visibleNotices.length === 0) return;
     setDirection(-1);
     setActiveIndex((prev) => (prev - 1 + visibleNotices.length) % visibleNotices.length);
-    setResetTrigger((prev) => prev + 1);
-  };
+    setResetTimerKey((k) => k + 1);
+  }, [visibleNotices.length]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (visibleNotices.length === 0) return;
     setDirection(1);
     setActiveIndex((prev) => (prev + 1) % visibleNotices.length);
-    setResetTrigger((prev) => prev + 1);
-  };
+    setResetTimerKey((k) => k + 1);
+  }, [visibleNotices.length]);
 
-  const handleDotClick = (index: number) => {
+  const handleDotSelect = useCallback((index: number) => {
     setDirection(index > activeIndex ? 1 : -1);
     setActiveIndex(index);
-    setResetTrigger((prev) => prev + 1);
-  };
+    setResetTimerKey((k) => k + 1);
+  }, [activeIndex]);
 
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
+  const currentNotice = visibleNotices[activeIndex] || DEFAULT_NOTICES[0];
 
-  if (loading) {
-    return null; // Silent load to prevent layout shifts
-  }
-
-  if (visibleNotices.length === 0) {
-    return null; // Hide the section gracefully when empty
-  }
-
-  const currentNotice = visibleNotices[activeIndex];
-  const formattedDate = currentNotice
-    ? (parseFirestoreDate(currentNotice.publishDate) || parseFirestoreDate(currentNotice.createdAt))?.toLocaleDateString('en-US', {
-        month: 'long',
+  // Resolve formatted date string cleanly
+  const formattedDate = useMemo(() => {
+    if (currentNotice.date) return currentNotice.date;
+    const pDate = parseFirestoreDate(currentNotice.publishDate) || parseFirestoreDate(currentNotice.createdAt);
+    if (pDate) {
+      return pDate.toLocaleDateString('en-US', {
+        month: 'short',
         day: 'numeric',
-        year: 'numeric'
-      }) || 'Recent Announcement'
-    : 'Recent Announcement';
+        year: 'numeric',
+      });
+    }
+    return 'Recent Update';
+  }, [currentNotice]);
 
-  // Slider animation variations using translation X and subtle scale for premium slide transitions
+  const badgeStyle = getCategoryBadgeClass(currentNotice.category);
+
+  // Notice link resolution and compact CTA handling
+  const noticeLink = (currentNotice.link || currentNotice.redirectUrl || '').trim();
+  const noticeLinkLabel = (currentNotice.linkLabel || currentNotice.actionText || 'View Notice').trim();
+  const hasLink = Boolean(noticeLink && noticeLink.length > 0 && noticeLink !== '#');
+
+  const handleNoticeLink = (url: string) => {
+    if (!url) return;
+    if (isExternalUrl(url)) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } else {
+      if (url === '/admissions' && onOpenAdmissions) {
+        onOpenAdmissions();
+      }
+      navigate(url);
+    }
+  };
+
+  // Editorial slide transitions: horizontal glide with subtle fade
   const slideVariants: Variants = {
     enter: (dir: number) => ({
+      x: dir > 0 ? 32 : -32,
       opacity: 0,
-      x: dir * 30,
-      scale: 0.98,
+      scale: 0.985,
     }),
     center: {
-      opacity: 1,
       x: 0,
+      opacity: 1,
       scale: 1,
       transition: {
-        duration: 0.35,
-        ease: "easeOut",
-      }
+        x: { type: 'spring', stiffness: 320, damping: 32 },
+        opacity: { duration: 0.35, ease: 'easeOut' },
+        scale: { duration: 0.35, ease: 'easeOut' },
+      },
     },
     exit: (dir: number) => ({
+      x: dir > 0 ? -32 : 32,
       opacity: 0,
-      x: dir * -30,
-      scale: 0.98,
+      scale: 0.985,
       transition: {
-        duration: 0.25,
-        ease: "easeIn",
-      }
+        x: { duration: 0.25, ease: 'easeIn' },
+        opacity: { duration: 0.25 },
+      },
     }),
   };
+
+  const imageVariants: Variants = {
+    enter: (dir: number) => ({
+      x: dir > 0 ? 24 : -24,
+      opacity: 0,
+      scale: 0.97,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        x: { type: 'spring', stiffness: 300, damping: 30 },
+        opacity: { duration: 0.4 },
+        scale: { duration: 0.4 },
+      },
+    },
+    exit: (dir: number) => ({
+      x: dir > 0 ? -24 : 24,
+      opacity: 0,
+      scale: 0.97,
+      transition: {
+        duration: 0.25,
+      },
+    }),
+  };
+
+  const posterImageSource = currentNotice.posterUrl || FALLBACK_IMAGE;
 
   return (
     <section 
       id="notices-announcements-section" 
-      className="w-full bg-[#F4F0EA] py-16 sm:py-24 md:py-28 overflow-hidden box-border relative"
+      className="w-full bg-[#F4F0EA] py-10 sm:py-14 md:py-18 overflow-hidden box-border relative"
+      aria-label="School Updates and Notice Board"
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full box-border relative z-10">
+      {/* =========================================================================
+          DECORATIVE EDUCATIONAL LINE-ART DOODLES
+          Subtle school stationery line-art icons in the outer margins of the section.
+          Never overlaps the main notice card or image.
+      ========================================================================= */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0" aria-hidden="true">
+        {/* 1. Paper Airplane with dashed flight trail (Upper Left) */}
+        <div className="absolute top-8 left-3 sm:left-6 lg:left-12 opacity-35 text-[#E78F68]">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 sm:w-10 sm:h-10">
+            <path d="M6 22L42 6L26 42L20 28L6 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M20 28L42 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M4 36C8 38 12 36 14 32" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="3 3" />
+          </svg>
+        </div>
+
+        {/* 2. School Pencil (Lower Left) */}
+        <div className="absolute bottom-10 left-4 sm:left-8 lg:left-14 opacity-25 text-[#3B231A]">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 sm:w-8 sm:h-8">
+            <path d="M30 6L38 14L14 38H6V30L30 6Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M24 12L32 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            <path d="M6 38L12 32" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </div>
+
+        {/* 3. Radiant Gentle Sun (Upper Right) */}
+        <div className="absolute top-10 right-4 sm:right-8 lg:right-14 opacity-30 text-[#E78F68]">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 sm:w-9 sm:h-9">
+            <circle cx="22" cy="22" r="8" stroke="currentColor" strokeWidth="2" />
+            <path d="M22 6V10M22 34V38M6 22H10M34 22H38M10.5 10.5L13.5 13.5M30.5 30.5L33.5 33.5M10.5 33.5L13.5 30.5M30.5 13.5L33.5 10.5" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+          </svg>
+        </div>
+
+        {/* 4. Open Book / Notebook (Lower Right) */}
+        <div className="absolute bottom-12 right-4 sm:right-8 lg:right-16 opacity-25 text-[#3B231A]">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 sm:w-8 sm:h-8">
+            <path d="M6 10C12 8 18 10 22 13C26 10 32 8 38 10V33C32 31 26 33 22 36C18 33 12 31 6 33V10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M22 13V36" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </div>
+
+        {/* 5. Soft Cloud (Desktop Upper Margin) */}
+        <div className="absolute top-14 left-1/4 hidden xl:block opacity-20 text-[#3B231A]">
+          <svg width="46" height="26" viewBox="0 0 48 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 24H38C42.4183 24 46 20.4183 46 16C46 11.8284 42.7937 8.4078 38.7188 8.0401C37.5258 3.48625 33.3934 0 28.5 0C23.6304 0 19.5165 3.4542 18.2933 7.9739C17.7121 7.8596 17.1132 7.8 16.5 7.8C10.701 7.8 6 12.501 6 18.3C6 19.3486 6.1537 20.3614 6.4388 21.3179C3.8966 22.0963 2 24.3213 2 27" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+
+        {/* 6. Subtle Tiny Star Accents */}
+        <div className="absolute top-1/2 left-3 sm:left-7 -translate-y-1/2 hidden sm:block opacity-25 text-[#E78F68]">
+          <span className="text-xs">✦</span>
+        </div>
+        <div className="absolute top-1/2 right-3 sm:right-7 -translate-y-1/2 hidden sm:block opacity-25 text-[#3B231A]">
+          <span className="text-xs">✦</span>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full box-border relative z-10">
         
-        {/* Section Header */}
+        {/* =========================================================================
+            1. SECTION HEADER
+            Eyebrow: SCHOOL UPDATES / NOTICE BOARD
+            Main heading: What's Happening at Vivekanandha
+            Short supporting text
+        ========================================================================= */}
         <motion.div 
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12 sm:mb-16 max-w-2xl mx-auto space-y-3"
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className="text-center mb-6 sm:mb-8 md:mb-10 max-w-3xl mx-auto space-y-2.5 px-4"
         >
-          <span className="inline-block bg-[#E78F68]/12 border border-[#E78F68]/25 text-[#E78F68] text-[10px] sm:text-xs font-mono font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
-            What's Happening
-          </span>
-          <div className="relative inline-block px-4">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-sans font-extrabold text-[#3B231A] tracking-tight">
-              Notices & Announcements
+          {/* Eyebrow badge */}
+          <div className="inline-flex items-center gap-2 bg-[#E78F68]/12 border border-[#E78F68]/25 text-[#E78F68] text-[10px] sm:text-xs font-mono font-bold uppercase tracking-widest px-4 py-1.5 rounded-full shadow-xs">
+            <BellRing className="w-3.5 h-3.5 text-[#E78F68]" />
+            <span>SCHOOL UPDATES / NOTICE BOARD</span>
+          </div>
+
+          {/* Main Heading with refined typography & curved flourish */}
+          <div className="relative inline-block pt-1">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-sans font-extrabold text-[#3B231A] tracking-tight leading-tight">
+              What’s Happening at Vivekanandha
             </h2>
-            {/* Hand-drawn underline/swoosh */}
-            <svg className="absolute left-1/2 -translate-x-1/2 -bottom-2 w-48 sm:w-64 h-2.5 text-[#E78F68]/70" viewBox="0 0 200 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 5.5C40 2.5 120 1 198 5.5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+            {/* Elegant warm-orange underline flourish */}
+            <svg 
+              className="absolute left-1/2 -translate-x-1/2 -bottom-2 w-40 sm:w-56 md:w-64 h-2.5 text-[#E78F68]/75 pointer-events-none" 
+              viewBox="0 0 240 10" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M2 6.5C50 2.5 150 1.5 238 7.5" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
             </svg>
           </div>
-          <p className="text-xs sm:text-sm md:text-base text-[#3B231A]/75 font-normal leading-relaxed pt-2 max-w-lg mx-auto">
-            Little updates, big moments — discover what’s happening in our school community.
+
+          {/* Short supporting text */}
+          <p className="text-xs sm:text-sm md:text-base text-[#3B231A]/75 font-normal leading-relaxed pt-2 max-w-xl mx-auto">
+            Stay informed with our latest school announcements, academic events, student milestones, and admissions notices.
           </p>
         </motion.div>
 
-        {/* Notices Slider Card with Layered-Paper Depth and Premium Stylings */}
-        <div className="relative w-full group">
-          {/* Subtle warm-orange offset stacked background sheet */}
-          <div className="absolute inset-0 bg-[#E78F68]/4 border-2 border-[#3B231A]/6 rounded-[40px] sm:rounded-[48px] translate-x-2 translate-y-2 pointer-events-none transition-all duration-500 group-hover:translate-x-3 group-hover:translate-y-3" />
-          {/* Subtle soft-white offset background sheet */}
-          <div className="absolute inset-0 bg-white/40 border border-[#3B231A]/4 rounded-[40px] sm:rounded-[48px] -translate-x-1.5 -translate-y-1.5 pointer-events-none transition-all duration-500 group-hover:-translate-x-2 group-hover:-translate-y-2" />
+        {/* =========================================================================
+            2. FEATURED NOTICE BOARD PRESENTATION
+            Spacious 2-column editorial school newsboard:
+            Left: Full-bleed notice image (dominant visual weight, no empty borders)
+            Right: Category, title, date, structured description, compact CTA, slide navigation
+        ========================================================================= */}
+        <div 
+          className="relative w-full max-w-6xl mx-auto"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {/* Subtle warm decorative background offset sheet */}
+          <div className="absolute inset-0 bg-[#E78F68]/5 border-2 border-[#3B231A]/6 rounded-[22px] sm:rounded-[30px] md:rounded-[36px] translate-x-1.5 translate-y-1.5 pointer-events-none hidden sm:block" />
 
-          {/* Main Card */}
-          <div 
-            className="relative bg-[#FCFAF7] rounded-[40px] sm:rounded-[48px] border-2 border-[#3B231A]/10 shadow-[0_12px_40px_rgba(59,35,26,0.03)] p-6 sm:p-10 md:p-12 w-full box-border transition-all duration-500 hover:shadow-[0_20px_50px_rgba(59,35,26,0.06)] hover:-translate-y-1"
-            onMouseEnter={() => setIsPlaying(false)}
-            onMouseLeave={() => setIsPlaying(true)}
-          >
-            {/* Play/Pause Control on the top-right corner of the card */}
-            {visibleNotices.length > 1 && (
-              <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20">
-                <button
-                  onClick={togglePlayPause}
-                  className="p-2 sm:p-2.5 rounded-full bg-white border border-[#3B231A]/10 text-[#3B231A]/60 hover:text-white hover:bg-[#E78F68] hover:border-[#E78F68] transition-all duration-300 cursor-pointer shadow-xs active:scale-90"
-                  aria-label={isPlaying ? "Pause Slideshow" : "Play Slideshow"}
-                >
-                  {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-                </button>
+          {/* Main Editorial Card Container */}
+          <div className="relative bg-[#FCFAF7] rounded-[20px] sm:rounded-[26px] md:rounded-[32px] border-2 border-[#3B231A]/10 shadow-[0_12px_40px_rgba(59,35,26,0.06)] overflow-hidden transition-all duration-300">
+            
+            {/* Top Bar on Card: Progress indicator & Play/Pause toggle */}
+            <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-3 border-b border-[#3B231A]/8 bg-[#F8F4ED]/80 text-xs text-[#3B231A]/75 font-mono">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#E78F68] animate-pulse" />
+                <span className="font-bold tracking-wider uppercase text-[11px] sm:text-xs">
+                  Notice {activeIndex + 1} of {visibleNotices.length}
+                </span>
               </div>
-            )}
 
-            {/* Grid Layout: Poster & Information Block */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 lg:gap-12 items-center relative z-10">
+              {visibleNotices.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => setIsPlaying(!isPlaying)}
+                  className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#3B231A]/10 hover:border-[#E78F68] hover:text-[#E78F68] text-[#3B231A]/70 transition-all duration-200 cursor-pointer text-[11px] font-mono shadow-2xs"
+                  aria-label={isPlaying ? 'Pause auto-slide' : 'Resume auto-slide'}
+                >
+                  {isPlaying ? (
+                    <>
+                      <Pause className="w-3 h-3 text-[#E78F68]" />
+                      <span className="hidden sm:inline">Pause</span>
+                    </>
+                  ) : (
+                    <>
+                      <Play className="w-3 h-3 text-[#E78F68]" />
+                      <span className="hidden sm:inline">Play</span>
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+
+            {/* 2-Column Responsive Body */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 p-3 sm:p-4 lg:p-5 xl:p-6 items-stretch">
               
-              {/* Left Column: Poster frame (Visually Dominant as pinned memory) */}
-              <div className="md:col-span-6 lg:col-span-7 w-full flex flex-col justify-center relative">
-                <div className="relative aspect-[4/3] md:aspect-[1.15] lg:aspect-[1.2] w-full bg-white rounded-[24px] overflow-hidden border-2 border-[#3B231A]/12 p-3 sm:p-4 shadow-[0_8px_24px_rgba(59,35,26,0.03),inset_0_1px_3px_rgba(255,255,255,0.8)] hover:scale-[1.015] transition-transform duration-500 ease-out">
-                  {/* Subtle dashed inner frame */}
-                  <div className="absolute inset-2 sm:inset-3 border border-dashed border-[#3B231A]/15 rounded-[16px] pointer-events-none z-10" />
-
-                  <div className="w-full h-full overflow-hidden rounded-[12px] bg-[#FDFBF7] flex items-center justify-center relative">
-                    <AnimatePresence initial={false} custom={direction} mode="wait">
-                      <motion.img
-                        key={activeIndex}
-                        custom={direction}
-                        variants={slideVariants}
-                        initial="enter"
-                        animate="center"
-                        exit="exit"
-                        src={currentNotice.posterUrl || FALLBACK_IMAGE}
-                        alt={currentNotice.title}
+              {/* ===================================================================
+                  LEFT: FULL-BLEED NOTICE IMAGE
+                  Desktop: Occupies ~58% of visual space (col-span-7)
+                  Mobile: Stacks first, occupies full width, minimal padding
+                  The image completely fills the area with object-cover,
+                  eliminating empty dark background bars while preserving artwork clarity.
+              =================================================================== */}
+              <div className="lg:col-span-7 xl:col-span-7 w-full flex flex-col justify-center order-1">
+                <div 
+                  className="relative w-full h-[280px] xs:h-[320px] sm:h-[380px] md:h-[430px] lg:h-full min-h-[340px] lg:min-h-[440px] xl:min-h-[460px] rounded-xl sm:rounded-2xl md:rounded-[20px] overflow-hidden shadow-xs border border-[#3B231A]/12 select-none group/artwork bg-[#F0EBE1]"
+                >
+                  <AnimatePresence initial={false} custom={direction} mode="wait">
+                    <motion.div
+                      key={`img-${activeIndex}`}
+                      custom={direction}
+                      variants={imageVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      className="absolute inset-0 w-full h-full overflow-hidden"
+                    >
+                      {/* Full-bleed foreground notice image */}
+                      <img
+                        src={posterImageSource}
+                        alt={currentNotice.title || 'Notice artwork'}
                         referrerPolicy="no-referrer"
-                        className="w-full h-full object-contain select-none rounded-[12px]"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (target.src !== FALLBACK_IMAGE) {
+                            target.src = FALLBACK_IMAGE;
+                          }
+                        }}
+                        className="w-full h-full object-cover object-top sm:object-center select-none transition-transform duration-700 ease-out group-hover/artwork:scale-[1.015]"
                       />
-                    </AnimatePresence>
-                  </div>
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
               </div>
 
-              {/* Right Column: Information Block with Staggered Elements */}
-              <div className="md:col-span-6 lg:col-span-5 flex flex-col justify-between h-full py-2 space-y-6 overflow-hidden w-full">
+              {/* ===================================================================
+                  RIGHT: INFORMATION PANEL & EDITORIAL DETAILS
+                  Desktop: Occupies ~42% of visual space (col-span-5)
+                  Balanced vertical rhythm, rich metadata, compact individual notice CTA
+              =================================================================== */}
+              <div className="lg:col-span-5 xl:col-span-5 flex flex-col justify-between h-full space-y-4 lg:space-y-0 order-2 lg:pl-1">
                 
                 <AnimatePresence initial={false} custom={direction} mode="wait">
                   <motion.div
-                    key={activeIndex}
+                    key={`text-${activeIndex}`}
                     custom={direction}
                     variants={slideVariants}
                     initial="enter"
                     animate="center"
                     exit="exit"
-                    className="space-y-5 sm:space-y-6 flex flex-col justify-start"
+                    className="space-y-3 sm:space-y-3.5"
                   >
-                    {/* Category Badge */}
-                    <div>
-                      <span className={`inline-block text-[10px] sm:text-xs font-mono font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-xs ${getCategoryBadgeClass(currentNotice.category)}`}>
-                        {currentNotice.category || 'Announcement'}
+                    {/* Badge & Date Header */}
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                      <span className={`inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider px-3 py-1 rounded-full border shadow-2xs ${badgeStyle.container}`}>
+                        <span className={`w-2 h-2 rounded-full ${badgeStyle.dot}`} />
+                        <span>{currentNotice.category || 'Announcement'}</span>
                       </span>
+
+                      <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-[#3B231A]/70">
+                        <Calendar className="w-3.5 h-3.5 text-[#E78F68]" />
+                        <span>{formattedDate}</span>
+                      </div>
                     </div>
 
-                    {/* Date */}
-                    <div className="flex items-center text-xs text-[#E78F68] font-mono font-bold gap-2">
-                      <Calendar className="w-4 h-4 text-[#E78F68]" />
-                      <span>{formattedDate}</span>
-                    </div>
-
-                    {/* Large Bold Notice Title with same dark-brown language */}
-                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-extrabold text-[#3B231A] leading-tight tracking-tight">
-                      {currentNotice.title}
+                    {/* Notice Main Title */}
+                    <h3 className="text-xl sm:text-2xl lg:text-[25px] xl:text-[27px] font-sans font-extrabold text-[#3B231A] leading-[1.25] tracking-tight">
+                      {currentNotice.title || 'Official School Notice'}
                     </h3>
 
-                    {/* Short Description */}
+                    {/* Subtitle / Tagline */}
                     {currentNotice.subtitle && (
-                      <p className="text-sm sm:text-base text-[#3B231A]/75 font-normal leading-relaxed">
-                        {currentNotice.subtitle}
+                      <p className="text-xs sm:text-sm font-semibold text-[#E78F68] flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-[#E78F68] shrink-0" />
+                        <span>{currentNotice.subtitle}</span>
                       </p>
                     )}
 
-                    {currentNotice.description && !currentNotice.subtitle && (
-                      <p className="text-sm sm:text-base text-[#3B231A]/75 font-normal leading-relaxed">
-                        {currentNotice.description}
-                      </p>
-                    )}
-
-                    {currentNotice.redirectUrl && (
-                      <div className="pt-2">
-                        <a
-                          href={currentNotice.redirectUrl}
-                          target={isExternalUrl(currentNotice.redirectUrl) ? "_blank" : undefined}
-                          rel={isExternalUrl(currentNotice.redirectUrl) ? "noopener noreferrer" : undefined}
-                          className="inline-flex items-center space-x-2 bg-[#E78F68] text-white hover:bg-[#cf744d] hover:shadow-[#E78F68]/20 active:scale-95 text-xs font-sans font-bold uppercase tracking-wider px-5 py-2.5 sm:py-3 rounded-full transition-all duration-300 shadow-md cursor-pointer group"
-                        >
-                          <span>{currentNotice.actionText || 'Explore Announcement'}</span>
-                          <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                        </a>
+                    {/* Structured Editorial Description Block */}
+                    {currentNotice.description && (
+                      <div className="bg-[#F8F4EE] border border-[#3B231A]/8 rounded-xl sm:rounded-2xl p-3.5 sm:p-4 text-xs sm:text-sm text-[#3B231A]/85 leading-relaxed space-y-2">
+                        <p>{currentNotice.description}</p>
+                        
+                        {/* Campus verification tag */}
+                        <div className="pt-2 border-t border-[#3B231A]/8 flex items-center justify-between text-[11px] text-[#3B231A]/60 font-mono">
+                          <span>Uthiramerur Campus</span>
+                          <span className="text-[#E78F68] font-bold">Verified Notice</span>
+                        </div>
                       </div>
                     )}
+
+                    {/* Small Notice CTA — rendered ONLY if this notice has a configured URL */}
+                    {hasLink && (
+                      <div className="pt-1.5">
+                        <button
+                          type="button"
+                          onClick={() => handleNoticeLink(noticeLink)}
+                          className="group inline-flex items-center gap-1.5 bg-[#E78F68] hover:bg-[#D96839] text-white text-xs font-sans font-semibold px-4 py-2 rounded-full transition-all duration-200 shadow-2xs hover:shadow-xs active:scale-95 cursor-pointer w-fit"
+                        >
+                          <span>{noticeLinkLabel || 'View Notice'}</span>
+                          {isExternalUrl(noticeLink) ? (
+                            <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                          ) : (
+                            <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                          )}
+                        </button>
+                      </div>
+                    )}
+
                   </motion.div>
                 </AnimatePresence>
 
-                {/* Playful Progress Navigation & Premium Control triggers */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t-2 border-[#3B231A]/8 w-full mt-auto">
+                {/* ===============================================================
+                    SLIDER CONTROLS & PAGINATION
+                    Numbered Indicators + Previous / Next Buttons
+                =============================================================== */}
+                <div className="pt-3 sm:pt-3.5 border-t border-[#3B231A]/10 mt-3 sm:mt-4 flex items-center justify-between gap-3">
                   
-                  {/* Playful Progress Indicators: 01 ─── 02 ─── 03 */}
-                  <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
-                    {visibleNotices.map((_, index) => {
-                      const isActive = index === activeIndex;
+                  {/* Interactive Numbered Slide Indicators */}
+                  <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
+                    {visibleNotices.map((_, idx) => {
+                      const isActive = idx === activeIndex;
                       return (
-                        <React.Fragment key={index}>
-                          {index > 0 && (
-                            <div className="w-6 sm:w-10 h-[2px] bg-[#3B231A]/10 rounded-full" />
-                          )}
-                          <button
-                            onClick={() => handleDotClick(index)}
-                            className="group flex items-center gap-2 focus:outline-none cursor-pointer py-1"
-                            aria-label={`Go to announcement ${index + 1}`}
-                          >
-                            <span className={`text-xs sm:text-sm font-mono font-extrabold transition-colors duration-300 ${isActive ? 'text-[#E78F68]' : 'text-[#3B231A]/40 group-hover:text-[#3B231A]/70'}`}>
-                              {String(index + 1).padStart(2, '0')}
-                            </span>
-                            {isActive && (
-                              <div className="relative w-12 sm:w-16 h-1.5 bg-[#3B231A]/10 rounded-full overflow-hidden">
-                                <motion.div
-                                  key={`${index}-${resetTrigger}-${isPlaying}`}
-                                  initial={{ width: '0%' }}
-                                  animate={isPlaying ? { width: '100%' } : { width: '0%' }}
-                                  transition={{ duration: isPlaying ? 5 : 0, ease: 'linear' }}
-                                  className="absolute left-0 top-0 h-full bg-[#E78F68] rounded-full"
-                                />
-                              </div>
-                            )}
-                          </button>
-                        </React.Fragment>
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => handleDotSelect(idx)}
+                          className="group py-1 px-1 sm:px-1.5 focus:outline-none cursor-pointer flex items-center gap-1"
+                          aria-label={`Go to notice ${idx + 1}`}
+                        >
+                          <span className={`text-[11px] sm:text-xs font-mono font-bold transition-colors duration-200 ${isActive ? 'text-[#E78F68]' : 'text-[#3B231A]/40 group-hover:text-[#3B231A]/70'}`}>
+                            0{idx + 1}
+                          </span>
+                          <div 
+                            className={`h-1.5 rounded-full transition-all duration-300 ${
+                              isActive 
+                                ? 'w-5 sm:w-7 bg-[#E78F68]' 
+                                : 'w-1.5 sm:w-2 bg-[#3B231A]/20 group-hover:bg-[#3B231A]/40'
+                            }`} 
+                          />
+                        </button>
                       );
                     })}
                   </div>
 
-                  {/* Circular navigation triggers */}
+                  {/* Previous / Next Circular Navigation Buttons */}
                   {visibleNotices.length > 1 && (
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                       <button
+                        type="button"
                         onClick={handlePrev}
-                        className="p-2 sm:p-2.5 bg-[#FAF6F0] hover:bg-[#E78F68] hover:text-white text-[#3B231A]/80 border-2 border-[#3B231A]/12 rounded-full transition-all duration-300 shadow-xs active:scale-90 group cursor-pointer"
-                        aria-label="Previous announcement"
+                        className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#3B231A]/15 bg-white hover:bg-[#E78F68] hover:border-[#E78F68] hover:text-white text-[#3B231A] transition-all duration-200 shadow-2xs flex items-center justify-center active:scale-90 cursor-pointer"
+                        aria-label="Previous notice"
                       >
-                        <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+                        <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                       </button>
+
                       <button
+                        type="button"
                         onClick={handleNext}
-                        className="p-2 sm:p-2.5 bg-[#FAF6F0] hover:bg-[#E78F68] hover:text-white text-[#3B231A]/80 border-2 border-[#3B231A]/12 rounded-full transition-all duration-300 shadow-xs active:scale-90 group cursor-pointer"
-                        aria-label="Next announcement"
+                        className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#3B231A]/15 bg-white hover:bg-[#E78F68] hover:border-[#E78F68] hover:text-white text-[#3B231A] transition-all duration-200 shadow-2xs flex items-center justify-center active:scale-90 cursor-pointer"
+                        aria-label="Next notice"
                       >
-                        <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                        <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                       </button>
                     </div>
                   )}
+
                 </div>
 
               </div>
@@ -425,88 +711,21 @@ export default function NoticesAnnouncements() {
 
           </div>
 
-          {/* Playful Outer Doodles - completely outside the main notice card boundaries */}
-          
-          {/* Doodle 1: Tiny Paper Airplane & flight path */}
-          <motion.div 
-            className="absolute -left-16 top-16 w-12 h-12 opacity-25 pointer-events-none hidden lg:block"
-            animate={{ y: [0, -6, 0], x: [0, 4, 0], rotate: [-2, 2, -2] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <svg viewBox="0 0 50 50" fill="none" stroke="#3B231A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
-              <path d="M45 5 L20 25 L30 45 L45 5 Z" />
-              <path d="M45 5 L5 18 L20 25 L45 5 Z" />
-              <path d="M5 45 C 10 38, 15 32, 18 26" strokeDasharray="3 3" strokeWidth="1.5" />
-            </svg>
-          </motion.div>
-
-          {/* Doodle 2: Small Sparkles/Star */}
-          <motion.div 
-            className="absolute -right-14 top-10 w-9 h-9 opacity-30 pointer-events-none hidden lg:block"
-            animate={{ scale: [1, 1.15, 1], opacity: [0.25, 0.45, 0.25] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="#E78F68" strokeWidth="2.5" strokeLinecap="round" className="w-full h-full">
-              <path d="M12 3v3M12 18v3M3 12h3M18 12h3" />
-              <circle cx="12" cy="12" r="2.5" fill="#E78F68" />
-              <path d="M5 5 L7 7 M19 5 L17 7" stroke="#E78F68" strokeWidth="1.5" />
-            </svg>
-          </motion.div>
-
-          {/* Doodle 3: Small Rainbow/Cloud */}
-          <motion.div 
-            className="absolute -right-16 top-1/2 -translate-y-1/2 w-14 h-12 opacity-25 pointer-events-none hidden lg:block"
-            animate={{ y: ["-50%", "-55%", "-50%"] }}
-            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <svg viewBox="0 0 50 40" fill="none" stroke="#3B231A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
-              <path d="M10 25 A 15 15 0 0 1 40 25" stroke="#E78F68" strokeWidth="1.5" strokeDasharray="2 2" />
-              <path d="M14 25 A 11 11 0 0 1 36 25" stroke="#3B231A" strokeWidth="1.5" />
-              <path d="M15 30 h20 a 5 5 0 0 0 5 -5 a 5 5 0 0 0 -5 -5 a 6 6 0 0 0 -11 -2 a 4 4 0 0 0 -9 2 a 5 5 0 0 0 0 10 Z" fill="#FCFAF7" />
-            </svg>
-          </motion.div>
-
-          {/* Doodle 4: Tiny Pencil */}
-          <motion.div 
-            className="absolute -left-14 bottom-24 w-9 h-9 opacity-25 pointer-events-none hidden lg:block"
-            animate={{ rotate: [-8, 8, -8], y: [0, -3, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="#3B231A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
-              <path d="M12 20h9" />
-              <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
-            </svg>
-          </motion.div>
-
-          {/* Doodle 5: Mini Book */}
-          <motion.div 
-            className="absolute -right-14 bottom-16 w-10 h-10 opacity-25 pointer-events-none hidden lg:block"
-            animate={{ y: [0, -4, 0], rotate: [-3, 3, -3] }}
-            transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="#3B231A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-            </svg>
-          </motion.div>
         </div>
 
-        {/* Warm Emotional Concluding Story block */}
-        <div className="mt-16 sm:mt-20 text-center max-w-xl mx-auto space-y-4 px-4 animate-fade-in relative z-10">
-          <div className="flex items-center justify-center space-x-3">
+        {/* Gentle Emotional Tagline beneath the board */}
+        <div className="mt-8 sm:mt-10 text-center max-w-xl mx-auto space-y-1.5 px-4 relative z-10">
+          <div className="flex items-center justify-center space-x-3 mb-1.5">
             <div className="h-px w-8 bg-[#3B231A]/15" />
-            <span className="text-[#E78F68] text-sm">✦</span>
+            <span className="text-[#E78F68] text-xs">✦</span>
             <div className="h-px w-8 bg-[#3B231A]/15" />
           </div>
-          
-          <div className="space-y-2">
-            <h4 className="font-serif italic text-base sm:text-lg text-[#3B231A] font-medium leading-relaxed">
-              “Little moments. Big memories. One beautiful journey.”
-            </h4>
-            <p className="text-[11px] sm:text-xs text-[#3B231A]/60 font-light leading-relaxed max-w-md mx-auto">
-              Every announcement marks another step in our children's story. From first days of school to cultural celebrations, scientific achievements, and new beginnings—we are grateful to share this journey with you.
-            </p>
-          </div>
+          <p className="font-serif italic text-sm sm:text-base text-[#3B231A]/85 font-medium">
+            “Connecting parents, teachers, and young learners with every milestone.”
+          </p>
+          <p className="text-[11px] sm:text-xs text-[#3B231A]/60 font-light">
+            Vivekanandha School — Vedapalayam Road, Near Angalamman Kovil, Uthiramerur
+          </p>
         </div>
 
       </div>

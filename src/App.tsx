@@ -65,7 +65,7 @@ function AppContent() {
             <Hero onOpenAdmissions={openAdmissions} />
 
             {/* Notices & Announcements Section */}
-            <NoticesAnnouncements />
+            <NoticesAnnouncements onOpenAdmissions={openAdmissions} />
 
             {/* Seasonal: Vijayadasami Admissions 2027 */}
             <VijayadasamiSection onOpenAdmissions={openAdmissions} />
