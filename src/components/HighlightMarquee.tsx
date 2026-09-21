@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 import { 
   Award, 
   BookOpen, 
@@ -12,18 +14,19 @@ import {
 
 export interface MarqueeLogoItem {
   id: string;
-  name: string;
+  name?: string;
   subtitle?: string;
   logo?: string;
   image?: string;
+  imageUrl?: string;
+  imagePublicId?: string;
   link?: string;
   enabled: boolean;
   order: number;
   badgeType?: 'award' | 'book' | 'graduation' | 'shield' | 'trophy' | 'sparkles' | 'leaf' | 'cpu';
 }
 
-// Initial structured data for accreditation, curriculum, and educational partners
-// Can be cleanly replaced or augmented by CMS data in future steps without breaking the visual system
+// Fallback structured data when no published CMS items exist
 const DEFAULT_MARQUEE_ITEMS: MarqueeLogoItem[] = [
   {
     id: 'cbse-affiliation',
@@ -95,19 +98,93 @@ interface HighlightMarqueeProps {
   items?: MarqueeLogoItem[];
 }
 
-export default function HighlightMarquee({ items = DEFAULT_MARQUEE_ITEMS }: HighlightMarqueeProps) {
-  // Sort and filter active items
-  const activeItems = items
-    .filter(item => item.enabled !== false)
-    .sort((a, b) => a.order - b.order);
+export default function HighlightMarquee({ items }: HighlightMarqueeProps) {
+  const [cmsItems, setCmsItems] = useState<MarqueeLogoItem[] | null>(null);
+  const [isSectionEnabled, setIsSectionEnabled] = useState<boolean>(true);
+
+  // Subscribe to published Marquee Highlights in website_cms/marquee in real time
+  useEffect(() => {
+    if (!db) return;
+
+    const unsub = onSnapshot(
+      doc(db, 'website_cms', 'marquee'),
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+
+          // Section-level visibility toggle
+          if (data.enabled === false) {
+            setIsSectionEnabled(false);
+            return;
+          } else {
+            setIsSectionEnabled(true);
+          }
+
+          // Check if published (if status field is set, must be 'published')
+          if (data.status && data.status !== 'published') {
+            setCmsItems(null);
+            return;
+          }
+
+          // Process and validate items list
+          if (Array.isArray(data.items) && data.items.length > 0) {
+            const validItems: MarqueeLogoItem[] = data.items
+              .filter((it: any) => it && it.enabled !== false && Boolean(it.imageUrl || it.image || it.logo))
+              .map((it: any, idx: number) => ({
+                id: it.id || `marquee-${idx}`,
+                name: it.name || it.title || '',
+                subtitle: it.subtitle || '',
+                imageUrl: it.imageUrl || it.image || it.logo || '',
+                imagePublicId: it.imagePublicId || '',
+                link: it.link || it.url || '',
+                enabled: it.enabled !== false,
+                order: typeof it.order === 'number' ? it.order : idx + 1,
+                badgeType: it.badgeType || undefined,
+              }))
+              .sort((a, b) => a.order - b.order);
+
+            if (validItems.length > 0) {
+              setCmsItems(validItems);
+            } else {
+              setCmsItems(null);
+            }
+          } else {
+            setCmsItems(null);
+          }
+        } else {
+          setCmsItems(null);
+        }
+      },
+      (err) => {
+        console.warn('Error reading website_cms/marquee from Firestore:', err);
+      }
+    );
+
+    return () => unsub();
+  }, []);
+
+  if (!isSectionEnabled) {
+    return null;
+  }
+
+  // Use published CMS items if available, otherwise fall back gracefully
+  const activeItems: MarqueeLogoItem[] = (cmsItems && cmsItems.length > 0)
+    ? cmsItems
+    : (items ? items.filter(it => it.enabled !== false).sort((a, b) => a.order - b.order) : DEFAULT_MARQUEE_ITEMS);
 
   if (activeItems.length === 0) {
     return null;
   }
 
+  // Ensure the base sequence has enough items to smoothly fill wide viewports before loop reset
+  let baseSequence = [...activeItems];
+  while (baseSequence.length < 10) {
+    baseSequence = [...baseSequence, ...activeItems];
+  }
+
   // Render emblem icon based on badge type
   const renderIcon = (type?: string) => {
-    const iconClass = "w-4 h-4 sm:w-4.5 sm:h-4.5 text-[#E78F68] transition-colors duration-300 group-hover/item:text-[#D96839]";
+    const iconClass = "w-5 h-5 sm:w-6 sm:h-6 text-[#E78F68] transition-colors duration-300 group-hover/item:text-[#D96839]";
     switch (type) {
       case 'award':
         return <Award className={iconClass} />;
@@ -130,32 +207,31 @@ export default function HighlightMarquee({ items = DEFAULT_MARQUEE_ITEMS }: High
     }
   };
 
-  const renderItemCard = (item: MarqueeLogoItem, keyPrefix: string) => {
-    const Content = (
-      <div className="flex items-center gap-2.5 sm:gap-3.5 px-3.5 py-2 sm:px-4.5 sm:py-2.5 rounded-full bg-[#FAF7F2] border border-[#3B231A]/10 hover:border-[#E78F68]/45 shadow-[0_2px_8px_rgba(59,35,26,0.03)] hover:shadow-[0_4px_14px_rgba(59,35,26,0.07)] transition-all duration-300 select-none group/item cursor-default shrink-0">
-        {/* Logo Image or Crisp Monogram Badge */}
-        {item.logo || item.image ? (
-          <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden flex items-center justify-center bg-white border border-[#3B231A]/08 shrink-0">
-            <img
-              src={item.logo || item.image}
-              alt={item.name}
-              className="w-full h-full object-contain p-0.5"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-        ) : (
-          <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#E78F68]/12 border border-[#E78F68]/25 flex items-center justify-center shrink-0">
-            {renderIcon(item.badgeType)}
-          </div>
-        )}
+  const renderItem = (item: MarqueeLogoItem, keyPrefix: string, index: number) => {
+    const imgUrl = item.imageUrl || item.image || item.logo;
+    const hasImage = Boolean(imgUrl && imgUrl.trim() !== '');
 
-        {/* Text Details */}
+    const Content = hasImage ? (
+      <div className="flex items-center justify-center shrink-0 transition-transform duration-300 hover:scale-105">
+        <img
+          src={imgUrl}
+          alt={item.name || item.id || 'Institutional Highlight'}
+          className="h-[64px] sm:h-[84px] md:h-[108px] lg:h-[126px] w-auto max-w-[200px] sm:max-w-[260px] md:max-w-[320px] lg:max-w-[380px] object-contain shrink-0 select-none pointer-events-none"
+          referrerPolicy="no-referrer"
+          loading="lazy"
+        />
+      </div>
+    ) : (
+      <div className="flex items-center gap-3.5 sm:gap-4 shrink-0 select-none py-2">
+        <div className="w-11 h-11 sm:w-14 sm:h-14 flex items-center justify-center text-[#E78F68] shrink-0">
+          {renderIcon(item.badgeType)}
+        </div>
         <div className="flex flex-col text-left whitespace-nowrap">
-          <span className="text-xs sm:text-[13px] font-sans font-bold text-[#3B231A] tracking-tight group-hover/item:text-[#2B1710] transition-colors leading-tight">
+          <span className="text-sm sm:text-base md:text-lg font-serif font-bold text-[#3B231A] tracking-tight leading-tight">
             {item.name}
           </span>
           {item.subtitle && (
-            <span className="text-[9px] sm:text-[10px] font-mono text-[#3B231A]/60 font-medium tracking-wider uppercase leading-tight mt-0.5">
+            <span className="text-[10px] sm:text-xs font-mono text-[#3B231A]/65 font-medium tracking-wider uppercase leading-tight mt-0.5">
               {item.subtitle}
             </span>
           )}
@@ -167,11 +243,11 @@ export default function HighlightMarquee({ items = DEFAULT_MARQUEE_ITEMS }: High
       const isExternal = item.link.startsWith('http://') || item.link.startsWith('https://');
       return (
         <a
-          key={`${keyPrefix}-${item.id}`}
+          key={`${keyPrefix}-${item.id}-${index}`}
           href={item.link}
           target={isExternal ? '_blank' : undefined}
           rel={isExternal ? 'noopener noreferrer' : undefined}
-          className="focus:outline-hidden focus:ring-2 focus:ring-[#E78F68]/50 rounded-full"
+          className="shrink-0 flex items-center justify-center focus:outline-hidden focus:ring-2 focus:ring-[#E78F68]/50 rounded-lg"
         >
           {Content}
         </a>
@@ -179,7 +255,7 @@ export default function HighlightMarquee({ items = DEFAULT_MARQUEE_ITEMS }: High
     }
 
     return (
-      <div key={`${keyPrefix}-${item.id}`} className="inline-block">
+      <div key={`${keyPrefix}-${item.id}-${index}`} className="shrink-0 flex items-center justify-center">
         {Content}
       </div>
     );
@@ -188,10 +264,10 @@ export default function HighlightMarquee({ items = DEFAULT_MARQUEE_ITEMS }: High
   return (
     <section 
       id="home-highlights-marquee"
-      className="w-full bg-[#F4F0EA] border-y border-[#3B231A]/08 py-3.5 sm:py-4.5 overflow-hidden box-border relative select-none"
+      className="w-full bg-[#F5F1EB] border-y border-[#3B231A]/08 py-6 sm:py-7 md:py-9 overflow-hidden box-border relative select-none"
       aria-label="Accreditations and Institutional Highlights"
     >
-      {/* Component-Specific Keyframes for Hardware-Accelerated Smooth Marquee */}
+      {/* Component-Specific Keyframes for Hardware-Accelerated Smooth Continuous Marquee */}
       <style>{`
         @keyframes marquee-continuous {
           0% {
@@ -206,13 +282,7 @@ export default function HighlightMarquee({ items = DEFAULT_MARQUEE_ITEMS }: High
           display: flex;
           width: max-content;
           will-change: transform;
-          animation: marquee-continuous 32s linear infinite;
-        }
-
-        @media (hover: hover) and (pointer: fine) {
-          .marquee-container-hover:hover .marquee-track-motion {
-            animation-play-state: paused;
-          }
+          animation: marquee-continuous 38s linear infinite;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -225,26 +295,26 @@ export default function HighlightMarquee({ items = DEFAULT_MARQUEE_ITEMS }: High
 
       {/* Subtle Lateral Vignette Edge Fades */}
       <div 
-        className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 sm:w-24 md:w-32 bg-gradient-to-r from-[#F4F0EA] via-[#F4F0EA]/80 to-transparent z-10"
+        className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 sm:w-20 md:w-28 bg-gradient-to-r from-[#F5F1EB] to-transparent z-10"
         aria-hidden="true"
       />
       <div 
-        className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 sm:w-24 md:w-32 bg-gradient-to-l from-[#F4F0EA] via-[#F4F0EA]/80 to-transparent z-10"
+        className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 sm:w-20 md:w-28 bg-gradient-to-l from-[#F5F1EB] to-transparent z-10"
         aria-hidden="true"
       />
 
       {/* Continuous Marquee Wrapper */}
-      <div className="marquee-container-hover relative w-full overflow-hidden">
-        <div className="marquee-track-motion">
+      <div className="relative w-full overflow-hidden flex items-center">
+        <div className="marquee-track-motion items-center">
           
           {/* First Sequence */}
-          <div className="flex items-center gap-3 sm:gap-5 md:gap-6 shrink-0 pr-3 sm:pr-5 md:pr-6">
-            {activeItems.map(item => renderItemCard(item, 'set-a'))}
+          <div className="flex items-center gap-10 sm:gap-14 md:gap-20 lg:gap-24 shrink-0 pr-10 sm:pr-14 md:pr-20 lg:pr-24">
+            {baseSequence.map((item, idx) => renderItem(item, 'set-a', idx))}
           </div>
 
           {/* Second Duplicate Sequence (Enables Infinite Seamless Reset) */}
-          <div className="flex items-center gap-3 sm:gap-5 md:gap-6 shrink-0 pr-3 sm:pr-5 md:pr-6" aria-hidden="true">
-            {activeItems.map(item => renderItemCard(item, 'set-b'))}
+          <div className="flex items-center gap-10 sm:gap-14 md:gap-20 lg:gap-24 shrink-0 pr-10 sm:pr-14 md:pr-20 lg:pr-24" aria-hidden="true">
+            {baseSequence.map((item, idx) => renderItem(item, 'set-b', idx))}
           </div>
 
         </div>
