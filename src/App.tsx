@@ -25,6 +25,7 @@ import ActivitiesPage from './pages/ActivitiesPage';
 import GalleryPage from './pages/GalleryPage';
 import AlbumDetailPage from './pages/AlbumDetailPage';
 import ContactPage from './pages/ContactPage';
+import VLeoChatbotPage from './pages/VLeoChatbotPage';
 
 export default function App() {
   return (
@@ -102,6 +103,8 @@ function AppContent() {
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/gallery/:albumId" element={<AlbumDetailPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/vleo" element={<VLeoChatbotPage />} />
+        <Route path="/chatbot" element={<VLeoChatbotPage />} />
 
         {/* 9. Premium Footer (Global) */}
         <Footer />

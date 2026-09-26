@@ -611,7 +611,171 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
           }
         }
       `}</style>
-      
+
+      {/* ================= SOFT LEARNING UNIVERSE BACKGROUND TREATMENT ================= */}
+      {/* Hand-drawn educational line-art around outer margins with 16-18% visibility */}
+      <div 
+        aria-hidden="true" 
+        className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden"
+      >
+        {/* Very subtle warm radial glow behind the central school heading for depth */}
+        <div 
+          className="absolute top-[26%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] max-w-[92vw] h-[380px] rounded-full pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(254, 215, 170, 0.22) 0%, rgba(253, 230, 138, 0.08) 45%, rgba(244, 240, 234, 0) 70%)',
+            filter: 'blur(36px)',
+          }}
+        />
+
+        {/* 1. TOP LEFT: One very small hand-drawn open book */}
+        <motion.div
+          animate={{ y: [0, -3, 0] }}
+          transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
+          className="absolute top-[3.5%] left-[3%] sm:left-[5%] lg:left-[6%]"
+        >
+          <svg width="34" height="24" viewBox="0 0 38 28" fill="none" stroke="#6D4327" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.17 }}>
+            <path d="M19 8 V24" />
+            <path d="M19 8 C14 5 7 5 3 7 V23 C7 21 14 21 19 24" />
+            <path d="M19 8 C24 5 31 5 35 7 V23 C31 21 24 21 19 24" />
+            <path d="M7 11 C11 10 15 10 17 11" strokeWidth="1.1" />
+            <path d="M7 15 C11 14 15 14 17 15" strokeWidth="1.1" />
+            <path d="M21 11 C23 10 27 10 31 11" strokeWidth="1.1" />
+            <path d="M21 15 C23 14 27 14 31 15" strokeWidth="1.1" />
+          </svg>
+        </motion.div>
+
+        {/* 2. UPPER LEFT/MIDDLE: One small pencil sketch */}
+        <motion.div
+          animate={{ y: [0, -3, 0], rotate: [20, 24, 20] }}
+          transition={{ repeat: Infinity, duration: 8.5, ease: "easeInOut", delay: 0.4 }}
+          className="absolute top-[3.5%] left-[20%] sm:left-[22%] lg:left-[24%]"
+        >
+          <svg width="26" height="26" viewBox="0 0 32 32" fill="none" stroke="#6D4327" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.17 }}>
+            <path d="M11 6 L17 6 L17 23 L14 28 L11 23 Z" />
+            <line x1="14" y1="6" x2="14" y2="23" strokeWidth="1" />
+            <line x1="11" y1="9" x2="17" y2="9" strokeWidth="1.1" />
+            <polygon points="12.5,25.5 15.5,25.5 14,28" fill="#6D4327" stroke="none" />
+          </svg>
+        </motion.div>
+
+        {/* 3. TOP RIGHT: One small cloud */}
+        <motion.div
+          animate={{ y: [0, -3, 0] }}
+          transition={{ repeat: Infinity, duration: 9, ease: "easeInOut" }}
+          className="absolute top-[3.5%] right-[20%] sm:right-[22%] lg:right-[24%]"
+        >
+          <svg width="38" height="22" viewBox="0 0 44 26" fill="none" stroke="#6D4327" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.17 }}>
+            <path d="M11 22 C6 22 2.5 18.5 2.5 14 C2.5 10 5.5 7.2 9.5 7 C10.8 3.5 14.5 1 19 1 C24.5 1 29 4.8 29.8 9.5 C33.5 9.5 38 12.2 38 16.5 C38 20.8 34.5 22 30.5 22 Z" />
+          </svg>
+        </motion.div>
+
+        {/* 4. UPPER RIGHT: One tiny sun with very thin rays */}
+        <motion.div
+          animate={{ rotate: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 11, ease: "easeInOut" }}
+          className="absolute top-[3.5%] right-[3%] sm:right-[5%] lg:right-[6%]"
+        >
+          <svg width="28" height="28" viewBox="0 0 34 34" fill="none" stroke="#B8562B" strokeWidth="1.4" strokeLinecap="round" style={{ opacity: 0.18 }}>
+            <circle cx="17" cy="17" r="5.5" />
+            <line x1="17" y1="4" x2="17" y2="7.5" />
+            <line x1="17" y1="26.5" x2="17" y2="30" />
+            <line x1="4" y1="17" x2="7.5" y2="17" />
+            <line x1="26.5" y1="17" x2="30" y2="17" />
+            <line x1="7.8" y1="7.8" x2="10.3" y2="10.3" />
+            <line x1="23.7" y1="23.7" x2="26.2" y2="26.2" />
+            <line x1="7.8" y1="26.2" x2="10.3" y2="23.7" />
+            <line x1="23.7" y1="10.3" x2="26.2" y2="7.8" />
+          </svg>
+        </motion.div>
+
+        {/* 5. FAR LEFT: 2–3 tiny educational dots/stars */}
+        <motion.div
+          animate={{ opacity: [0.12, 0.18, 0.12], scale: [0.95, 1.05, 0.95] }}
+          transition={{ repeat: Infinity, duration: 4.8, ease: "easeInOut" }}
+          className="absolute top-[22%] left-[1.5%] sm:left-[2.5%]"
+        >
+          <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="#B8562B" strokeWidth="1.5" strokeLinecap="round" style={{ opacity: 0.17 }}>
+            <path d="M10 2 C10 6, 6 10, 2 10 C6 10, 10 14, 10 18 C10 14, 14 10, 18 10 C14 10, 10 6, 10 2 Z" />
+          </svg>
+        </motion.div>
+
+        <motion.div
+          animate={{ opacity: [0.11, 0.17, 0.11] }}
+          transition={{ repeat: Infinity, duration: 5.5, ease: "easeInOut", delay: 0.8 }}
+          className="absolute top-[36%] left-[2%] sm:left-[2.8%]"
+        >
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#6D4327" strokeWidth="1.4" strokeLinecap="round" style={{ opacity: 0.16 }}>
+            <path d="M8 1 L8 15 M1 8 L15 8 M3 3 L13 13 M3 13 L13 3" />
+          </svg>
+        </motion.div>
+
+        <span 
+          className="absolute top-[62%] left-[1.8%] sm:left-[2.5%] w-1.5 h-1.5 rounded-full bg-[#6D4327]"
+          style={{ opacity: 0.16 }}
+        />
+
+        {/* 6. FAR RIGHT: 2–3 tiny educational dots/stars */}
+        <motion.div
+          animate={{ opacity: [0.12, 0.18, 0.12], scale: [0.95, 1.05, 0.95] }}
+          transition={{ repeat: Infinity, duration: 5.2, ease: "easeInOut", delay: 0.5 }}
+          className="absolute top-[22%] right-[1.5%] sm:right-[2.5%]"
+        >
+          <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="#6D4327" strokeWidth="1.5" strokeLinecap="round" style={{ opacity: 0.17 }}>
+            <path d="M10 2 C10 6, 6 10, 2 10 C6 10, 10 14, 10 18 C10 14, 14 10, 18 10 C14 10, 10 6, 10 2 Z" />
+          </svg>
+        </motion.div>
+
+        <motion.div
+          animate={{ opacity: [0.11, 0.17, 0.11] }}
+          transition={{ repeat: Infinity, duration: 5.8, ease: "easeInOut", delay: 1.2 }}
+          className="absolute top-[36%] right-[2%] sm:right-[2.8%]"
+        >
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#B8562B" strokeWidth="1.4" strokeLinecap="round" style={{ opacity: 0.16 }}>
+            <path d="M8 1 L8 15 M1 8 L15 8 M3 3 L13 13 M3 13 L13 3" />
+          </svg>
+        </motion.div>
+
+        <span 
+          className="absolute top-[62%] right-[1.8%] sm:right-[2.5%] w-1.5 h-1.5 rounded-full bg-[#B8562B]"
+          style={{ opacity: 0.16 }}
+        />
+
+        {/* 7. LOWER OUTER LEFT: One subtle paper-plane line-art element */}
+        <motion.div
+          animate={{ y: [0, -3, 0], x: [0, 2, 0], rotate: [-6, -2, -6] }}
+          transition={{ repeat: Infinity, duration: 8.5, ease: "easeInOut" }}
+          className="absolute bottom-[4.5%] left-[2%] sm:left-[3.5%] lg:left-[4.5%]"
+        >
+          <svg width="36" height="24" viewBox="0 0 44 30" fill="none" stroke="#6D4327" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.17 }}>
+            {/* Soft dashed flight trace */}
+            <path d="M3 24 C10 24 15 20 18 15" strokeDasharray="2.5,2.5" strokeWidth="1" stroke="#6D4327" />
+            {/* Folded paper plane */}
+            <path d="M41 4 L16 16 L25 20 L29 26 L31 19 L41 4 Z" />
+            <line x1="41" y1="4" x2="25" y2="20" />
+          </svg>
+        </motion.div>
+
+        {/* 8. LOWER OUTER RIGHT: One subtle small ruler/pencil line-art element */}
+        <motion.div
+          animate={{ y: [0, -3, 0], rotate: [-4, 0, -4] }}
+          transition={{ repeat: Infinity, duration: 8, ease: "easeInOut", delay: 0.7 }}
+          className="absolute bottom-[4.5%] right-[2%] sm:right-[3.5%] lg:right-[4.5%]"
+        >
+          <svg width="36" height="22" viewBox="0 0 44 26" fill="none" stroke="#6D4327" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.17 }}>
+            <rect x="4" y="8" width="35" height="12" rx="1.5" transform="rotate(-6 21 14)" />
+            <g transform="rotate(-6 21 14)">
+              <line x1="9" y1="8" x2="9" y2="12" strokeWidth="1.2" />
+              <line x1="13" y1="8" x2="13" y2="11" strokeWidth="1" />
+              <line x1="17" y1="8" x2="17" y2="13" strokeWidth="1.2" />
+              <line x1="21" y1="8" x2="21" y2="11" strokeWidth="1" />
+              <line x1="25" y1="8" x2="25" y2="13" strokeWidth="1.2" />
+              <line x1="29" y1="8" x2="29" y2="11" strokeWidth="1" />
+              <line x1="33" y1="8" x2="33" y2="13" strokeWidth="1.2" />
+            </g>
+          </svg>
+        </motion.div>
+      </div>
+
       {/* ================= PLAYFUL DECORATIVE DOODLES ================= */}
       
       {/* Upper-Left: Playful Hot Air Balloon */}

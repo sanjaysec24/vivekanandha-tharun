@@ -141,7 +141,7 @@ const DEFAULT_QUICK_ACTIONS = [
 ];
 
 export default function VLeoChatbot() {
-  const { path } = useRouter();
+  const { path, navigate } = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [language, setLanguage] = useState<"en" | "ta">("en");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -384,11 +384,11 @@ I can help you with:
   const emailVal = cmsData?.email || "admissions@vivekanandhaschool.edu.in";
   const mapsUrlVal = cmsData?.googleMapsUrl || "https://maps.google.com/?q=Vivekanandha+School+Uthiramerur";
 
-  // Position Styling
+  // Position Styling - Peeking directly from the viewport edge
   const floatingPosClass =
     cmsData?.position === "bottom-left" || cmsData?.floatingPosition === "bottom-left"
-      ? "bottom-4 left-4 md:bottom-6 md:left-6"
-      : "bottom-4 right-4 md:bottom-6 md:right-6";
+      ? "bottom-4 left-0 md:bottom-6 md:left-0"
+      : "bottom-4 right-0 md:bottom-6 md:right-0";
 
   const windowPosClass =
     cmsData?.position === "bottom-left" || cmsData?.floatingPosition === "bottom-left"
@@ -434,12 +434,16 @@ I can help you with:
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen]);
 
+  useEffect(() => {
+    const handleOpenVLeo = () => {
+      navigate('/vleo');
+    };
+    window.addEventListener("open-vleo-chat", handleOpenVLeo);
+    return () => window.removeEventListener("open-vleo-chat", handleOpenVLeo);
+  }, [navigate]);
+
   const handleMascotClick = () => {
-    setHasInteracted(true);
-    setShowSparkles(true);
-    setHoverBubble(null);
-    setTimeout(() => setShowSparkles(false), 1200);
-    setIsOpen((prev) => !prev);
+    navigate('/vleo');
   };
 
   const handleSendMessage = async (textToSend: string) => {
@@ -693,6 +697,10 @@ I can help you with:
     setFeedbackCommentText("");
     setActiveFeedbackMsgId(null);
   };
+
+  if (path === '/vleo' || path === '/chatbot') {
+    return null;
+  }
 
   return (
     <div className={`fixed ${floatingPosClass} z-50 font-sans select-none pointer-events-auto`}>
@@ -1108,66 +1116,23 @@ I can help you with:
         )}
       </AnimatePresence>
 
-      {/* Floating Speech Bubble on Hover */}
-      <AnimatePresence>
-        {hoverBubble && !isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.92 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 6, scale: 0.94 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute bottom-[80px] sm:bottom-[88px] right-0 bg-white/95 backdrop-blur-md text-[#3A2318] border border-[#E6DCCF] shadow-xl px-4 py-2.5 rounded-2xl text-[12.5px] font-bold whitespace-nowrap z-50 pointer-events-none flex items-center gap-2"
-          >
-            <span className="flex items-center gap-1.5">
-              <span>{hoverBubble}</span>
-            </span>
-            <span className="w-2 h-2 bg-[#25D366] rounded-full animate-pulse"></span>
-            <div className="absolute -bottom-1.5 right-7 sm:right-8 w-3 h-3 bg-white border-r border-b border-[#E6DCCF] rotate-45"></div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Floating Sparkles Burst */}
-      <AnimatePresence>
-        {showSparkles && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1.4 }}
-            exit={{ opacity: 0, scale: 1.8 }}
-            transition={{ duration: 0.6 }}
-            className="absolute -top-6 -left-6 pointer-events-none text-amber-400 z-50"
-          >
-            <Sparkles className="w-12 h-12 fill-current" />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* FLOATING LION EMBLEM LAUNCHER */}
+      {/* FLOATING V-LEO ROBOT PEEKING CUTOUT LAUNCHER */}
       <motion.button
         onClick={handleMascotClick}
-        animate={!isOpen ? { y: [0, -4, 0] } : { y: 0 }}
-        transition={!isOpen ? { repeat: Infinity, duration: 4, ease: "easeInOut" } : { duration: 0.2 }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        aria-label={`Open ${currentBotName} Assistant`}
-        style={{ backgroundColor: launcherBgColor }}
-        className="group relative flex items-center justify-center w-[64px] h-[64px] sm:w-[72px] sm:h-[72px] md:w-[78px] md:h-[78px] backdrop-blur-xl border-2 border-white/90 shadow-[0_12px_32px_rgba(74,44,33,0.18)] rounded-full p-2 cursor-pointer transition-all duration-300 hover:shadow-[0_16px_40px_rgba(234,179,8,0.28)] hover:border-amber-200/90"
+        animate={{ y: [0, -5, 0] }}
+        transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut" }}
+        whileHover={{ scale: 1.04 }}
+        whileTap={{ scale: 0.96 }}
+        aria-label="Ask V-Leo AI School Assistant"
+        className="group relative flex items-center justify-end cursor-pointer select-none focus:outline-none p-0 bg-transparent border-0 outline-none"
       >
-        <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-amber-400/20 via-orange-300/10 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-
-        <div className="relative w-full h-full rounded-full border border-[#EAB308]/35 flex items-center justify-center p-1.5 bg-gradient-to-b from-white to-[#FFFDF9] shadow-inner overflow-hidden">
-          <img
-            src={launcherIcon}
-            alt={`${currentBotName} Launcher Emblem`}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-full object-contain p-0.5 filter drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-
-        <span className="absolute top-0 right-0 w-3.5 h-3.5 bg-[#25D366] border-2 border-white rounded-full shadow-xs">
-          <span className="absolute inset-0 bg-[#25D366] rounded-full animate-ping opacity-75"></span>
-        </span>
+        <img
+          src="/images/vleo_peeking_launcher.png"
+          alt="V-Leo AI Mascot - Click Me!"
+          className="h-[88px] sm:h-[115px] md:h-[135px] w-auto max-w-none object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.15)] transition-transform duration-200"
+          loading="eager"
+          decoding="async"
+        />
       </motion.button>
     </div>
   );

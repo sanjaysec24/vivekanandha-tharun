@@ -304,7 +304,7 @@ export default function AdmissionsPage() {
                         required
                         value={formData.parentName}
                         onChange={handleInputChange}
-                        placeholder="e.g. S. Ramkumar"
+                        placeholder="e.g. Kumar"
                         className="w-full bg-[#F5F1EB] border border-[#3B231A]/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#E78F68]/30 text-[#3B231A] font-light"
                       />
                     </div>
@@ -319,7 +319,7 @@ export default function AdmissionsPage() {
                         required
                         value={formData.childName}
                         onChange={handleInputChange}
-                        placeholder="e.g. Rahul Ramkumar"
+                        placeholder="e.g. Iniyazh"
                         className="w-full bg-[#F5F1EB] border border-[#3B231A]/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#E78F68]/30 text-[#3B231A] font-light"
                       />
                     </div>

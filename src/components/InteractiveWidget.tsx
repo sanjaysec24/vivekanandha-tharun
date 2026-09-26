@@ -189,7 +189,7 @@ export function AdmissionsDrawer({ isAdmissionsOpen, onCloseAdmissions }: Intera
                       required
                       value={formData.parentName}
                       onChange={(e) => setFormData({ ...formData, parentName: e.target.value })}
-                      placeholder="e.g. Katherine Sterling"
+                      placeholder="e.g. Kumar"
                       className="w-full bg-white border border-[#3B231A]/15 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#E78F68] transition-colors"
                     />
                   </div>
@@ -229,7 +229,7 @@ export function AdmissionsDrawer({ isAdmissionsOpen, onCloseAdmissions }: Intera
                         required
                         value={formData.childName}
                         onChange={(e) => setFormData({ ...formData, childName: e.target.value })}
-                        placeholder="e.g. Liam"
+                        placeholder="e.g. Iniyazh"
                         className="w-full bg-white border border-[#3B231A]/15 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#E78F68] transition-colors"
                       />
                     </div>

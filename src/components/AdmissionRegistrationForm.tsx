@@ -451,7 +451,7 @@ export default function AdmissionRegistrationForm() {
                               type="text"
                               value={formData.studentName}
                               onChange={(e) => handleFieldChange('studentName', e.target.value)}
-                              placeholder="e.g. Sanjay Swaminathan"
+                              placeholder="e.g. Iniyazh"
                               className={`w-full bg-[#F8F5F0] border ${errors.studentName ? 'border-red-500' : 'border-[#3B231A]/15'} rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#D9A441]/30 text-[#3B231A] font-light transition-all`}
                             />
                             {formData.studentName.trim().length > 2 && !errors.studentName && (
@@ -614,7 +614,7 @@ export default function AdmissionRegistrationForm() {
                             type="text"
                             value={formData.fatherName}
                             onChange={(e) => handleFieldChange('fatherName', e.target.value)}
-                            placeholder="e.g. Swaminathan G"
+                            placeholder="e.g. Kumar"
                             className={`w-full bg-[#F8F5F0] border ${errors.fatherName ? 'border-red-500' : 'border-[#3B231A]/15'} rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#D9A441]/30 text-[#3B231A] font-light transition-all`}
                           />
                           {errors.fatherName && (

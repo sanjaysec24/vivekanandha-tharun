@@ -194,7 +194,7 @@ export default function ContactPage() {
                         required
                         value={formData.parentName}
                         onChange={handleInputChange}
-                        placeholder="e.g. S. Ramkumar"
+                        placeholder="e.g. Kumar"
                         className="w-full bg-[#F5F1EB] border border-[#E6DCCF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#E78F68]/30 text-[#3B231A] font-medium transition-all"
                       />
                     </div>
@@ -210,7 +210,7 @@ export default function ContactPage() {
                         required
                         value={formData.studentName}
                         onChange={handleInputChange}
-                        placeholder="e.g. R. Kavya"
+                        placeholder="e.g. Iniyazh"
                         className="w-full bg-[#F5F1EB] border border-[#E6DCCF] rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#E78F68]/30 text-[#3B231A] font-medium transition-all"
                       />
                     </div>

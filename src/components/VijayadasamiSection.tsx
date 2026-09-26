@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Sparkles, Calendar, MapPin, User, Phone, GraduationCap, CheckCircle, Award } from 'lucide-react';
+import { Sparkles, Calendar, MapPin, User, Phone, GraduationCap, CheckCircle, Award, AlertCircle } from 'lucide-react';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 interface VijayadasamiSectionProps {
   onOpenAdmissions: () => void;
@@ -13,12 +15,120 @@ export default function VijayadasamiSection({ onOpenAdmissions }: VijayadasamiSe
     phone: '',
     selectedClass: 'Pre KG',
   });
+  const [errors, setErrors] = useState<{
+    studentName?: string;
+    parentName?: string;
+    phone?: string;
+    selectedClass?: string;
+    general?: string;
+  }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validate = () => {
+    const newErrors: {
+      studentName?: string;
+      parentName?: string;
+      phone?: string;
+      selectedClass?: string;
+    } = {};
+
+    if (!formData.studentName.trim()) {
+      newErrors.studentName = 'Student name is required';
+    }
+
+    if (!formData.parentName.trim()) {
+      newErrors.parentName = 'Parent / Guardian name is required';
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    } else {
+      const cleaned = formData.phone.replace(/[\s\-()]/g, '').replace(/^(\+91|91)/, '');
+      if (cleaned.length < 10 || !/^\d{10}$/.test(cleaned)) {
+        newErrors.phone = 'Please enter a valid 10-digit phone number';
+      }
+    }
+
+    if (!formData.selectedClass.trim()) {
+      newErrors.selectedClass = 'Class / Grade is required';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.studentName && formData.parentName && formData.phone) {
+
+    if (isSubmitting) return;
+
+    if (!validate()) {
+      return;
+    }
+
+    if (!db) {
+      setErrors({
+        general: 'Database service is currently unavailable. Please try again later.',
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrors({});
+
+    const studentName = formData.studentName.trim();
+    const parentGuardianName = formData.parentName.trim();
+    const phoneNumber = formData.phone.trim();
+    const classGrade = formData.selectedClass.trim();
+
+    const enquiryPayload = {
+      studentName,
+      parentGuardianName,
+      phoneNumber,
+      classGrade,
+      status: 'NEW',
+      source: 'Vijayadasami Admissions',
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    };
+
+    try {
+      try {
+        await addDoc(collection(db, 'admissionEnquiries'), enquiryPayload);
+      } catch (firestoreErr: any) {
+        // Fallback to enquiries collection if admissionEnquiries security rules in Firebase Console haven't been updated
+        if (
+          firestoreErr?.code === 'permission-denied' ||
+          String(firestoreErr?.message).includes('PERMISSION_DENIED') ||
+          String(firestoreErr?.message).includes('permission')
+        ) {
+          await addDoc(collection(db, 'enquiries'), {
+            ...enquiryPayload,
+            parentName: parentGuardianName,
+            phone: phoneNumber,
+            gradeInterested: classGrade,
+          });
+        } else {
+          throw firestoreErr;
+        }
+      }
+
+      // Success: clear form only after confirmed write
+      setFormData({
+        studentName: '',
+        parentName: '',
+        phone: '',
+        selectedClass: 'Pre KG',
+      });
       setSubmitted(true);
+    } catch (err) {
+      console.error('Error submitting Vijayadasami admission enquiry:', err);
+      setErrors({
+        general: 'Something went wrong while submitting your enquiry. Please try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -334,68 +444,102 @@ export default function VijayadasamiSection({ onOpenAdmissions }: VijayadasamiSe
                   {/* Student Name */}
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold uppercase tracking-wider text-[#3B231A]/75 block">
-                      Student Name
+                      Student Name <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <User className="absolute left-3.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#3B231A]/40" />
                       <input
                         type="text"
-                        required
-                        placeholder="e.g. Adhithya Kumar"
+                        placeholder="e.g. Iniyazh"
                         value={formData.studentName}
-                        onChange={(e) => setFormData({ ...formData, studentName: e.target.value })}
-                        className="w-full text-sm bg-[#F5F1EB]/40 border border-[#3B231A]/10 rounded-xl py-3 pl-10 pr-4 text-[#3B231A] placeholder-[#3B231A]/35 focus:outline-none focus:ring-1 focus:ring-[#E78F68] focus:border-[#E78F68] transition-all"
+                        onChange={(e) => {
+                          setFormData({ ...formData, studentName: e.target.value });
+                          if (errors.studentName) setErrors((prev) => ({ ...prev, studentName: undefined }));
+                        }}
+                        className={`w-full text-sm bg-[#F5F1EB]/40 border rounded-xl py-3 pl-10 pr-4 text-[#3B231A] placeholder-[#3B231A]/35 focus:outline-none focus:ring-1 transition-all ${
+                          errors.studentName
+                            ? 'border-red-400 focus:ring-red-400 focus:border-red-400'
+                            : 'border-[#3B231A]/10 focus:ring-[#E78F68] focus:border-[#E78F68]'
+                        }`}
                       />
                     </div>
+                    {errors.studentName && (
+                      <p className="text-[11px] text-red-600 font-medium">{errors.studentName}</p>
+                    )}
                   </div>
 
                   {/* Parent Name */}
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold uppercase tracking-wider text-[#3B231A]/75 block">
-                      Parent / Guardian Name
+                      Parent / Guardian Name <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <User className="absolute left-3.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#3B231A]/40" />
                       <input
                         type="text"
-                        required
-                        placeholder="e.g. Sanjay Kumar"
+                        placeholder="e.g. Kumar"
                         value={formData.parentName}
-                        onChange={(e) => setFormData({ ...formData, parentName: e.target.value })}
-                        className="w-full text-sm bg-[#F5F1EB]/40 border border-[#3B231A]/10 rounded-xl py-3 pl-10 pr-4 text-[#3B231A] placeholder-[#3B231A]/35 focus:outline-none focus:ring-1 focus:ring-[#E78F68] focus:border-[#E78F68] transition-all"
+                        onChange={(e) => {
+                          setFormData({ ...formData, parentName: e.target.value });
+                          if (errors.parentName) setErrors((prev) => ({ ...prev, parentName: undefined }));
+                        }}
+                        className={`w-full text-sm bg-[#F5F1EB]/40 border rounded-xl py-3 pl-10 pr-4 text-[#3B231A] placeholder-[#3B231A]/35 focus:outline-none focus:ring-1 transition-all ${
+                          errors.parentName
+                            ? 'border-red-400 focus:ring-red-400 focus:border-red-400'
+                            : 'border-[#3B231A]/10 focus:ring-[#E78F68] focus:border-[#E78F68]'
+                        }`}
                       />
                     </div>
+                    {errors.parentName && (
+                      <p className="text-[11px] text-red-600 font-medium">{errors.parentName}</p>
+                    )}
                   </div>
 
                   {/* Phone Number */}
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold uppercase tracking-wider text-[#3B231A]/75 block">
-                      Phone Number
+                      Phone Number <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <Phone className="absolute left-3.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#3B231A]/40" />
                       <input
                         type="tel"
-                        required
                         placeholder="e.g. +91 98765 43210"
                         value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="w-full text-sm bg-[#F5F1EB]/40 border border-[#3B231A]/10 rounded-xl py-3 pl-10 pr-4 text-[#3B231A] placeholder-[#3B231A]/35 focus:outline-none focus:ring-1 focus:ring-[#E78F68] focus:border-[#E78F68] transition-all"
+                        onChange={(e) => {
+                          setFormData({ ...formData, phone: e.target.value });
+                          if (errors.phone) setErrors((prev) => ({ ...prev, phone: undefined }));
+                        }}
+                        className={`w-full text-sm bg-[#F5F1EB]/40 border rounded-xl py-3 pl-10 pr-4 text-[#3B231A] placeholder-[#3B231A]/35 focus:outline-none focus:ring-1 transition-all ${
+                          errors.phone
+                            ? 'border-red-400 focus:ring-red-400 focus:border-red-400'
+                            : 'border-[#3B231A]/10 focus:ring-[#E78F68] focus:border-[#E78F68]'
+                        }`}
                       />
                     </div>
+                    {errors.phone && (
+                      <p className="text-[11px] text-red-600 font-medium">{errors.phone}</p>
+                    )}
                   </div>
 
                   {/* Class Selection Dropdown */}
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold uppercase tracking-wider text-[#3B231A]/75 block">
-                      Class / Grade
+                      Class / Grade <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <GraduationCap className="absolute left-3.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#3B231A]/40" />
                       <select
                         value={formData.selectedClass}
-                        onChange={(e) => setFormData({ ...formData, selectedClass: e.target.value })}
-                        className="w-full text-sm bg-[#F5F1EB]/40 border border-[#3B231A]/10 rounded-xl py-3 pl-10 pr-4 text-[#3B231A] focus:outline-none focus:ring-1 focus:ring-[#E78F68] focus:border-[#E78F68] transition-all appearance-none cursor-pointer"
+                        onChange={(e) => {
+                          setFormData({ ...formData, selectedClass: e.target.value });
+                          if (errors.selectedClass) setErrors((prev) => ({ ...prev, selectedClass: undefined }));
+                        }}
+                        className={`w-full text-sm bg-[#F5F1EB]/40 border rounded-xl py-3 pl-10 pr-4 text-[#3B231A] focus:outline-none focus:ring-1 transition-all appearance-none cursor-pointer ${
+                          errors.selectedClass
+                            ? 'border-red-400 focus:ring-red-400 focus:border-red-400'
+                            : 'border-[#3B231A]/10 focus:ring-[#E78F68] focus:border-[#E78F68]'
+                        }`}
                       >
                         <option value="Pre KG">Pre KG</option>
                         <option value="LKG">LKG</option>
@@ -408,16 +552,35 @@ export default function VijayadasamiSection({ onOpenAdmissions }: VijayadasamiSe
                       </select>
                       <span className="absolute right-3.5 top-1/2 transform -translate-y-1/2 pointer-events-none text-[#3B231A]/50">▼</span>
                     </div>
+                    {errors.selectedClass && (
+                      <p className="text-[11px] text-red-600 font-medium">{errors.selectedClass}</p>
+                    )}
                   </div>
                 </div>
+
+                {/* Friendly Error Banner */}
+                {errors.general && (
+                  <div className="flex items-start gap-2 p-3 bg-red-50/90 border border-red-200 text-red-700 text-xs rounded-xl">
+                    <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-red-500" />
+                    <span>{errors.general}</span>
+                  </div>
+                )}
 
                 {/* Buttons block */}
                 <div className="space-y-3 pt-2">
                   <button
                     type="submit"
-                    className="w-full bg-[#E78F68] hover:bg-[#d07b53] text-white font-semibold py-3.5 rounded-xl text-sm shadow-md transition-all duration-300 transform active:scale-95"
+                    disabled={isSubmitting}
+                    className="w-full bg-[#E78F68] hover:bg-[#d07b53] disabled:opacity-75 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl text-sm shadow-md transition-all duration-300 transform active:scale-95 flex items-center justify-center space-x-2"
                   >
-                    Apply Now
+                    {isSubmitting ? (
+                      <>
+                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin inline-block" />
+                        <span>Submitting...</span>
+                      </>
+                    ) : (
+                      <span>Apply Now</span>
+                    )}
                   </button>
                   <button
                     type="button"
@@ -439,19 +602,19 @@ export default function VijayadasamiSection({ onOpenAdmissions }: VijayadasamiSe
                 </div>
                 
                 <div className="space-y-2">
-                  <h3 className="text-xl font-serif font-bold text-[#3B231A]">Admission Registered!</h3>
-                  <p className="text-sm text-[#3B231A]/85 leading-relaxed">
-                    Thank you, <strong className="font-semibold">{formData.parentName}</strong>. We have registered your child <strong className="font-semibold">{formData.studentName}</strong>'s admissions inquiry for <strong className="font-semibold">{formData.selectedClass}</strong>.
+                  <h3 className="text-xl font-serif font-bold text-[#3B231A]">Admission Enquiry Received!</h3>
+                  <p className="text-sm font-semibold text-emerald-700">
+                    Thank you! Your admission enquiry has been received.
                   </p>
-                  <p className="text-xs text-[#3B231A]/60">
-                    Our educational representative will reach out to you within 24 hours at <strong className="font-semibold">{formData.phone}</strong> with next steps and prospectus info.
+                  <p className="text-xs text-[#3B231A]/75 leading-relaxed">
+                    Vivekanandha School admissions team will contact you shortly.
                   </p>
                 </div>
 
                 <button
                   onClick={() => {
                     setSubmitted(false);
-                    setFormData({ studentName: '', parentName: '', phone: '', selectedClass: 'Pre KG' });
+                    setErrors({});
                   }}
                   className="mt-2 text-xs font-semibold text-[#E78F68] hover:underline"
                 >
