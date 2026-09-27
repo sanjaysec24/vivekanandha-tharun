@@ -50,13 +50,22 @@ function AppContent() {
     }
   }, [path, navigate]);
 
+  const isChatRoute = path === '/vleo' || path === '/chatbot';
+
   return (
-    <div id="school-landing-app" className="min-h-screen bg-[#F4F0EA] text-[#3A2318] selection:bg-[#E78F68]/35 overflow-x-hidden font-sans">
+    <div 
+      id="school-landing-app" 
+      className={
+        isChatRoute
+          ? "h-dvh w-full overflow-hidden bg-[#FAF6F0] font-sans"
+          : "min-h-screen bg-[#F4F0EA] text-[#3A2318] selection:bg-[#E78F68]/35 overflow-x-hidden font-sans"
+      }
+    >
         {/* Real-time CMS-driven SEO Engine */}
         <SEOManager />
 
-        {/* 1. Header Navigation Bar (Global) */}
-        <Navbar onOpenAdmissions={openAdmissions} />
+        {/* 1. Header Navigation Bar (Global - omitted on full-screen chat route) */}
+        {!isChatRoute && <Navbar onOpenAdmissions={openAdmissions} />}
 
         {/* --- Routing Pages --- */}
         
@@ -106,11 +115,13 @@ function AppContent() {
         <Route path="/vleo" element={<VLeoChatbotPage />} />
         <Route path="/chatbot" element={<VLeoChatbotPage />} />
 
-        {/* 9. Premium Footer (Global) */}
-        <Footer />
+        {/* 9. Premium Footer (Global - omitted on full-screen chat route) */}
+        {!isChatRoute && <Footer />}
 
-        {/* Interactive slideout booking drawer (Global) */}
-        <AdmissionsDrawer isAdmissionsOpen={isAdmissionsOpen} onCloseAdmissions={closeAdmissions} />
+        {/* Interactive slideout booking drawer (Global - omitted on full-screen chat route) */}
+        {!isChatRoute && (
+          <AdmissionsDrawer isAdmissionsOpen={isAdmissionsOpen} onCloseAdmissions={closeAdmissions} />
+        )}
 
         {/* Global Floating AI Chatbot Assistant */}
         <VLeoChatbot />

@@ -62,6 +62,8 @@ export interface ChatbotCMSData {
   avatar?: string;
   avatarUrl?: string;
   botAvatar?: string;
+  chatAvatarUrl?: string;
+  chatbotAvatar?: string;
   headerAvatar?: string;
   header_avatar?: string;
   headerAvatarUrl?: string;

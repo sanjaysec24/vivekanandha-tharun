@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <!-- Background circular gradient -->
+    <linearGradient id="vleoBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFDF9" />
+      <stop offset="100%" stop-color="#F5ECE1" />
+    </linearGradient>
+
+    <!-- Outer ring gradient -->
+    <linearGradient id="vleoRing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E58B52" />
+      <stop offset="100%" stop-color="#C25A24" />
+    </linearGradient>
+
+    <!-- Robot face casing -->
+    <linearGradient id="robotFace" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#EDE6DF" />
+    </linearGradient>
+
+    <!-- Eye glow -->
+    <linearGradient id="eyeGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+  </defs>
+
+  <!-- Circular background badge -->
+  <circle cx="50" cy="50" r="48" fill="url(#vleoBg)" stroke="url(#vleoRing)" stroke-width="3" />
+
+  <!-- Antenna -->
+  <line x1="50" y1="28" x2="50" y2="17" stroke="#8C654D" stroke-width="3" stroke-linecap="round" />
+  <circle cx="50" cy="14" r="4.5" fill="#E58B52" />
+  <circle cx="50" cy="14" r="2" fill="#FDE047" />
+
+  <!-- Left & Right Ear Sensors -->
+  <rect x="20" y="38" width="5" height="14" rx="2.5" fill="#E58B52" />
+  <rect x="75" y="38" width="5" height="14" rx="2.5" fill="#E58B52" />
+
+  <!-- Robot Head / Helmet -->
+  <rect x="23" y="26" width="54" height="42" rx="14" fill="url(#robotFace)" stroke="#5A3A2C" stroke-width="2.5" />
+
+  <!-- Visor / Face Screen -->
+  <rect x="29" y="33" width="42" height="23" rx="8" fill="#2A1B14" />
+
+  <!-- Friendly Eyes (Cheerful Curved Arches) -->
+  <circle cx="39" cy="43.5" r="4.5" fill="url(#eyeGlow)" />
+  <circle cx="37.5" cy="41.5" r="1.5" fill="#FFFFFF" />
+
+  <circle cx="61" cy="43.5" r="4.5" fill="url(#eyeGlow)" />
+  <circle cx="59.5" cy="41.5" r="1.5" fill="#FFFFFF" />
+
+  <!-- Subtle Pink Blush Cheeks -->
+  <ellipse cx="34" cy="50" rx="2.5" ry="1.2" fill="#F43F5E" opacity="0.6" />
+  <ellipse cx="66" cy="50" rx="2.5" ry="1.2" fill="#F43F5E" opacity="0.6" />
+
+  <!-- Friendly Smile -->
+  <path d="M 45 50 Q 50 54 55 50" fill="none" stroke="#38BDF8" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Collar / Shoulders -->
+  <path d="M 33 68 Q 50 72 67 68 L 73 84 Q 50 89 27 84 Z" fill="#422A21" stroke="#5A3A2C" stroke-width="2" />
+  <!-- Terracotta Neck Tie / V-Accent -->
+  <polygon points="50,71 44,79 50,86 56,79" fill="#E58B52" />
+  <circle cx="50" cy="74" r="1.5" fill="#FDE047" />
+</svg>
