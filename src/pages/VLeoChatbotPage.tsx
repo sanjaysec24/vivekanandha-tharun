@@ -112,7 +112,7 @@ export default function VLeoChatbotPage() {
   };
 
   // Dedicated V-Leo Chat Avatar (strictly separated from the floating website launcher artwork)
-  const defaultChatAvatar = '/images/vleo_chat_avatar.svg';
+  const defaultChatAvatar = '/images/vleo_mascot.png';
   const chatAvatar =
     cmsData?.chatAvatarUrl ||
     cmsData?.chatbotAvatar ||
@@ -281,15 +281,15 @@ export default function VLeoChatbotPage() {
   const quickTopics = language === 'en' ? QUICK_MENU_TOPICS_EN : QUICK_MENU_TOPICS_TA;
 
   return (
-    <div className="h-dvh w-full flex flex-col bg-[#F3ECE4] text-[#2C1810] font-sans overflow-hidden">
-      {/* Centered chat workspace for desktop / full width on mobile */}
-      <div className="w-full max-w-2xl mx-auto flex-1 flex flex-col bg-[#FAF5EE] shadow-2xl sm:border-x sm:border-[#E8DFD5] overflow-hidden relative">
+    <div className="h-dvh w-full flex flex-col bg-[#FAF5EE] text-[#2C1810] font-sans overflow-hidden">
+      {/* Full-width responsive chat workspace for both desktop and mobile */}
+      <div className="w-full flex-1 flex flex-col bg-[#FAF5EE] overflow-hidden relative">
 
         {/* ━━━━━━━━━━━━━━━━━━━━
             2. TOP CHAT HEADER
             ━━━━━━━━━━━━━━━━━━━━ */}
-        <header className="bg-[#422A21] text-white px-3 sm:px-4 py-2.5 flex items-center justify-between shadow-xs z-30 shrink-0 select-none border-b border-[#352018]">
-          <div className="flex items-center gap-2.5 min-w-0">
+        <header className="bg-[#422A21] text-white px-3 sm:px-6 md:px-10 lg:px-16 xl:px-24 py-2.5 sm:py-3 flex items-center justify-between shadow-xs z-30 shrink-0 select-none border-b border-[#352018] w-full">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
             {/* [ ← ] Back button */}
             <button
               onClick={() => navigate('/')}
@@ -300,7 +300,7 @@ export default function VLeoChatbotPage() {
             </button>
 
             {/* [ V-Leo avatar ] */}
-            <div className="relative w-9 h-9 rounded-full bg-white p-1 shrink-0 shadow-xs border border-white/20 overflow-hidden">
+            <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white p-1 shrink-0 shadow-xs border border-white/20 overflow-hidden">
               <img
                 src={chatAvatar}
                 alt="V-Leo Robot Avatar"
@@ -311,8 +311,11 @@ export default function VLeoChatbotPage() {
 
             {/* [ V-Leo AI ] + Online status */}
             <div className="min-w-0 leading-tight">
-              <h1 className="text-sm font-bold text-white truncate">
-                {currentBotName}
+              <h1 className="text-sm sm:text-base font-bold text-white truncate flex items-center gap-2">
+                <span>{currentBotName}</span>
+                <span className="text-[10px] bg-white/15 text-amber-200 px-1.5 py-0.5 rounded font-normal hidden sm:inline-block">
+                  AI School Companion
+                </span>
               </h1>
               <p className="text-[11px] text-[#A7F3D0] flex items-center gap-1 font-medium">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E]" />
@@ -322,11 +325,11 @@ export default function VLeoChatbotPage() {
           </div>
 
           {/* Right side: [ Tamil / English ] [ ⋮ ] */}
-          <div className="flex items-center gap-1.5 shrink-0 relative" ref={menuRef}>
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 relative" ref={menuRef}>
             <button
               onClick={handleLanguageToggle}
               title={language === 'en' ? 'Switch to Tamil' : 'Switch to English'}
-              className="px-2.5 py-1 text-xs font-semibold rounded-full bg-white/10 hover:bg-white/20 text-[#FAF5EE] border border-white/15 transition-all flex items-center gap-1 cursor-pointer"
+              className="px-2.5 sm:px-3 py-1 text-xs font-semibold rounded-full bg-white/10 hover:bg-white/20 text-[#FAF5EE] border border-white/15 transition-all flex items-center gap-1 cursor-pointer"
             >
               <Globe className="w-3.5 h-3.5 text-[#E58B52]" />
               <span>{language === 'en' ? 'தமிழ்' : 'English'}</span>
@@ -377,11 +380,11 @@ export default function VLeoChatbotPage() {
         {/* ━━━━━━━━━━━━━━━━━━━━
             3, 4, 5, 7. CHAT AREA & MESSAGES
             ━━━━━━━━━━━━━━━━━━━━ */}
-        <main className="flex-1 overflow-y-auto px-3 sm:px-4 py-3 sm:py-4 bg-[#FAF5EE] relative">
+        <main className="flex-1 overflow-y-auto px-3 sm:px-6 md:px-10 lg:px-16 xl:px-24 py-3 sm:py-5 md:py-6 bg-[#FAF5EE] relative">
           {/* Low-opacity educational doodle pattern strictly in conversation area */}
           <ChatDoodlePattern />
 
-          <div className="relative z-10 space-y-3">
+          <div className="relative z-10 space-y-3.5 sm:space-y-4 w-full">
             {messages.map((msg) => {
               const isUser = msg.sender === 'user';
 
@@ -391,13 +394,15 @@ export default function VLeoChatbotPage() {
                   className={`flex flex-col ${isUser ? 'items-end' : 'items-start'} space-y-1.5`}
                 >
                   <div
-                    className={`flex items-end gap-1.5 max-w-[88%] sm:max-w-[80%] ${
-                      isUser ? 'flex-row-reverse' : 'flex-row'
+                    className={`flex items-end gap-1.5 sm:gap-2.5 ${
+                      isUser
+                        ? 'flex-row-reverse max-w-[85%] sm:max-w-[70%] md:max-w-[60%] lg:max-w-[50%]'
+                        : 'flex-row max-w-[88%] sm:max-w-[75%] md:max-w-[65%] lg:max-w-[55%]'
                     }`}
                   >
                     {/* Small dedicated avatar alongside V-Leo messages */}
                     {!isUser && (
-                      <div className="w-7 h-7 rounded-full bg-white p-0.5 border border-[#E8DFD5] shadow-2xs shrink-0 mb-0.5 overflow-hidden">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white p-0.5 border border-[#E8DFD5] shadow-2xs shrink-0 mb-0.5 overflow-hidden">
                         <img
                           src={chatAvatar}
                           alt="V-Leo"
@@ -408,7 +413,7 @@ export default function VLeoChatbotPage() {
 
                     {/* Message Bubble */}
                     <div
-                      className={`relative px-3.5 py-2.5 rounded-2xl text-[13.5px] leading-relaxed shadow-2xs select-text ${
+                      className={`relative px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-[13.5px] sm:text-[14px] leading-relaxed shadow-2xs select-text ${
                         isUser
                           ? 'bg-[#E58B52] text-white rounded-br-xs'
                           : 'bg-white text-[#2C1810] border border-[#E8DFD5] rounded-bl-xs'
@@ -474,12 +479,12 @@ export default function VLeoChatbotPage() {
 
                   {/* Compact Quick-Question Chips beneath V-Leo message */}
                   {!isUser && msg.suggestedQuestions && msg.suggestedQuestions.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 ml-8 mt-1">
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2 ml-8 sm:ml-10 mt-1 max-w-xl">
                       {msg.suggestedQuestions.map((q, idx) => (
                         <button
                           key={idx}
                           onClick={() => handleSendMessage(q)}
-                          className="text-[12px] text-[#422A21] bg-white hover:bg-[#FFF4EC] active:bg-[#FBECE0] border border-[#E8DFD5] hover:border-[#E58B52] px-3 py-1.5 rounded-full transition-all text-left shadow-2xs active:scale-95 cursor-pointer font-medium"
+                          className="text-[12px] sm:text-[12.5px] text-[#422A21] bg-white hover:bg-[#FFF4EC] active:bg-[#FBECE0] border border-[#E8DFD5] hover:border-[#E58B52] px-3 sm:px-3.5 py-1.5 rounded-full transition-all text-left shadow-2xs active:scale-95 cursor-pointer font-medium"
                         >
                           {q}
                         </button>
@@ -489,8 +494,8 @@ export default function VLeoChatbotPage() {
 
                   {/* Escalation contact button if needed */}
                   {!isUser && msg.shouldEscalate && (
-                    <div className="ml-8 mt-1 inline-flex items-center gap-2 bg-[#FFF6EE] border border-[#E58B52]/40 rounded-xl px-3 py-1.5 text-xs text-[#422A21] shadow-2xs">
-                      <span className="font-semibold text-[11px]">📞 Need direct assistance?</span>
+                    <div className="ml-8 sm:ml-10 mt-1 inline-flex items-center gap-2 bg-[#FFF6EE] border border-[#E58B52]/40 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-[13px] text-[#422A21] shadow-2xs">
+                      <span className="font-semibold text-[11px] sm:text-xs">📞 Need direct assistance?</span>
                       <a
                         href="tel:+919444547474"
                         className="font-bold text-[#E58B52] hover:underline"
@@ -505,8 +510,8 @@ export default function VLeoChatbotPage() {
 
             {/* Thinking / typing indicator */}
             {isThinking && (
-              <div className="flex items-end gap-1.5 justify-start">
-                <div className="w-7 h-7 rounded-full bg-white p-0.5 border border-[#E8DFD5] shadow-2xs shrink-0 mb-0.5 overflow-hidden">
+              <div className="flex items-end gap-1.5 sm:gap-2.5 justify-start">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white p-0.5 border border-[#E8DFD5] shadow-2xs shrink-0 mb-0.5 overflow-hidden">
                   <img
                     src={chatAvatar}
                     alt="V-Leo"
@@ -529,7 +534,7 @@ export default function VLeoChatbotPage() {
             QUICK TOPICS ACTION SHEET (Toggled by '+')
             ━━━━━━━━━━━━━━━━━━━━ */}
         {showQuickMenu && (
-          <div className="bg-white border-t border-[#E8DFD5] p-3 shadow-lg z-20 shrink-0">
+          <div className="bg-white border-t border-[#E8DFD5] px-3 sm:px-6 md:px-10 lg:px-16 xl:px-24 py-3 shadow-lg z-20 shrink-0 w-full">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold text-[#422A21] flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-[#E58B52]" />
@@ -542,12 +547,12 @@ export default function VLeoChatbotPage() {
                 <X className="w-4 h-4" />
               </button>
             </div>
-            <div className="grid grid-cols-2 gap-1.5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
               {quickTopics.map((topic, i) => (
                 <button
                   key={i}
                   onClick={() => handleSendMessage(topic.query)}
-                  className="px-2.5 py-2 text-xs rounded-xl bg-[#FAF5EE] hover:bg-[#E58B52] hover:text-white border border-[#E8DFD5] text-[#422A21] font-medium text-left transition-colors cursor-pointer truncate"
+                  className="px-3 py-2 text-xs rounded-xl bg-[#FAF5EE] hover:bg-[#E58B52] hover:text-white border border-[#E8DFD5] text-[#422A21] font-medium text-left transition-colors cursor-pointer truncate"
                 >
                   {topic.label}
                 </button>
@@ -559,13 +564,13 @@ export default function VLeoChatbotPage() {
         {/* ━━━━━━━━━━━━━━━━━━━━
             6. MESSAGE COMPOSER
             ━━━━━━━━━━━━━━━━━━━━ */}
-        <footer className="bg-[#FAF5EE] border-t border-[#E8DFD5] p-2 sm:p-2.5 shrink-0 z-20 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+        <footer className="bg-[#FAF5EE] border-t border-[#E8DFD5] px-3 sm:px-6 md:px-10 lg:px-16 xl:px-24 py-2.5 sm:py-3 shrink-0 z-20 pb-[max(0.6rem,env(safe-area-inset-bottom))] w-full">
           <form
             onSubmit={(e) => {
               e.preventDefault();
               handleSendMessage(inputValue);
             }}
-            className="flex items-end gap-1.5 sm:gap-2 max-w-full"
+            className="flex items-end gap-1.5 sm:gap-2.5 max-w-full"
           >
             {/* [ + ] Quick topic launcher button */}
             <button
@@ -573,17 +578,17 @@ export default function VLeoChatbotPage() {
               onClick={() => setShowQuickMenu((prev) => !prev)}
               title={language === 'en' ? 'Quick questions' : 'விரைவு கேள்விகள்'}
               aria-label="Quick questions"
-              className={`p-2.5 rounded-full transition-colors cursor-pointer shrink-0 ${
+              className={`p-2.5 sm:p-3 rounded-full transition-colors cursor-pointer shrink-0 ${
                 showQuickMenu
                   ? 'bg-[#422A21] text-white'
                   : 'bg-white text-[#7D6B5D] hover:text-[#422A21] border border-[#E8DFD5]'
               }`}
             >
-              <Plus className={`w-4 h-4 transition-transform ${showQuickMenu ? 'rotate-45' : ''}`} />
+              <Plus className={`w-4 h-4 sm:w-4.5 sm:h-4.5 transition-transform ${showQuickMenu ? 'rotate-45' : ''}`} />
             </button>
 
             {/* Input bar */}
-            <div className="flex-1 bg-white rounded-2xl border border-[#E8DFD5] focus-within:border-[#E58B52] focus-within:ring-1 focus-within:ring-[#E58B52]/40 transition-all flex items-center px-3.5 py-1.5 shadow-2xs">
+            <div className="flex-1 bg-white rounded-2xl border border-[#E8DFD5] focus-within:border-[#E58B52] focus-within:ring-1 focus-within:ring-[#E58B52]/40 transition-all flex items-center px-3.5 sm:px-4 py-1.5 sm:py-2 shadow-2xs">
               <textarea
                 ref={textareaRef}
                 rows={1}
@@ -601,7 +606,7 @@ export default function VLeoChatbotPage() {
                     : 'செய்தியைத் தட்டச்சு செய்யவும்...'
                 }
                 disabled={isThinking}
-                className="w-full text-[13.5px] text-[#2C1810] placeholder-[#A08E7E] bg-transparent resize-none focus:outline-none max-h-28 leading-5 disabled:opacity-50"
+                className="w-full text-[13.5px] sm:text-[14px] text-[#2C1810] placeholder-[#A08E7E] bg-transparent resize-none focus:outline-none max-h-28 leading-5 disabled:opacity-50"
               />
             </div>
 
@@ -612,7 +617,7 @@ export default function VLeoChatbotPage() {
               aria-label="Send Message"
               className="p-2.5 sm:p-3 bg-[#E58B52] hover:bg-[#D9773B] active:scale-95 text-white rounded-full transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100 shrink-0 cursor-pointer shadow-xs"
             >
-              <Send className="w-4 h-4" />
+              <Send className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
             </button>
           </form>
         </footer>

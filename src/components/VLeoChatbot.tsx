@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../lib/firebase";
@@ -68,6 +68,11 @@ export interface ChatbotCMSData {
   header_avatar?: string;
   headerAvatarUrl?: string;
   mascotIcon?: string;
+
+  // Launch Video Transition
+  transitionVideoUrl?: string;
+  launchVideoUrl?: string;
+  videoUrl?: string;
 
   // Names & Titles
   name?: string;
@@ -178,6 +183,60 @@ export default function VLeoChatbot() {
   // Image load error fallback state
   const [imgErrorLevel, setImgErrorLevel] = useState<number>(0);
 
+  // Full-screen video launch transition state
+  const [isPlayingTransition, setIsPlayingTransition] = useState<boolean>(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Reset transition state if navigating away or already on chat page
+  useEffect(() => {
+    if (path === "/vleo" || path === "/chatbot") {
+      setIsPlayingTransition(false);
+    }
+  }, [path]);
+
+  // Video source for click launch transition
+  const transitionVideoSrc =
+    cmsChatbotData?.transitionVideoUrl ||
+    cmsChatbotData?.launchVideoUrl ||
+    cmsChatbotData?.videoUrl ||
+    cmsAiData?.transitionVideoUrl ||
+    "/videos/vleo_launch.mp4";
+
+  // Transition completion navigation handler
+  const handleCompleteTransition = () => {
+    setIsPlayingTransition(false);
+    navigate("/vleo");
+  };
+
+  // Manage video playback, autoplay attempt, body scroll lock, and graceful fallback timer
+  useEffect(() => {
+    if (!isPlayingTransition) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.warn("V-Leo transition video autoplay failed, navigating immediately:", err);
+          handleCompleteTransition();
+        });
+      }
+    }
+
+    // Safety fallback timeout: automatically navigate to chat if video takes too long or fails silently
+    const safetyTimer = setTimeout(() => {
+      handleCompleteTransition();
+    }, 11500);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      clearTimeout(safetyTimer);
+    };
+  }, [isPlayingTransition]);
+
   // 1. Subscribe to Website CMS Firestore documents in real time
   // Source of truth: website_cms/chatbot (Chatbot Branding & Widget Configurator)
   useEffect(() => {
@@ -230,17 +289,44 @@ export default function VLeoChatbot() {
           sessionStorage.setItem("vleo_initial_query", e.detail.query);
         } catch (_) {}
       }
-      navigate("/vleo");
+      setIsPlayingTransition(true);
     };
 
     window.addEventListener("open-vleo-chat", handleOpenVLeo);
     return () => window.removeEventListener("open-vleo-chat", handleOpenVLeo);
-  }, [navigate]);
+  }, []);
 
   // If the user is currently on the dedicated V-Leo Chatbot page (/vleo or /chatbot),
   // hide the floating launcher to prevent duplicate mascot artwork on screen
   if (path === "/vleo" || path === "/chatbot") {
     return null;
+  }
+
+  // When transition is triggered, immediately hide normal launcher and display full-screen video overlay
+  if (isPlayingTransition) {
+    return (
+      <div
+        className="fixed inset-0 z-[100000] w-screen h-dvh bg-black flex items-center justify-center overflow-hidden select-none pointer-events-auto"
+        style={{ margin: 0, padding: 0 }}
+      >
+        <video
+          ref={videoRef}
+          src={transitionVideoSrc}
+          autoPlay
+          muted
+          playsInline
+          controls={false}
+          disablePictureInPicture
+          disableRemotePlayback
+          className="w-full h-full object-cover object-center pointer-events-none"
+          onEnded={handleCompleteTransition}
+          onError={() => {
+            console.warn("V-Leo transition video failed to load, navigating directly.");
+            handleCompleteTransition();
+          }}
+        />
+      </div>
+    );
   }
 
   // --- Published Config Extraction ---
@@ -336,9 +422,9 @@ export default function VLeoChatbot() {
     setImgErrorLevel((prev) => prev + 1);
   };
 
-  // Click handler: Navigate to existing V-Leo chatbot page
+  // Click handler: Open full-screen video transition overlay
   const handleLauncherClick = () => {
-    navigate("/vleo");
+    setIsPlayingTransition(true);
   };
 
   // Dimensions & Offsets for current viewport (Desktop vs Mobile)
