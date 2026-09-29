@@ -790,7 +790,7 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
             : { repeat: Infinity, repeatType: "mirror", duration: 4, ease: "easeInOut" }
           }
           onClick={() => setBalloonTrigger(p => p + 1)}
-          className="absolute top-[8%] left-[4%] sm:left-[8%] lg:left-[10%] xl:left-[14%] z-20 cursor-pointer select-none"
+          className="absolute top-2 left-2 sm:top-[8%] sm:left-[8%] lg:left-[10%] xl:left-[14%] z-20 cursor-pointer select-none origin-top-left scale-[0.65] sm:scale-100"
         >
           <svg width="55" height="75" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-md">
             <path d="M30 5C17.29 5 7 15.29 7 28C7 38.64 13.56 44.52 19.33 49.64C21.43 51.5 23.57 53.4 24.5 56H35.5C36.43 53.4 38.57 51.5 40.67 49.64C46.44 44.52 53 38.64 53 28C53 15.29 42.71 5 30 5Z" fill="#E74C3C" stroke="#3A2318" strokeWidth="2.5" />
@@ -815,7 +815,7 @@ export default function Hero({ onOpenAdmissions }: HeroProps) {
             : { repeat: Infinity, repeatType: "mirror", duration: 3.2, ease: "easeInOut" }
           }
           onClick={() => setBallTrigger(p => p + 1)}
-          className="absolute top-[8%] right-[4%] sm:right-[8%] lg:right-[10%] xl:right-[14%] z-20 cursor-pointer select-none"
+          className="absolute top-2 right-2 sm:top-[8%] sm:right-[8%] lg:right-[10%] xl:right-[14%] z-20 cursor-pointer select-none origin-top-right scale-[0.7] sm:scale-100"
         >
           <svg width="55" height="55" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-sm">
             <line x1="52" y1="18" x2="62" y2="10" stroke="#FF8A3D" strokeWidth="3" strokeLinecap="round" />

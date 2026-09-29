@@ -208,7 +208,7 @@ export default function VLeoChatbot() {
     navigate("/vleo");
   };
 
-  // Manage video playback, autoplay attempt, body scroll lock, and graceful fallback timer
+  // Manage video playback with original audio, body scroll lock, and graceful fallback timer
   useEffect(() => {
     if (!isPlayingTransition) return;
 
@@ -216,13 +216,17 @@ export default function VLeoChatbot() {
     document.body.style.overflow = "hidden";
 
     if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      const playPromise = videoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((err) => {
-          console.warn("V-Leo transition video autoplay failed, navigating immediately:", err);
-          handleCompleteTransition();
-        });
+      videoRef.current.muted = false;
+      videoRef.current.volume = 0.95;
+      if (videoRef.current.paused) {
+        videoRef.current.currentTime = 0;
+        const playPromise = videoRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((err) => {
+            console.warn("V-Leo transition video play error, navigating immediately:", err);
+            handleCompleteTransition();
+          });
+        }
       }
     }
 
@@ -289,6 +293,15 @@ export default function VLeoChatbot() {
           sessionStorage.setItem("vleo_initial_query", e.detail.query);
         } catch (_) {}
       }
+      if (videoRef.current) {
+        videoRef.current.muted = false;
+        videoRef.current.volume = 0.95;
+        videoRef.current.currentTime = 0;
+        const playPromise = videoRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {});
+        }
+      }
       setIsPlayingTransition(true);
     };
 
@@ -300,33 +313,6 @@ export default function VLeoChatbot() {
   // hide the floating launcher to prevent duplicate mascot artwork on screen
   if (path === "/vleo" || path === "/chatbot") {
     return null;
-  }
-
-  // When transition is triggered, immediately hide normal launcher and display full-screen video overlay
-  if (isPlayingTransition) {
-    return (
-      <div
-        className="fixed inset-0 z-[100000] w-screen h-dvh bg-black flex items-center justify-center overflow-hidden select-none pointer-events-auto"
-        style={{ margin: 0, padding: 0 }}
-      >
-        <video
-          ref={videoRef}
-          src={transitionVideoSrc}
-          autoPlay
-          muted
-          playsInline
-          controls={false}
-          disablePictureInPicture
-          disableRemotePlayback
-          className="w-full h-full object-cover object-center pointer-events-none"
-          onEnded={handleCompleteTransition}
-          onError={() => {
-            console.warn("V-Leo transition video failed to load, navigating directly.");
-            handleCompleteTransition();
-          }}
-        />
-      </div>
-    );
   }
 
   // --- Published Config Extraction ---
@@ -422,8 +408,19 @@ export default function VLeoChatbot() {
     setImgErrorLevel((prev) => prev + 1);
   };
 
-  // Click handler: Open full-screen video transition overlay
+  // Click handler: Start video with original audio and open full-screen transition overlay
   const handleLauncherClick = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = false;
+      videoRef.current.volume = 0.95;
+      videoRef.current.currentTime = 0;
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.warn("V-Leo transition video play error on click:", err);
+        });
+      }
+    }
     setIsPlayingTransition(true);
   };
 
@@ -433,57 +430,86 @@ export default function VLeoChatbot() {
   const currentBottom = isMobile ? mobileBottomOffset : desktopBottomOffset;
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        zIndex: 9999,
-        bottom: isTop ? undefined : `${currentBottom}px`,
-        top: isTop ? `${currentBottom}px` : undefined,
-        right: isLeft ? undefined : `${currentRight}px`,
-        left: isLeft ? `${currentRight}px` : undefined,
-        pointerEvents: "auto",
-        overflow: "visible",
-      }}
-      className="select-none font-sans overflow-visible"
-    >
-      <motion.button
-        onClick={handleLauncherClick}
-        animate={
-          animationEnabled
-            ? {
-                y: [0, -6, 0],
-              }
-            : {
-                y: 0,
-              }
-        }
-        transition={
-          animationEnabled
-            ? {
-                repeat: Infinity,
-                duration: 3.5,
-                ease: "easeInOut",
-              }
-            : undefined
-        }
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        aria-label="Ask V-Leo AI School Assistant"
-        className="group relative flex items-center justify-end cursor-pointer bg-transparent border-0 p-0 m-0 outline-none focus:outline-none overflow-visible"
-        style={{
-          width: `${currentWidth}px`,
-          height: "auto",
-        }}
+    <>
+      {/* 1. Full-screen Video Transition Overlay with Original Audio */}
+      <div
+        className={`fixed inset-0 z-[100000] w-screen h-dvh bg-black flex items-center justify-center overflow-hidden select-none ${
+          isPlayingTransition ? "block pointer-events-auto" : "hidden pointer-events-none"
+        }`}
+        style={{ margin: 0, padding: 0 }}
       >
-        <img
-          src={currentImageSrc}
-          onError={handleImageError}
-          alt="V-Leo AI Assistant - Click Me!"
-          loading="eager"
-          decoding="async"
-          className="w-full h-auto object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,0.18)] transition-transform duration-200 pointer-events-none select-none"
+        <video
+          ref={videoRef}
+          src={transitionVideoSrc}
+          preload="auto"
+          playsInline
+          controls={false}
+          disablePictureInPicture
+          disableRemotePlayback
+          className="w-full h-full object-cover object-center pointer-events-none"
+          onEnded={handleCompleteTransition}
+          onError={() => {
+            console.warn("V-Leo transition video failed to load, navigating directly.");
+            handleCompleteTransition();
+          }}
         />
-      </motion.button>
-    </div>
+      </div>
+
+      {/* 2. Floating Robot Launcher (hidden during transition overlay) */}
+      {!isPlayingTransition && (
+        <div
+          style={{
+            position: "fixed",
+            zIndex: 9999,
+            bottom: isTop ? undefined : `${currentBottom}px`,
+            top: isTop ? `${currentBottom}px` : undefined,
+            right: isLeft ? undefined : `${currentRight}px`,
+            left: isLeft ? `${currentRight}px` : undefined,
+            pointerEvents: "auto",
+            overflow: "visible",
+          }}
+          className="select-none font-sans overflow-visible"
+        >
+          <motion.button
+            onClick={handleLauncherClick}
+            animate={
+              animationEnabled
+                ? {
+                    y: [0, -6, 0],
+                  }
+                : {
+                    y: 0,
+                  }
+            }
+            transition={
+              animationEnabled
+                ? {
+                    repeat: Infinity,
+                    duration: 3.5,
+                    ease: "easeInOut",
+                  }
+                : undefined
+            }
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Ask V-Leo AI School Assistant"
+            className="group relative flex items-center justify-end cursor-pointer bg-transparent border-0 p-0 m-0 outline-none focus:outline-none overflow-visible"
+            style={{
+              width: `${currentWidth}px`,
+              height: "auto",
+            }}
+          >
+            <img
+              src={currentImageSrc}
+              onError={handleImageError}
+              alt="V-Leo AI Assistant - Click Me!"
+              loading="eager"
+              decoding="async"
+              className="w-full h-auto object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,0.18)] transition-transform duration-200 pointer-events-none select-none"
+            />
+          </motion.button>
+        </div>
+      )}
+    </>
   );
 }
