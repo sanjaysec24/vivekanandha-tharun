@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import HighlightMarquee from './components/HighlightMarquee';
 import NoticesAnnouncements from './components/NoticesAnnouncements';
 import VijayadasamiSection from './components/VijayadasamiSection';
+import SchoolKidsMarquee from './components/SchoolKidsMarquee';
 import StatsBar from './components/StatsBar';
 import FeatureCards from './components/FeatureCards';
 import Categories from './components/Categories';
@@ -83,6 +84,9 @@ function AppContent() {
 
             {/* Seasonal: Vijayadasami Admissions 2027 */}
             <VijayadasamiSection onOpenAdmissions={openAdmissions} />
+
+            {/* School Kids Marquee (Continuous Left -> Right Infinite Loop) */}
+            <SchoolKidsMarquee />
 
             {/* 3. Dark Chocolate Statistics Board */}
             <StatsBar />

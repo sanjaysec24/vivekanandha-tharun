@@ -135,7 +135,7 @@ export default function VijayadasamiSection({ onOpenAdmissions }: VijayadasamiSe
   return (
     <section 
       id="vijayadasami-section" 
-      className="relative overflow-hidden bg-[#F5F1EB] py-16 px-6 md:px-12 border-b border-[#3B231A]/10"
+      className="relative overflow-hidden bg-[#F5F1EB] py-16 px-6 md:px-12"
     >
       {/* Background traditional kolam / lotus decorative patterns */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-0 flex items-center justify-center">

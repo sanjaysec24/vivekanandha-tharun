@@ -1,0 +1,14 @@
+{
+  "entities": {
+    "website_cms": {
+      "title": "Website CMS",
+      "description": "Central collection storing modular website CMS documents, including school_kids_marquee, hero, promotions, branding, and upcoming events.",
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "status": { "type": "string" },
+        "items": { "type": "array" }
+      }
+    }
+  }
+}
